@@ -1,6 +1,5 @@
 'use client'
 
-import { stringify } from 'postcss'
 import { ImTwitch, ImYoutube } from 'react-icons/im'
 import { MdPerson } from 'react-icons/md'
 const chzzkLogo = 'https://i.namu.wiki/i/QA7A5LmG-R_DeaQN7OkwRgvxn0IqN2TvPcoVwcRVLLAb6WAlZ0_rah9RUmaiLIzRWGLviTiiZg6Edsev_UceLA.svg'
