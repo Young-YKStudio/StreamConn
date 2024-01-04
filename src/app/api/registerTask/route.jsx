@@ -11,3 +11,9 @@ export async function POST(req) {
     req: data
   })
 } 
+export async function GET(req) {
+  const data = await req.json();
+  return NextResponse.json({
+    req: data
+  })
+} 
