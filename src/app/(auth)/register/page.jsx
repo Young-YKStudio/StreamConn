@@ -64,7 +64,6 @@ const Register = () => {
           <h3 className='text-xl font-semibold'>
             Register Account
           </h3>
-          {message !== '' && <p className='text-red-500 italic pt-2 text-xs'>{message}</p>}
         </div>
 
         {/* body */}
@@ -84,6 +83,7 @@ const Register = () => {
             </div>
             <div className='flex flex-col gap-4 pt-2'>
               <button type='submit' className='w-full bg-sky-900 hover:bg-sky-500 font-medium rounded-md text-sm px-5 py-2.5 text-center'>Reigster</button>
+              {message !== '' && <p className='text-red-500 italic text-center text-xs'>{message}</p>}
               <div className='flex flex-row gap-2 text-sm'>
                 <p>Already registered?</p>
                 <Link href='/login' className='text-sky-700 hover:text-sky-500'>Login</Link>
