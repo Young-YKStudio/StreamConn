@@ -37,6 +37,7 @@ const Register = () => {
     }
 
     try {
+      // TODO: add Pending state
       const request = await axios.post('api/register', submitForm)
       // TODO: login with successed email and token 
       if(request.status === 200) {

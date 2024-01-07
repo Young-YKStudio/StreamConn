@@ -14,7 +14,7 @@ export const POST = async (req) => {
     return new NextResponse('Email is already registered', { status: 400 })
   }
 
-  const hashedPassword = await bcrypt.hash(password, 5)
+  const hashedPassword = await bcrypt.hash(password, 10)
   const newUser = new User({
     email,
     password: hashedPassword,
@@ -22,6 +22,7 @@ export const POST = async (req) => {
 
   try {
     await newUser.save()
+    // TODO: send email
     return new NextResponse('User is registered', { status: 200 })
   } catch (e) {
     return new NextResponse(e, { status: 500 })
