@@ -20,5 +20,4 @@ export async function POST(req) {
   } catch (e) {
     return new NextResponse(e, { status: 500 })
   }
-
 } 
