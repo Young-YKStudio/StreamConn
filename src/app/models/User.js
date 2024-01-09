@@ -13,6 +13,11 @@ const userSchema = new Schema(
       type: String,
       required: false,
     },
+    collections: {},
+    account: String,
+    session: String,
+    user: String,
+    verificationToken: String,
   },{timestamps: true}
 )
 

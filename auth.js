@@ -1,12 +1,10 @@
 import NextAuth from 'next-auth'
+import { MongoDBAdapter } from '@auth/mongodb-adapter'
+import clientPromise from '@/app/util/mongodb'
 import Naver from '@auth/core/providers/naver'
 import Google from '@auth/core/providers/google'
 import Twitch from '@auth/core/providers/twitch'
-import Email from '@auth/core/providers/email'
 
-export const {
-  handlers: {GET, POST},
-  auth
-} = NextAuth({
-  providers: [Naver, Google, Twitch, Email],
+export default NextAuth({
+  adapter: MongoDBAdapter(clientPromise),
 })
