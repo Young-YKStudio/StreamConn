@@ -2,8 +2,8 @@
 
 import { NextResponse, NextRequest } from "next/server"
 
-import dbConnect from "@/app/util/DBConnect"
-import Task from "@/app/models/task"
+import dbConnect from '@/app/util/DBConnect'
+import Task from '@/app/models/task'
 
 export async function POST(req) {
   const { title } = await req.json();
