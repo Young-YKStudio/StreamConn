@@ -1,5 +1,7 @@
-import User from "@/app/models/User";
-import dbConnect from "@/app/util/DBConnect";
+import User from '@/app/models/User';
+// import User from '../../../../app/models/User'
+import dbConnect from '@/app/util/DBConnect';
+// import dbConnect from '../../../../app/util/DBConnect'
 import bcrypt from 'bcryptjs'
 import { NextResponse } from "next/server";
 

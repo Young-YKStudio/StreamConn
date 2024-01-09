@@ -8,13 +8,17 @@ import { useState } from 'react'
 
 const notLoggedInLinks = [
   {
+    name: 'Tutorial',
+    href: '/tutorial'
+  },
+  {
     name: 'Login',
     href: '/login',
   },
   {
     name: 'Sign In',
     href: '/register',
-  }
+  },
 ]
 
 const smallButtonStyles = "flex justify-center items-center p-2 rounded-md hover:bg-slate-700"
