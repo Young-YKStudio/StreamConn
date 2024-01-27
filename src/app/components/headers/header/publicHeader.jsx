@@ -21,12 +21,35 @@ const notLoggedInLinks = [
   },
 ]
 
+const subMenuLinks = [
+  {
+    name: 'Events',
+    href: '/events'
+  },
+  {
+
+    name: 'Browse',
+    href:  '/browse'
+  }
+]
+
 const smallButtonStyles = "flex justify-center items-center p-2 rounded-md hover:bg-slate-700"
 const iconStyles = 'w-5 h-5 text-slate-400 '
 
 const PublicHeader = () => {
 
   const [ searchedText, setSearchedText ] = useState('')
+  const [ isSubLinkMenuOpen, setIsSubLinkMenuOpen ] = useState(false)
+
+  const subMenubuttonHandler = (e) => {
+    setIsSubLinkMenuOpen(!isSubLinkMenuOpen)
+  }
+
+  const subLinkButtonHandler = (e, link) => {
+    console.log(link, 'link button clicked')
+    setIsSubLinkMenuOpen(!isSubLinkMenuOpen)
+  }
+
 
   return (
     <nav className="bg-slate-900 grid grid-cols-3 p-4 absolute top-0 w-full">
@@ -38,9 +61,21 @@ const PublicHeader = () => {
         <button className={smallButtonStyles}><MdFavoriteBorder className={iconStyles} /></button> 
         {/* Public */}
         <button className={smallButtonStyles}><MdFilterNone className={iconStyles} /></button>
-        <button className={smallButtonStyles}><MdMoreVert className={iconStyles} /></button>
+        <button className={smallButtonStyles} onClick={subMenubuttonHandler}><MdMoreVert className={iconStyles} /></button>
       </div>
 
+      {/* Sub hidden menu */}
+      {isSubLinkMenuOpen && <div className="w-24 h-24 bg-white/40 absolute top-12 left-56 rounded-md flex flex-col">
+          <div className="relative flex flex-end">
+            <p>close</p>
+          </div>
+          {subMenuLinks && subMenuLinks.map((link, i) => {
+            return <div key={'sublink'+i}>
+              <Link href={link.href} onClick={(e) => setIsSubLinkMenuOpen(false)}>{link.name}</Link>
+            </div>
+          })}
+        </div>
+      }
       {/* search section */}
       <Header_SearchBox searchedText={searchedText} setSearchedText={setSearchedText} />
 

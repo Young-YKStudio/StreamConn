@@ -2,7 +2,14 @@
 
 import Landing from "./components/pages/landing/page"
 
-export default function Home() {
+import { redirect } from 'next/navigation'
+import { auth } from '../../auth'
+
+export default async function Home() {
+
+  const session = await auth()
+  if(!session) redirect('/register')
+
   return (
     <div>
       <Landing />
