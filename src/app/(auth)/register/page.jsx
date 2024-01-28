@@ -43,16 +43,13 @@ const Register = () => {
       if(request.status === 200) {
         console.log(request)
       } 
-      // TODO: set error msg in message state
-      if(request.status !== 200) {
-        console.log('error')
-      }
     } catch (e) {
       setMessage('Please try again')
-      console.log(e)
+      console.log(e, 'error?')
+      setMessage(e.response.data)
     }
 
-    console.log('submit triggered')
+    // console.log('submit triggered', submitForm)
   }
 
   const inputLabelStyle = 'block mb-2 text-sm font-medium'
