@@ -1,9 +1,15 @@
 'use client'
 
 import { useState } from 'react'
-import { loginAction } from '@/app/components/action/loginAction'
+import { signIn, useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 const LoginPage = () => {
+
+  const router = useRouter()
+  const session = useSession()
+
+  const [ message, setMessage ] = useState('')
 
   const inputLabelStyle = 'block mb-2 text-sm font-medium'
   const inputBoxStyle = 'bg-slate-500 text-gray-900 text-sm rounded-md focus:outline-none focus:ring-2 focus:bg-slate-300 focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5'
@@ -22,10 +28,19 @@ const LoginPage = () => {
     }))
   }
 
-  const submitHandler = async (e, data) => {
+  const submitHandler = (e, data) => {
     e.preventDefault()
-    // console.log(data)
-    await loginAction(data)
+    // await loginAction(data)
+    'use server'
+    const request = async () => {
+      const loginSubmission = await signIn('credentials', {
+        redirect: false,
+        email: submitForm.email,
+        password: submitForm.password
+      })
+      console.log(loginSubmission)
+    }
+    request()
   }
 
   return (

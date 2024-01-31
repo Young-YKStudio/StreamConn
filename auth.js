@@ -10,7 +10,7 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 
 // })
 
-export const { auth, signIn, handlers:{GET, POST}} = NextAuth({
+export const { auth, signIn} = NextAuth({
   providers: [
     CredentialsProvider({
       name: "Credentials",
