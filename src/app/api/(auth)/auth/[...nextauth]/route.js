@@ -4,6 +4,7 @@ import GoogleProvider from 'next-auth/providers/google'
 import CredientialsProvider from 'next-auth/providers/credentials'
 import User from '../../../../models/User'
 import dbConnect from '../../../../util/DBConnect'
+import bcrypt from 'bcryptjs'
 
 export const authOptions = {
   providers: [
@@ -26,5 +27,8 @@ export const authOptions = {
         }
       }
     })
-  ]
+  ],
+  // callbacks: {
+
+  // }
 }

@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 const LoginPage = () => {
 
   const router = useRouter()
-  const session = useSession()
+  // const session = useSession()
 
   const [ message, setMessage ] = useState('')
 
@@ -31,14 +31,13 @@ const LoginPage = () => {
   const submitHandler = (e, data) => {
     e.preventDefault()
     // await loginAction(data)
-    'use server'
     const request = async () => {
       const loginSubmission = await signIn('credentials', {
         redirect: false,
         email: submitForm.email,
         password: submitForm.password
       })
-      console.log(loginSubmission)
+      console.log(loginSubmaission)
     }
     request()
   }
