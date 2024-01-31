@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 const LoginPage = () => {
 
@@ -10,6 +11,9 @@ const LoginPage = () => {
   // const session = useSession()
 
   const [ message, setMessage ] = useState('')
+
+  const { session, sessionStatus } = useSession()
+
 
   const inputLabelStyle = 'block mb-2 text-sm font-medium'
   const inputBoxStyle = 'bg-slate-500 text-gray-900 text-sm rounded-md focus:outline-none focus:ring-2 focus:bg-slate-300 focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5'
@@ -28,18 +32,30 @@ const LoginPage = () => {
     }))
   }
 
-  const submitHandler = (e, data) => {
+  const submitHandler = async (e, data) => {
     e.preventDefault()
     // await loginAction(data)
-    const request = async () => {
-      const loginSubmission = await signIn('credentials', {
-        redirect: false,
-        email: submitForm.email,
-        password: submitForm.password
-      })
-      console.log(loginSubmaission)
+    const email = submitForm.email
+    const password = submitForm.password
+
+    const response = await signIn('credentials', {
+      redirect: false,
+      email: email,
+      password: password
+    })
+
+    if(response) {
+      console.log(response, sessionStatus, 'at response')
     }
-    request()
+    // const request = async () => {
+    //   const loginSubmission = await signIn('credentials', {
+    //     redirect: false,
+    //     email: submitForm.email,
+    //     password: submitForm.password
+    //   })
+    // }
+    // console.log(submitForm)
+    // request()
   }
 
   return (
