@@ -16,7 +16,7 @@ const notLoggedInLinks = [
     href: '/login',
   },
   {
-    name: 'Sign In',
+    name: 'Register',
     href: '/register',
   },
 ]
@@ -31,6 +31,21 @@ const subMenuLinks = [
     name: 'Browse',
     href:  '/browse'
   }
+]
+
+const roleBasedLinksTemplate = [
+  {
+    name: 'Client Memeber',
+    href: '/ClientMember'
+  },
+  {
+    name: 'Public',
+    href: '/Public'
+  },
+  {
+    name: 'Member',
+    href: '/Member'
+  },
 ]
 
 const smallButtonStyles = "flex justify-center items-center p-2 rounded-md hover:bg-slate-700"
@@ -52,7 +67,7 @@ const PublicHeader = () => {
 
 
   return (
-    <nav className="bg-slate-900 grid grid-cols-3 p-4 absolute top-0 w-full">
+    <nav className="bg-slate-900 grid grid-cols-4 p-4 absolute top-0 w-full">
       {/* Logo/left section */}
       <div className="flex flex-row gap-2 items-center">
         <Link href='/' className="truncate text-sky-500">Stream Connect</Link>
@@ -85,6 +100,13 @@ const PublicHeader = () => {
           return <Link key={link.name} href={link.href} className="text-slate-400 hover:text-sky-500 mr-2">{link.name}</Link>
         })}
         <button className={smallButtonStyles}><MdLanguage className={iconStyles} /></button>
+      </div>
+
+      {/* Temporary */}
+      <div>
+        {roleBasedLinksTemplate && roleBasedLinksTemplate.map((link) => {
+          return <Link key={link.name} href={link.href}>{link.name}</Link>
+        })}
       </div>
     </nav>
   );
