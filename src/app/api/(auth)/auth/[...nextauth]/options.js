@@ -36,7 +36,7 @@ export const options = {
       },
       async authorize(credentials) {
         await dbConnect()
-        console.log('db connected')
+        console.log('db connected at authorize')
         try {
           const allUsers = await User.find().lean().exec()
           const foundUser = allUsers.find((user) =>  user.email = credentials.email)
@@ -47,6 +47,7 @@ export const options = {
               foundUser.password
               )
             if(match) {
+              console.log('password matched', foundUser)
               return foundUser
             }
             console.log(match, 'uer found')
@@ -59,7 +60,8 @@ export const options = {
     })
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
+      console.log(account, 'at option jwt callback')
       if(user) token.role = user.role
       return token
     },
@@ -67,5 +69,5 @@ export const options = {
       if(session?.user) session.user.role = token.role
       return session
     }
-  }
+  },
 }

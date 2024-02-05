@@ -4,7 +4,8 @@ import Header_SearchBox from "./headerParts/header_search";
 import Link from "next/link";
 import { MdMoreVert, MdFavoriteBorder, MdFilterNone, MdLanguage } from 'react-icons/md'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSession } from "next-auth/react";
 
 const notLoggedInLinks = [
   {
@@ -56,6 +57,12 @@ const PublicHeader = () => {
   const [ searchedText, setSearchedText ] = useState('')
   const [ isSubLinkMenuOpen, setIsSubLinkMenuOpen ] = useState(false)
 
+  const { data: session } = useSession()
+
+  useEffect(() => {
+    console.log(session)
+  }, [session])
+
   const subMenubuttonHandler = (e) => {
     setIsSubLinkMenuOpen(!isSubLinkMenuOpen)
   }
@@ -67,7 +74,7 @@ const PublicHeader = () => {
 
 
   return (
-    <nav className="bg-slate-900 grid grid-cols-4 p-4 absolute top-0 w-full">
+    <nav className="bg-slate-900 grid grid-cols-3 p-4 absolute top-0 w-full">
       {/* Logo/left section */}
       <div className="flex flex-row gap-2 items-center">
         <Link href='/' className="truncate text-sky-500">Stream Connect</Link>
@@ -100,13 +107,6 @@ const PublicHeader = () => {
           return <Link key={link.name} href={link.href} className="text-slate-400 hover:text-sky-500 mr-2">{link.name}</Link>
         })}
         <button className={smallButtonStyles}><MdLanguage className={iconStyles} /></button>
-      </div>
-
-      {/* Temporary */}
-      <div>
-        {roleBasedLinksTemplate && roleBasedLinksTemplate.map((link) => {
-          return <Link key={link.name} href={link.href}>{link.name}</Link>
-        })}
       </div>
     </nav>
   );
