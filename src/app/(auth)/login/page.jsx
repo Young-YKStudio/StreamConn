@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react'
 import { signIn, useSession, getProviders } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { FcGoogle } from "react-icons/fc";
+import { MdOutlineEmail } from "react-icons/md";
+
 
 const LoginPage = () => {
 
@@ -13,7 +16,7 @@ const LoginPage = () => {
   
   const [ message, setMessage ] = useState('')
   const [ providers, setProviders ] = useState()
-  
+  const [ credentialOpen, setCredentialOpen ] = useState(false)
   const { session, sessionStatus } = useSession()
   
   useEffect(() => {
@@ -56,15 +59,10 @@ const LoginPage = () => {
     if(response) {
       console.log(response, sessionStatus, 'at response')
     }
-    // const request = async () => {
-    //   const loginSubmission = await signIn('credentials', {
-    //     redirect: false,
-    //     email: submitForm.email,
-    //     password: submitForm.password
-    //   })
-    // }
-    // console.log(submitForm)
-    // request()
+  }
+
+  const credentialOpenHandler = (e) => {
+    setCredentialOpen(!credentialOpen)
   }
 
   return (
@@ -77,29 +75,33 @@ const LoginPage = () => {
         </div>
 
         {/* body */}
-        <div className="p-5 py-7 border-t border-slate-500">
-          <form className="space-y-4" onSubmit={(e) => submitHandler(e, submitForm)}>
-            {/* Forms */}
-            <div>
-              <label htmlFor="email" className={inputLabelStyle}>Email</label>
-              <input type='email' name='email' className={inputBoxStyle} placeholder="Enter your email address" required value={email} onChange={changeHandler} />
-            </div>
-            <div>
-              <label htmlFor="password" className={inputLabelStyle}>Password</label>
-              <input type='password' name='password' className={inputBoxStyle} placeholder="Enter your password" required value={password} onChange={changeHandler} />
-            </div>
-
-            {/* button */}
-            <div className='flex flex-col gap-4 pt-2'>
-              <button type='submit' className='w-full bg-sky-900 hover:bg-sky-500 font-medium rounded-md text-sm px-5 py-2.5 text-center'>Login</button>
-
-            </div>
-          </form>
+        <div className="flex flex-col gap-4 p-5 py-7 border-t border-slate-500">
           {/* Oauth Buttons */}
-          <div>
-            {console.log(providers, 'adf')}
-            {providers && <button onClick={() => signIn(providers.id)}>Sign in with {providers.name}</button>}
+          <div className='flex items-center justify-center pt-2'>
+            {providers && <button className='flex gap-2 items-center p-2 bg-white/20 w-full justify-center rounded-md hover:bg-white/50' onClick={() => signIn(providers.id)}><FcGoogle className='w-5 h-5' />Sign in with {providers.name}</button>}
           </div>
+          <div className='flex items-center justify-center pt-2'>
+            <button className='flex gap-2 items-center p-2 bg-white/20 w-full justify-center rounded-md hover:bg-white/50' onClick={() => credentialOpenHandler()}><MdOutlineEmail className='w-5 h-5' />Sign in with Email</button>
+          </div>
+          {credentialOpen &&
+            <form className="space-y-4 pt-4" onSubmit={(e) => submitHandler(e, submitForm)}>
+              {/* Forms */}
+              <div>
+                <label htmlFor="email" className={inputLabelStyle}>Email</label>
+                <input type='email' name='email' className={inputBoxStyle} placeholder="Enter your email address" required value={email} onChange={changeHandler} />
+              </div>
+              <div>
+                <label htmlFor="password" className={inputLabelStyle}>Password</label>
+                <input type='password' name='password' className={inputBoxStyle} placeholder="Enter your password" required value={password} onChange={changeHandler} />
+              </div>
+
+              {/* button */}
+              <div className='flex flex-col gap-4 pt-2'>
+                <button type='submit' className='w-full bg-sky-900 hover:bg-sky-500 font-medium rounded-md text-sm px-5 py-2.5 text-center'>Login</button>
+              </div>
+            </form>
+          
+          }
         </div>
       </div>
 
