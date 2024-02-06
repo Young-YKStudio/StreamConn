@@ -1,27 +1,42 @@
-// 'use server'
-
+'use client'// 'use server'
 import { EditButton } from '../../components/buttons/Edit.jsx'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 
-// const editHandler = async (e, id) => {
-//   console.log('Edit postID:', id)
-// }
 
-// const deleteHandler = async (e, id) => {
-//   console.log('Delete postID:', id)
-// }
-
-export default async function Tutorial() {
-// async function getData() {
-//   try {
-    const res = await fetch('http://localhost:3000/api/getPost')
+export default function Tutorial() {
+  // async function getData() {
+  const editHandler = (e, id) => {
+    console.log('Edit postID:', id)
+  }
   
-    if (!res.ok) {
-      // This will activate the closest `error.js` Error Boundary
-      throw new Error('Failed to fetch data')
-    }
+  const deleteHandler = (e, id) => {
+    console.log('Delete postID:', id)
+  }
 
-    // console.log('RES: ', res);
-    let posts = await res.json();
+  const [ fetchedData, setFetchedData ] = useState()
+
+  useEffect(() => {
+    const request = async () => {
+      const res = await axios.get('/api/getPost')
+      if(res.data) {
+        setFetchedData(res.data)
+      }
+    }
+    return (() => {
+      request()
+    })
+  },[])
+//   try {
+    // const res = await fetch('http://localhost:3000/api/getPost')
+  
+    // if (!res.ok) {
+    //   // This will activate the closest `error.js` Error Boundary
+    //   throw new Error('Failed to fetch data')
+    // }
+
+    // // console.log('RES: ', res);
+    // let posts = await res.json();
     // return object;
 
 //   } catch(e) {
@@ -32,13 +47,14 @@ export default async function Tutorial() {
   return (
     <div className="pt-20">
       {/* <p>Server Landing</p> */}
-      {posts.map(post => (
-        <li key={post._id}>{post.title} {post.body}
-          {/* <EditButton onClick={(e) => editHandler(e, post._id)} /> */}
-          {/* <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={(e) => editHandler(e, post._id)}>Edit</button>
-          <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={(e) => deleteHandler(e, post._id)}>Delete</button> */}
-        </li>
-      ))}
+      {fetchedData && fetchedData.map(post => (
+      <li key={post._id}>{post.title} {post.body}
+      {/* <button>adf</button> */}
+        {/* <EditButton onClick={(e) => editHandler(e, post._id)} /> */}
+        <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={(e) => editHandler(e, post._id)}>Edit</button>
+        <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={(e) => deleteHandler(e, post._id)}>Delete</button>
+      </li>
+    ))}
     </div>
   );
 }
@@ -213,3 +229,5 @@ export default async function Tutorial() {
     
 //   // }
   
+
+
