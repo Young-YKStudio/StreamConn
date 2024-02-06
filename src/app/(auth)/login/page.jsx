@@ -1,5 +1,8 @@
 'use client'
 
+// server component -> call data -> use client -> react render 
+
+
 import { useState, useEffect } from 'react'
 import { signIn, useSession, getProviders } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
