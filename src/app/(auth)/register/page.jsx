@@ -43,16 +43,13 @@ const Register = () => {
       if(request.status === 200) {
         console.log(request)
       } 
-      // TODO: set error msg in message state
-      if(request.status !== 200) {
-        console.log('error')
-      }
     } catch (e) {
       setMessage('Please try again')
-      console.log(e)
+      console.log(e, 'error?')
+      setMessage(e.response.data)
     }
 
-    console.log('submit triggered')
+    // console.log('submit triggered', submitForm)
   }
 
   const inputLabelStyle = 'block mb-2 text-sm font-medium'
@@ -71,7 +68,7 @@ const Register = () => {
         <div className='p-5 py-7 border-t border-slate-500'>
           <form className='space-y-4' onSubmit={submitHandler}>
             <div>
-              <label htmlFor='email' className={inputLabelStyle}>Your email</label>
+              <label htmlFor='email' className={inputLabelStyle}>Email</label>
               <input type='email' name='email' className={inputBoxStyle} placeholder='Enter your email address' required value={email} onChange={changeHandler}/>
             </div>
             <div>

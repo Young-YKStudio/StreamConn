@@ -2,7 +2,10 @@
 
 import Landing from "./components/pages/landing/page"
 
-export default function Home() {
+import { redirect } from 'next/navigation'
+
+export default async function Home() {
+
   return (
     <div>
       <Landing />
