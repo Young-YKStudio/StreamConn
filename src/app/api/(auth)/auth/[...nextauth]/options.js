@@ -17,8 +17,8 @@ export const options = {
           role: userRole
         }
       },
-      // clientId: process.env.GOOGLEID,
-      // clientSecret: process.env.GOOGLESEC
+      clientId: process.env.GOOGLE_ID,
+      clientSecret: process.env.GOOGLE_SEC
     }),
     CredentialsProvider({
       name: 'Credentials',
@@ -61,13 +61,20 @@ export const options = {
   ],
   callbacks: {
     async jwt({ token, user, account }) {
-      console.log(account, 'at option jwt callback')
       if(user) token.role = user.role
       return token
     },
     async session({ session, token }) {
-      if(session?.user) session.user.role = token.role
+      // console.log(user, 'session on options')
+      // let newSession = session
+      
+      if(session?.user) {
+        session.user.role = token.role
+      }
       return session
     }
   },
+  pages: {
+    signIn: '/login'
+  }
 }

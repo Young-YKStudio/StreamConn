@@ -1,19 +1,28 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn, useSession, getProviders } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 const LoginPage = () => {
 
   const router = useRouter()
+  // const providers = await getProviders()
   // const session = useSession()
-
+  
   const [ message, setMessage ] = useState('')
-
+  const [ providers, setProviders ] = useState()
+  
   const { session, sessionStatus } = useSession()
-
+  
+  useEffect(() => {
+    (() => {
+      const res = getProviders().then((result) => {
+        setProviders(result.google)
+      })
+    })()
+  },[])
 
   const inputLabelStyle = 'block mb-2 text-sm font-medium'
   const inputBoxStyle = 'bg-slate-500 text-gray-900 text-sm rounded-md focus:outline-none focus:ring-2 focus:bg-slate-300 focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5'
@@ -85,8 +94,12 @@ const LoginPage = () => {
               <button type='submit' className='w-full bg-sky-900 hover:bg-sky-500 font-medium rounded-md text-sm px-5 py-2.5 text-center'>Login</button>
 
             </div>
-            {/* Oauth Buttons */}
           </form>
+          {/* Oauth Buttons */}
+          <div>
+            {console.log(providers, 'adf')}
+            {providers && <button onClick={() => signIn(providers.id)}>Sign in with {providers.name}</button>}
+          </div>
         </div>
       </div>
 

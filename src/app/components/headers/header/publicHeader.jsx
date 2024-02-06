@@ -5,7 +5,8 @@ import Link from "next/link";
 import { MdMoreVert, MdFavoriteBorder, MdFilterNone, MdLanguage } from 'react-icons/md'
 
 import { useState, useEffect } from 'react'
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const notLoggedInLinks = [
   {
@@ -20,6 +21,13 @@ const notLoggedInLinks = [
     name: 'Register',
     href: '/register',
   },
+]
+
+const loggedInLinks = [
+  {
+    name: 'My Account',
+    href: 'myAccount'
+  }
 ]
 
 const subMenuLinks = [
@@ -58,6 +66,7 @@ const PublicHeader = () => {
   const [ isSubLinkMenuOpen, setIsSubLinkMenuOpen ] = useState(false)
 
   const { data: session } = useSession()
+  const router = useRouter()
 
   useEffect(() => {
     console.log(session)
@@ -72,6 +81,14 @@ const PublicHeader = () => {
     setIsSubLinkMenuOpen(!isSubLinkMenuOpen)
   }
 
+  const signOutProcess = async () => {
+    await signOut()
+    router.push('/')
+  }
+
+  const accountButtonHandler = (e, email) => {
+    console.log(email)
+  }
 
   return (
     <nav className="bg-slate-900 grid grid-cols-3 p-4 absolute top-0 w-full">
@@ -102,12 +119,21 @@ const PublicHeader = () => {
       <Header_SearchBox searchedText={searchedText} setSearchedText={setSearchedText} />
 
       {/* link elements section */}
-      <div className="flex justify-end w-full items-center gap-2">
-        {notLoggedInLinks && notLoggedInLinks.map((link) => {
-          return <Link key={link.name} href={link.href} className="text-slate-400 hover:text-sky-500 mr-2">{link.name}</Link>
-        })}
-        <button className={smallButtonStyles}><MdLanguage className={iconStyles} /></button>
-      </div>
+      {session ? <div>
+          <p>logged In</p>
+          {/* my account */}
+          <button onClick={(e) => accountButtonHandler(e, session.user.email)}>My Account</button>
+          {/* logout */}
+          <button onClick={() => signOutProcess()}>Logout</button>
+        </div> 
+        :
+        <div className="flex justify-end w-full items-center gap-2">
+          {notLoggedInLinks && notLoggedInLinks.map((link) => {
+            return <Link key={link.name} href={link.href} className="text-slate-400 hover:text-sky-500 mr-2">{link.name}</Link>
+          })}
+          <button className={smallButtonStyles}><MdLanguage className={iconStyles} /></button>
+        </div>
+      }
     </nav>
   );
 }
