@@ -8,6 +8,7 @@ export default withAuth(
       return NextResponse.rewrite(`${process.env.APP_URL}/login`, req.url)
     }
     if(req.nextUrl.pathname.startsWith('/login') && req.nextauth.token.email) {
+      console.log('at middleware')
       return NextResponse.rewrite(`${process.env.APP_URL}`, req.url)
     }
     if(req.nextUrl.pathname.startsWith('/register') && req.nextauth.token.email) {
