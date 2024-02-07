@@ -8,8 +8,6 @@ const AccountIndividualPage = ({params}) => {
   const [ currentSection, setCurrentSection ] = useState()
   const session = useSession()
 
-  console.log(session)
-
   return (
     <div className='flex flex-col w-full'>
       <div className='min-h-24 bg-blue-700/30 pt-16 px-8 pb-1'>
