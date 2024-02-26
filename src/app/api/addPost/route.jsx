@@ -17,7 +17,7 @@ export async function POST(req) {
 
   try  {
     await newPost.save()
-    return new NextResponse('post created', { status: 200 })
+    return NextResponse.json(newPost, { status: 200 })
   } catch (e) {
     return new NextResponse(e, { status: 500 })
   }

@@ -4,7 +4,7 @@ import dbConnect from '@/app/util/DBConnect';
 import Post from '@/app/models/post'
 import { NextRequest, NextResponse } from "next/server"
 
-export async function GET(req) {
+export async function GET() {
   await dbConnect();
 
   let allPosts = await Post.find()
@@ -12,6 +12,7 @@ export async function GET(req) {
     return NextResponse.json(allPosts, { status: 200 })
   }
   else {
+    console.log('ERROR in getAllPosts')
     return NextResponse('No post found', { status: 500 })
   }
 }
