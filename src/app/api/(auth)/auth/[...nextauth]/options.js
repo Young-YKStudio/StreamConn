@@ -8,12 +8,11 @@ export const options = {
   providers: [
     GoogleProvider({
       profile(profile) {
-        console.log('Profile Google:', profile)
-
         let userRole = 'Google User'
         return {
           ...profile,
           id: profile.sub,
+          picture: profile.picture,
           role: userRole
         }
       },
@@ -36,7 +35,6 @@ export const options = {
       },
       async authorize(credentials) {
         await dbConnect()
-        console.log('db connected at authorize')
         try {
           const allUsers = await User.find().lean().exec()
           const foundUser = allUsers.find((user) =>  user.email = credentials.email)
@@ -47,7 +45,6 @@ export const options = {
               foundUser.password
               )
             if(match) {
-              console.log('password matched', foundUser)
               return foundUser
             }
             console.log(match, 'uer found')
@@ -61,17 +58,49 @@ export const options = {
   ],
   callbacks: {
     async jwt({ token, user, account }) {
-      if(user) token.role = user.role
+      if(user) {
+        token.role = user.role
+      }
       return token
     },
-    async session({ session, token }) {
+    async session({ session, token, user }) {
       // console.log(user, 'session on options')
       // let newSession = session
       
+      await dbConnect()
+      
       if(session?.user) {
+
+        
+        const foundUser = await User.findOne({email: session.user.email})
+        
         session.user.role = token.role
+        session.user.picture = foundUser.profile
+        session.user.isUpdated = foundUser.isUpdated
+        session.user.id = foundUser._id
       }
       return session
+    }, 
+    async signIn({ account, profile }) {
+      if(account.provider === 'google') {
+        await dbConnect()
+
+        const foundUser = await User.findOne({email: profile.email})
+
+        if(!foundUser) {
+
+          let newDBUser = await User.create({
+            email: profile.email,
+            profile: profile.picture,
+            locale: profile.locale
+          })
+
+          return true
+          
+        } else {
+          return true
+        }
+      }
     }
   },
   pages: {

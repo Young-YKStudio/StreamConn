@@ -13,10 +13,15 @@ const userSchema = new Schema(
       type: String,
       required: false
     },
-    platforms: [],
     follows: [],
     followers: [],
-    
+    introduction: String,
+    isUpdated: {
+      type: Boolean,
+      default: false,
+    },
+    profile: String,
+    locale: String,
   },{timestamps: true}
 )
 

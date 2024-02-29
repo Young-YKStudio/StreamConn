@@ -1,4 +1,5 @@
 'use client'
+// TODO: remove red error text when click register again
 
 import Link from 'next/link'
 import { useState } from 'react'
@@ -41,7 +42,7 @@ const Register = () => {
       const request = await axios.post('api/register', submitForm)
       // TODO: login with successed email and token 
       if(request.status === 200) {
-        console.log(request)
+        router.push(`/account_update/${request.data.message._id}`)
       } 
     } catch (e) {
       setMessage('Please try again')

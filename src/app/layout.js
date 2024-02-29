@@ -1,5 +1,5 @@
 import './globals.css'
-import PublicHeader from './components/headers/header/publicHeader'
+import HeaderLanding from './components/headers/header/HeaderLanding'
 import SideBar from './components/sidebar/sideBar'
 
 import { getServerSession } from 'next-auth'
@@ -18,7 +18,7 @@ export default async function RootLayout({ children }) {
     <html lang="en">
       <body className='text-white bg-black'>
         <SessionProvider session={session}>
-          <PublicHeader />
+          <HeaderLanding />
           <div className='flex flex-row flex-nowrap'>
             <SideBar />
             {children}

@@ -8,68 +8,26 @@ import { useState, useEffect } from 'react'
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-const notLoggedInLinks = [
-  {
-    name: 'Tutorial',
-    href: '/tutorial'
-  },
-  {
-    name: 'Login',
-    href: '/login',
-  },
-  {
-    name: 'Register',
-    href: '/register',
-  },
-]
-
-const loggedInLinks = [
-  {
-    name: 'My Account',
-    href: 'myAccount'
-  }
-]
-
-const subMenuLinks = [
-  {
-    name: 'Events',
-    href: '/events'
-  },
-  {
-
-    name: 'Browse',
-    href:  '/browse'
-  }
-]
-
-const roleBasedLinksTemplate = [
-  {
-    name: 'Client Memeber',
-    href: '/ClientMember'
-  },
-  {
-    name: 'Public',
-    href: '/Public'
-  },
-  {
-    name: 'Member',
-    href: '/Member'
-  },
-]
+import { notLoggedInLinks, loggedInLinks, subMenuLinks, roleBasedLinksTemplate } from "@/app/data/headerLinks";
 
 const smallButtonStyles = "flex justify-center items-center p-2 rounded-md hover:bg-slate-700"
 const iconStyles = 'w-5 h-5 text-slate-400 '
 
-const PublicHeader = () => {
+const HeaderLanding = () => {
 
   const [ searchedText, setSearchedText ] = useState('')
   const [ isSubLinkMenuOpen, setIsSubLinkMenuOpen ] = useState(false)
 
   const { data: session } = useSession()
   const router = useRouter()
-
+  
   useEffect(() => {
-    console.log(session)
+    if(session) {
+      if(!session.user.isUpdated) {
+        router.push(`/account_update/${session.user.id}`)
+        console.log(session, 'not updated at headerLanding')
+      }
+    }
   }, [session])
 
   const subMenubuttonHandler = (e) => {
@@ -91,7 +49,7 @@ const PublicHeader = () => {
   }
 
   return (
-    <nav className="bg-slate-900 grid grid-cols-3 p-4 absolute top-0 w-full">
+    <nav className="bg-slate-900 grid grid-cols-3 p-4 absolute top-0 w-full z-10">
       {/* Logo/left section */}
       <div className="flex flex-row gap-2 items-center">
         <Link href='/' className="truncate text-sky-500">Stream Connect</Link>
@@ -137,4 +95,4 @@ const PublicHeader = () => {
     </nav>
   );
 }
-export default PublicHeader;
+export default HeaderLanding;
