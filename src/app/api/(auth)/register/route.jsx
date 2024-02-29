@@ -25,7 +25,10 @@ export const POST = async (req) => {
   try {
     await newUser.save()
     // TODO: send email
-    return new NextResponse('User is registered', { status: 200 })
+    return NextResponse.json(
+      { message: newUser },
+      { status: 200 },
+    )
   } catch (e) {
     return new NextResponse(e, { status: 500 })
   }
