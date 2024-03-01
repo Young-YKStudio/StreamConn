@@ -20,7 +20,6 @@ export default async function RootLayout({ children }) {
         <SessionProvider session={session}>
           <HeaderLanding />
           <div className='flex flex-row flex-nowrap'>
-            <SideBar />
             {children}
           </div>
         </SessionProvider>

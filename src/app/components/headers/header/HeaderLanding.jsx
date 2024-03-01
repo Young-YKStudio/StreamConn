@@ -77,12 +77,11 @@ const HeaderLanding = () => {
       <Header_SearchBox searchedText={searchedText} setSearchedText={setSearchedText} />
 
       {/* link elements section */}
-      {session ? <div>
-          <p>logged In</p>
+      {session ? <div className="flex justify-end w-full items-center gap-2 text-slate-400">
           {/* my account */}
-          <button onClick={(e) => accountButtonHandler(e, session.user.email)}>My Account</button>
+          <button onClick={(e) => accountButtonHandler(e, session.user.email)} className=" hover:text-sky-500">My Account</button>
           {/* logout */}
-          <button onClick={() => signOutProcess()}>Logout</button>
+          <button onClick={() => signOutProcess()} className=" hover:text-sky-500">Logout</button>
         </div> 
         :
         <div className="flex justify-end w-full items-center gap-2">

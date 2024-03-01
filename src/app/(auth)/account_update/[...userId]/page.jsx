@@ -19,6 +19,8 @@ const Account_Update = async ({params}) => {
     <div>
       <Account_Update_Render user={foundUser}/>
       <p className="pt-20">account update page {foundUser.email}</p>
+      {/* ask platform */}
+      {/* ask stream address */}
     </div>
   );
 }
