@@ -22,6 +22,7 @@ const userSchema = new Schema(
     },
     profile: String,
     locale: String,
+    isStreamer: Boolean,
   },{timestamps: true}
 )
 

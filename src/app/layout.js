@@ -19,7 +19,7 @@ export default async function RootLayout({ children }) {
       <body className='text-white bg-black'>
         <SessionProvider session={session}>
           <HeaderLanding />
-          <div className='flex flex-row flex-nowrap'>
+          <div className='w-screen h-screen'>
             {children}
           </div>
         </SessionProvider>
