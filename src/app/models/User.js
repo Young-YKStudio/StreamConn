@@ -22,6 +22,13 @@ const userSchema = new Schema(
     },
     profile: String,
     locale: String,
+    isStreamer: Boolean,
+    platforms: [
+      {
+        name: String,
+        href: String,
+      }
+    ],
   },{timestamps: true}
 )
 

@@ -1,125 +1,33 @@
-
-// let samplePosts = [
-//   {
-//     id: 'post001',
-//     channel: 'General',
-//     channelTopic: 'General1 channel topic',
-//     text: 'this is a test post',
-//     author: 'test00001',
-//     comments: [
-//       {
-//         id: 'comment0001',
-//         comment: 'this is a test comment',
-//         author: 'test00002'
-//       }
-//     ],
-//   },
-//   {
-//     id: 'post002',
-//     channel: 'General2',
-//     channelTopic: 'General2 channel topic',
-//     text: 'this is a test post2',
-//     author: 'test00003',
-//     comments: [
-//       {
-//         id: 'comment0002',
-//         comment: 'this is a test comment2',
-//         author: 'test00005'
-//       }
-//     ],
-//   },
-//   {
-//     id: 'post005',
-//     channel: 'Notice',
-//     channelTopic: 'General2 channel topic',
-//     text: 'this is a test post2',
-//     author: 'test00003',
-//     comments: [
-//       {
-//         id: 'comment0002',
-//         comment: 'this is a test comment2',
-//         author: 'test00005'
-//       }
-//     ],
-//   },
-// ]
-
-import LandingComponents from './components/landingComponents'
-import PostInput from './components/postInput'
-import RenderingPosts from './components/posts'
+import SideBar from "@/app/components/sidebar/sideBar";
+import LoadingComponent from "@/app/components/loading/loadingComponent";
+import IndividualPageIntro from "./parts/Introduction";
+import { Suspense } from "react";
 import axios from 'axios'
 
-const getAllPost = async (userId) => {
-  const returnedPosts = await axios.get(`${process.env.APP_URL}/api/getallposts/${userId}`)
-  if(returnedPosts) {
-    return returnedPosts.data.message
-  } else {
-    return `${userId} did not call all posts`
+const getUserInfo = async (user) => {
+  try {
+    let response = await axios.get(`${process.env.APP_URL}/api/findOneUser/${user}`)
+    if(response) {
+      return response.data.message
+    }
+  } catch (error) {
+    return 'error'
   }
 }
 
-const AccountIndividualPage = async ({params}) => {
+const AccountLanding = async ({params}) => {
+  
+  const userId = params.id
+  const user = await getUserInfo(userId)
 
-  const returnedPosts = await getAllPost(params.id)
-
-  const categoryOpenHandler = () => {
-    setIsCategorySectionOpen(!isCategorySectionOpen)
-  }
-
-  const categorySectionStyles = (section, boolean) => {
-    if(section =='firstRow' && boolean) {
-      return 'absolute top-0 right-0 w-48 bg-blue-900 h-full z-0 pt-24 px-2' 
-    }
-    if(section =='firstRow' && !boolean) {
-      return 'absolute top-0 right-0 bg-blue-900 h-full z-0 pt-24 px-2'
-    }
-
-  }
-
-
+  // TODO: set most of the site functionality here(합방, 이벤트 등등)
   return (
-    <div className='flex flex-col justify-end w-full'>
-
-      {/* right side channel section */}
-      {/* <div className={categorySectionStyles('firstRow', isCategorySectionOpen)}> */}
-        {/* first row */}
-        {/* <div className='flex flex-row flex-nowrap justify-between'>
-          {isCategorySectionOpen && 
-            <p className='py-1 text-normal'>Channels</p>
-          }
-          <button onClick={categoryOpenHandler}>{isCategorySectionOpen ? 'Close' : 'Open'}</button>
-        </div> */}
-
-        {/* channel lists */}
-        {/* {loopedTopics.length > 0 && loopedTopics.map((loop) => {
-          if(loop.channel === 'Notice') {
-            return <p key={loop.id}>#Notice</p>
-          }
-          if(loop.channel === 'Gallery'){
-            return <p key={loop.id}>#Gallery</p>
-          }
-          if(loop.channel === 'Suggestions'){
-            return <p key={loop.id}>#Gallery</p>
-          }
-          if(loop.channel !== 'Notice' || loop.channel !== 'Gallery' || loop.channel !== 'Suggestions') {
-            return <p key={loop.id}>#{loop.channel}</p>
-          }
-        })} */}
-
-      {/* </div> */}
-      
-      {/* breadcrumbs section */}
-
-        <div className='w-full'>
-          <RenderingPosts returnedPosts={returnedPosts}/>
-          <div>
-            {/* TODO: switch to user ID */}
-          </div>
-          <PostInput />
-        </div>
-
-    </div>
+    <>
+      <SideBar />
+      <Suspense fallback={<LoadingComponent />}>
+        <IndividualPageIntro user={user}/>
+      </Suspense>
+    </>
   );
 }
-
-export default AccountIndividualPage;
+export default AccountLanding;
