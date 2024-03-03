@@ -4,6 +4,8 @@ import GoBackButton from './components/goBackButton'
 import AskStreamer from './components/askStreamer'
 import Introduction from './components/introduction'
 import AddStreamerAddress from './components/addStreamerAddress'
+import AddStreamerInformation from './components/addStreamerInformation'
+import CreateNickname from './components/createNickname'
 import AskPlatform from './components/askPlatform'
 import NotSupported from './components/notsupported'
 import { AnimatePresence } from 'framer-motion'
@@ -18,31 +20,36 @@ const Account_Update_Render = (user) => {
       name: 'Twitch',
       checked: false,
       image: '',
-      href: ''
+      href: '',
+      hrefChecked: false,
     },
     {
       name: 'YouTube',
       checked: false,
       image: '',
-      href: ''
+      href: '',
+      hrefChecked: false,
     },
     {
       name: 'Chzzk',
       checked: false,
       image: '',
-      href: ''
+      href: '',
+      hrefChecked: false,
     },
     {
       name: 'Afreeca',
       checked: false,
       image: '',
-      href: ''
+      href: '',
+      hrefChecked: false,
     },
     {
       name: 'KICK',
       checked: false,
       image: '',
-      href: ''
+      href: '',
+      hrefChecked: false,
     },
   ])
       // ask platform
@@ -66,6 +73,12 @@ const Account_Update_Render = (user) => {
     }
     if(section === 'askPlatformAddress') {
       return <AddStreamerAddress user={user} setCurrentPage={setCurrentPage} platforms={platforms} setPlatforms={setPlatforms}/>
+    }
+    if(section === 'streamerIntro') {
+      return <AddStreamerInformation user={user} setCurrentPage={setCurrentPage} />
+    }
+    if(section === 'createNickname') {
+      return <CreateNickname user={user} setCurrentPage={setCurrentPage} />
     }
   }
 

@@ -19,8 +19,17 @@ const AskPlatform = ({platforms, setPlatforms, setCurrentPage}) => {
   
   const nextBtnHandler = (e, type) => {
     e.preventDefault()
+    let tempArry = []
+    platforms.forEach(platform => {
+      if(platform.checked) {
+        tempArry.push(platform.name)
+      }
+    })
+    if(tempArry.length === 0) {
+      console.log('no platform selected')
+      return
+    }
     setCurrentPage('askPlatformAddress')
-    console.log(platforms, type, 'button clicked')
   }
   
   const nonBtnHandler = (e, type) => {

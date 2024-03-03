@@ -1,30 +1,122 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { MdCheck } from "react-icons/md";
 import { bluebuttonDark, blueButtonDarkOutlined } from '@/app/components/buttons/buttonStyles'
+import axios from 'axios'
 
-const AddStreamerAddress = ({platforms, setPlatforms, setCurrentPage}) => {
+const AddStreamerAddress = ({user, platforms, setPlatforms, setCurrentPage}) => {
 
-  const checkBoxStyles = 'h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500'
+  const inputBoxStyles = 'block w-full rounded-l-md border-0 py-1.5 shadow-sm ring-inset ring-sky-800 focus:ring-inset focus:ring-sky500 text-gray-900'
+  const inputBoxDisabledStyles = 'block w-full rounded-l-md border-0 py-1.5 shadow-sm ring-inset ring-sky-800 focus:ring-inset focus:ring-sky500 text-gray-900 bg-gray-400'
 
-  const changeHandler = (e) => {
-    let platformName = e.target.name
-    setPlatforms(platforms.map(platform => {
-      if(platform.name === platformName) {
-        return {...platform, checked: !platform.checked}
+  const changeHandler = (e, index) => {
+    setPlatforms(platforms.map((platform, i) => {
+      if(i === index) {
+        return {...platform, href: e.target.value}
       } else {
         return platform
       }
     }))
   }
 
-  const nextBtnHandler = (e, type) => {
-    e.preventDefault()
-    console.log(platforms, type, 'button clicked')
+  const checkStreamingAddress = (e, checkingPlatform) => {
+
+    // validations
+
+    if(checkingPlatform.href === '') {
+      console.log('no href entered')
+      return
+    }
+
+    if(checkingPlatform.name == 'Twtich') {
+      if(!checkingPlatform.href.startsWith('https://www.twitch.tv/')) {
+        return console.log('invalid url twtich')
+      }
+    }
+
+    if(checkingPlatform.name == 'YouTube') {
+      if(!checkingPlatform.href.startsWith('https://www.youtube.com/@')) {
+        return console.log('invalid url youtube')
+      }
+    }
+
+    if(checkingPlatform.name == 'Chzzk') {
+      if(!checkingPlatform.href.startsWith('https://chzzk.naver.com/')) {
+        return console.log('invalid url chzzk')
+      }
+    }
+
+    if(checkingPlatform.name == 'Afreeca') {
+      if(!checkingPlatform.href.startsWith('https://bj.afreecatv.com/')) {
+        return console.log('invalid url afreeca')
+      }
+    }
+
+    if(checkingPlatform.name == 'KICK') {
+      if(!checkingPlatform.href.startsWith('https://kick.com/')) {
+        return console.log('invalid url kick')
+      }
+    }
+
+
+    // call API check streaming address
+
+    // const checkStreamingAddressUrl = async () => {
+    //   try {
+    //     const res = await axios.get(`${platform.href}`)
+    //     if(res.status === 200) {
+    //       console.log(res.data)
+    //     }
+    //   } catch (error) {
+    //     console.log(error)
+    //   }
+    // }
+    // checkStreamingAddressUrl()
+
+    // if checking returns okay, update state
+    setPlatforms(platforms.map((platform) => {
+      if(platform.name === checkingPlatform.name) {
+        return {...platform, href: checkingPlatform.href, hrefChecked: true}
+      } else {
+        return platform
+      }
+    }))
   }
 
-  const nonBtnHandler = (e, type) => {
-    setCurrentPage('notSupported')
+  const nextBtnHandler = (e) => {
+    e.preventDefault()
+
+    const requestToAPI = async () => {
+      try {
+        const res = await axios.post(`/api/addPlatformAddress/${user.user._id}`, platforms)
+        if(res.status === 200) {
+          setCurrentPage('streamerIntro')
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    requestToAPI()
+  }
+
+  const exampleTextDistributor = (name) => {
+    if(name === 'Twitch') {
+      return 'https://www.twitch.tv/'
+    }
+    if(name === 'YouTube') {
+      return 'https://www.youtube.com/@'
+    }
+    if(name === 'Chzzk') {
+      return 'https://chzzk.naver.com/'
+    }
+    if(name === 'Afreeca') {
+      return 'https://bj.afreecatv.com/'
+    }
+    if(name === 'KICK') {
+      return 'https://kick.com/'
+    }
   }
 
   return (
@@ -35,34 +127,42 @@ const AddStreamerAddress = ({platforms, setPlatforms, setCurrentPage}) => {
       transition={{ease: "linear", duration: 0.75}} 
       className="flex flex-col justify-center items-center w-full h-full gap-12"
     >
-      <div>
-        <p className="text-3xl">Provide your streaming address</p>
-      </div>
-      <div className='flex flex-row justify-center gap-4'>
-        <fieldset>
-          <form className='w-48' onSubmit={(e) => nextBtnHandler(e, 'submitBtn')}>
-            <legend className='text-base font-semibold leading-6'>Platforms</legend>
-            <div className='mt-4 divide-y divide-white/45 border-b border-t border-white/45'>
-              {platforms.map((platform, i) => (
+      <div className='w-96 flex flex-col justify-center items-center gap-8'>
+        <div>
+          <p className="text-2xl">Provide your streaming address</p>
+        </div>
+        <div className='flex flex-col justify-center gap-6 w-full'>
+          {platforms && platforms.map((platform, i) => {
+            if(platform.checked) {
+              return (
                 <div
                   key={platform.name + i}
-                  className='relative flex items-start py-4 px-4'
                 >
-                  <div className='min-w-0 flex-1 text-sm leading-6'>
-                    <label htmlFor={platform.name} className='select-non font-medium'>{platform.name}</label>
+                  <div>
+                    <label htmlFor={platform.name} className='select-non font-medium'>{platform.name} address</label>
                   </div>
-                  <div className='ml-3 flex h-6 items-center'>
-                    <input type='checkbox' checked={platform.checked} name={platform.name} className={checkBoxStyles} onChange={changeHandler}/>
+                  <div className='mt-2 flex flex-nowrap'>
+                    <input 
+                      type='url' 
+                      value={platform.href} 
+                      name={platform.name} 
+                      className={platform.hrefChecked ? inputBoxDisabledStyles : inputBoxStyles} 
+                      disabled={platform.hrefChecked ? true : false} 
+                      onChange={(e) => changeHandler(e, i)}
+                    />
+                    {platform.hrefChecked ? 
+                      <div className='bg-green-600 rounded-r-md border border-1 border-green-600 px-6 py-2'><MdCheck className='w-5 h-5'/></div>
+                      :
+                      <button onClick={(e) => checkStreamingAddress(e, platform)} className='px-4 py-2 text-sm bg-sky-800 rounded-r-md border border-1 border-sky-800 hover:bg-sky-500'>Check</button>
+                    }
                   </div>
+                  <p className='mt-2 text-xs text-gray-500'>ex) {exampleTextDistributor(platform.name)}<span className='font-bold italic'>Your ID</span></p>
                 </div>
-              ))}
-            </div>
-            <div className='w-full flex justify-center my-4'>
-              <button className={`${bluebuttonDark} w-full`} type='submit'>Next</button>
-            </div>
-          </form>
-          <button className={`${blueButtonDarkOutlined} w-full`} onClick={(e) => nonBtnHandler(e, 'nonBtn')}>Non of the above</button>
-        </fieldset>
+              )
+            }}
+          )}
+          <button className={bluebuttonDark} onClick={nextBtnHandler}>Next</button>
+        </div>
       </div>
     </motion.section>
   );

@@ -15,6 +15,9 @@ const GoBackButton = ({current, setCurrentPage}) => {
     if(current === 'askPlatformAddress') {
       setCurrentPage('streamingPlatforms')
     }
+    if(current === 'streamerIntro') {
+      setCurrentPage('askPlatformAddress')
+    }
   }
 
   return (
