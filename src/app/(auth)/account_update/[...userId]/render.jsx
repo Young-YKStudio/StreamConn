@@ -5,6 +5,7 @@ import AskStreamer from './components/askStreamer'
 import Introduction from './components/introduction'
 import AddStreamerAddress from './components/addStreamerAddress'
 import AddStreamerInformation from './components/addStreamerInformation'
+import AddFollows from './components/addFollows'
 import CreateNickname from './components/createNickname'
 import AskPlatform from './components/askPlatform'
 import NotSupported from './components/notsupported'
@@ -80,12 +81,15 @@ const Account_Update_Render = (user) => {
     if(section === 'createNickname') {
       return <CreateNickname user={user} setCurrentPage={setCurrentPage} />
     }
+    if(section === 'addFollows') {
+      return <AddFollows user={user} setCurrentPage={setCurrentPage} />
+    }
   }
 
   return (
     <section className='relative pt-20 flex flex-col justify-center items-center w-screen h-full'>
       <AnimatePresence>
-        {currentPage !== 'intro' && <GoBackButton key='button' current={currentPage} setCurrentPage={setCurrentPage} />}
+        {currentPage !== 'intro' || currentPage !== 'createNickname' && <GoBackButton key='button' current={currentPage} setCurrentPage={setCurrentPage} />}
         {currentSectionDistributor(currentPage)}
       </AnimatePresence>
     </section>
