@@ -29,6 +29,10 @@ const userSchema = new Schema(
         href: String,
       }
     ],
+    nickname: {
+      type: String,
+      unique: true,
+    }
   },{timestamps: true}
 )
 

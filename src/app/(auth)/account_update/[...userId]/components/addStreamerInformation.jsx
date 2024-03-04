@@ -24,7 +24,7 @@ const AddStreamerInformation = ({user, setCurrentPage}) => {
     }
 
     try {
-      const response = await axios.put(`/api/updateIntroduction/${user.user._id}`, sendingData)
+      const response = await axios.put(`/api/updateIntroduction/${user._id}`, sendingData)
       if(response.status === 200) {
         setCurrentPage('createNickname')
       }

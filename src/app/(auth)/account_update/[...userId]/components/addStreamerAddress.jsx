@@ -89,7 +89,7 @@ const AddStreamerAddress = ({user, platforms, setPlatforms, setCurrentPage}) => 
 
     const requestToAPI = async () => {
       try {
-        const res = await axios.post(`/api/addPlatformAddress/${user.user._id}`, platforms)
+        const res = await axios.post(`/api/addPlatformAddress/${user._id}`, platforms)
         if(res.status === 200) {
           setCurrentPage('streamerIntro')
         }

@@ -6,7 +6,7 @@ const AskStreamer = ({user, setCurrentPage}) => {
 
   const yesButtonHandler = async (e) => {
     let sendingData = {
-      id: user.user._id,
+      id: user._id,
     }
     try {
       const response = await axios.post('/api/auth/isStreamerUpdate', sendingData)
@@ -16,6 +16,10 @@ const AskStreamer = ({user, setCurrentPage}) => {
     } catch (e) {
       console.log(e, 'error at front')
     }
+  }
+
+  const noButtonHandler = async (e) => {
+    setCurrentPage('createNickname')
   }
 
   return (
@@ -31,7 +35,7 @@ const AskStreamer = ({user, setCurrentPage}) => {
       </div>
       <div className='flex flex-row justify-center gap-4'>
         <button onClick={yesButtonHandler} className={bluebuttonDark}>YES</button>
-        <button className={bluebuttonDark}>NO</button>
+        <button onClick={noButtonHandler} className={bluebuttonDark}>NO</button>
       </div>
     </motion.section>
   );

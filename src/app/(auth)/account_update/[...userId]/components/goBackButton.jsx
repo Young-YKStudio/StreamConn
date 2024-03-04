@@ -18,6 +18,9 @@ const GoBackButton = ({current, setCurrentPage}) => {
     if(current === 'streamerIntro') {
       setCurrentPage('askPlatformAddress')
     }
+    if(current === 'addFollows') {
+      setCurrentPage('createNickname')
+    }
   }
 
   return (

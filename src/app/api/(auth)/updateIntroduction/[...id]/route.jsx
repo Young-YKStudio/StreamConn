@@ -12,7 +12,7 @@ export const PUT = async (req) => {
     await dbConnect()
   } catch (err) {
     return NextResponse.json(
-      { message: 'Error at connecting to DB'},
+      { message: 'Database connection error, please try again later'},
       { status: 501 }
     )
   }
@@ -20,7 +20,7 @@ export const PUT = async (req) => {
 
   if(!foundUser) {
     return NextResponse.json(
-      { message: 'User not found'},
+      { message: 'Requested user does not exist, please try again.'},
       { status: 404 }
     )
   }
