@@ -6,7 +6,6 @@ export const PUT = async (req) => {
   let userId = req.nextUrl.pathname.substr(-24)
 
   const { nickname } = await req.json()
-
   
   try {
     await dbConnect()
@@ -25,29 +24,28 @@ export const PUT = async (req) => {
       { status: 404 }
     )
   }
-  console.log(duplicated, 'duplicated')
 
-  // let foundUser = await User.findById(userId)
+  let foundUser = await User.findById(userId)
   
-  // if(!foundUser) {
-  //   return NextResponse.json(
-  //     { message: 'Requested user does not exist, please try again.'},
-  //     { status: 404 }
-  //   )
-  // }
+  if(!foundUser) {
+    return NextResponse.json(
+      { message: 'Requested user does not exist, please try again.'},
+      { status: 404 }
+    )
+  }
 
-  // try {
-  //   foundUser.nickname = nickname
-  //   await foundUser.save()
-  // } catch (err) {
-  //   return NextResponse.json(
-  //     { message: 'Database update error, please try again later'},
-  //     { status: 501 }
-  //   )
-  // }
+  try {
+    foundUser.nickname = nickname
+    await foundUser.save()
+  } catch (err) {
+    return NextResponse.json(
+      { message: 'Database update error, please try again later'},
+      { status: 501 }
+    )
+  }
 
   return NextResponse.json(
-    {message: 'testing'},
+    {message: 'Successfully updated nickname'},
     {status: 200}
   )
 }

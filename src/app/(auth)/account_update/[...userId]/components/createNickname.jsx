@@ -21,6 +21,8 @@ const CreateNickname = ({user, setCurrentPage}) => {
       return
     }
 
+    console.log(user)
+
     if(inputtedText.length > 16) {
       setMessage('Nickname cannot be more than 16 characters')
       return
@@ -32,12 +34,13 @@ const CreateNickname = ({user, setCurrentPage}) => {
     }
 
     try {
-      const response = await axios.put(`/api/updateNickname/${user.user._id}`, sendingData)
+      const response = await axios.put(`/api/updateNickname/${user._id}`, sendingData)
       if(response.status === 200) {
         setCurrentPage('addFollows')
       }
     } catch (error) {
-      setMessage(error.response.data.message)
+      console.log(error)
+      // setMessage(error.response.data.message)
     }
   }
 

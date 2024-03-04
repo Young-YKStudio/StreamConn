@@ -11,13 +11,24 @@ export const getUserInfo = async (userId) => {
   return null
 }
 
+export const getAllStreamers = async () => {
+  const foundStreamers = await axios.get(`${process.env.APP_URL}/api/getAllStreamers`)
+  
+  if(foundStreamers) {
+    return foundStreamers.data.message
+  }
+
+  return null
+}
+
 const Account_Update = async ({params}) => {
 
   const foundUser = await getUserInfo(params)
+  const allStreamers = await getAllStreamers()
 
   return (
     <div className='flex justify-center items-center w-full h-full'>
-      <Account_Update_Render user={foundUser}/>
+      <Account_Update_Render user={foundUser} allStreamers={allStreamers} />
     </div>
   );
 }

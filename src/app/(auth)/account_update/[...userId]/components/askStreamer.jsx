@@ -18,6 +18,10 @@ const AskStreamer = ({user, setCurrentPage}) => {
     }
   }
 
+  const noButtonHandler = async (e) => {
+    setCurrentPage('createNickname')
+  }
+
   return (
     <motion.section
       initial={{opacity: 0}}
@@ -31,7 +35,7 @@ const AskStreamer = ({user, setCurrentPage}) => {
       </div>
       <div className='flex flex-row justify-center gap-4'>
         <button onClick={yesButtonHandler} className={bluebuttonDark}>YES</button>
-        <button className={bluebuttonDark}>NO</button>
+        <button onClick={noButtonHandler} className={bluebuttonDark}>NO</button>
       </div>
     </motion.section>
   );

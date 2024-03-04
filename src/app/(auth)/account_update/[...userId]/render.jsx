@@ -13,7 +13,7 @@ import { AnimatePresence } from 'framer-motion'
 
 import { useState } from 'react'
 
-const Account_Update_Render = (user) => {
+const Account_Update_Render = ({user, allStreamers}) => {
 
   const [ currentPage, setCurrentPage ] = useState('intro')
   const [platforms, setPlatforms] = useState([
@@ -82,7 +82,7 @@ const Account_Update_Render = (user) => {
       return <CreateNickname user={user} setCurrentPage={setCurrentPage} />
     }
     if(section === 'addFollows') {
-      return <AddFollows user={user} setCurrentPage={setCurrentPage} />
+      return <AddFollows user={user} setCurrentPage={setCurrentPage} allStreamers={allStreamers} />
     }
   }
 
