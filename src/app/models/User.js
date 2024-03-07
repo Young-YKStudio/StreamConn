@@ -13,8 +13,14 @@ const userSchema = new Schema(
       type: String,
       required: false
     },
-    follows: [],
-    followers: [],
+    follows: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    }],
+    followers: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    }],
     introduction: String,
     isUpdated: {
       type: Boolean,
