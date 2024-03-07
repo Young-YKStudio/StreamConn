@@ -26,9 +26,16 @@ const Account_Update = async ({params}) => {
   const foundUser = await getUserInfo(params)
   const allStreamers = await getAllStreamers()
 
+  let filteredArry = []
+  allStreamers.forEach((streamer) => {
+    if(streamer.platforms.length > 0) {
+      filteredArry.push(streamer)
+    }
+  })
+
   return (
     <div className='flex justify-center items-center w-full h-full'>
-      <Account_Update_Render user={foundUser} allStreamers={allStreamers} />
+      <Account_Update_Render user={foundUser} allStreamers={filteredArry} />
     </div>
   );
 }

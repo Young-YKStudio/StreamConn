@@ -4,7 +4,7 @@ import { MdOutlineAddCircle } from 'react-icons/md'
 import axios from 'axios'
 import { useState } from 'react'
 
-const PostInput = () => {
+const PostInput = ({isReplyActive, setIsReplyActive}) => {
 
   const [ inputtedText, setInputtedText ] = useState('')
 
@@ -29,7 +29,11 @@ const PostInput = () => {
       <div className='mr-2'>
         <MdOutlineAddCircle className='w-5 h-5'/>
       </div>
-      <input type='text' placeholder='Message' value={inputtedText} onChange={(e) => setInputtedText(e.target.value)} className='w-full bg-transparent focus:ring-0 focus:outline-none text-xs'/>
+      {isReplyActive ?
+        <input type='text' placeholder='REPLY' value={inputtedText} onChange={(e) => setInputtedText(e.target.value)} className='w-full bg-transparent focus:ring-0 focus:outline-none text-xs'/>
+      :
+        <input type='text' placeholder='POSTING' value={inputtedText} onChange={(e) => setInputtedText(e.target.value)} className='w-full bg-transparent focus:ring-0 focus:outline-none text-xs'/>
+      } 
       <button type='submit'>submit</button>
     </form>
   );
