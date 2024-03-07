@@ -111,11 +111,7 @@ const AccountIndividualPage = async ({params}) => {
       {/* breadcrumbs section */}
 
         <div className='w-full'>
-          <RenderingPosts returnedPosts={returnedPosts}/>
-          <div>
-            {/* TODO: switch to user ID */}
-          </div>
-          <PostInput />
+          <LandingComponents returnedPosts={returnedPosts} />
         </div>
 
     </div>
