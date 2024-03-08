@@ -44,10 +44,11 @@ export const options = {
               credentials.password,
               foundUser.password
               )
-            if(match) {
+              if(match) {
               return foundUser
             }
-            console.log(match, 'uer found')
+          } else {
+            return null
           }
         } catch (error) {
           console.log(error, 'error at auth options')
@@ -64,13 +65,9 @@ export const options = {
       return token
     },
     async session({ session, token, user }) {
-      // console.log(user, 'session on options')
-      // let newSession = session
-      
       await dbConnect()
       
       if(session?.user) {
-
         
         const foundUser = await User.findOne({email: session.user.email})
         
@@ -101,6 +98,11 @@ export const options = {
           return true
         }
       }
+
+      if(account.provider === 'credentials') {
+        return true
+      }
+      
     }
   },
   pages: {
