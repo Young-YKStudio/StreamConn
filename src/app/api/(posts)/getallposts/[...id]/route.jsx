@@ -12,6 +12,9 @@ export async function GET(req) {
   await dbConnect();
 
   let allPosts = await Post.find()
+
+  // let foundArticle = await Article.findOne({_id: id }).populate('comments').exec()
+
   if (allPosts) {
     return NextResponse.json({message: allPosts}, { status: 200 })
   }
