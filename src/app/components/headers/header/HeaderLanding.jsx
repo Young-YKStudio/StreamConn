@@ -49,7 +49,7 @@ const HeaderLanding = () => {
   }
 
   return (
-    <nav className="bg-slate-900 grid grid-cols-3 p-4 absolute top-0 w-full z-10">
+    <nav className="bg-sky-950 grid grid-cols-3 p-4 absolute top-0 w-full z-10">
       {/* Logo/left section */}
       <div className="flex flex-row gap-2 items-center">
         <Link href='/' className="truncate text-sky-500">Stream Connect</Link>
