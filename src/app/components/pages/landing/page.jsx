@@ -13,7 +13,7 @@ const LandingRender = ({streamers}) => {
   console.log(streamers, session, 'landing render')
 
   return (
-    <div className='flex flex-row flex-nowrap'>
+    <div className='flex flex-row flex-nowrap h-full'>
       <LandingSideBarPublic streamers={streamers} />
       <container>
         <FeaturedStreamers streamers={streamers} />
