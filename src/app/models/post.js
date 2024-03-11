@@ -7,6 +7,10 @@ const postSchema = new Schema(
     title: String,
     body: String,
     user: String,
+    comments: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Comment',
+    }],
   }, {timestamps: true}
 )
 

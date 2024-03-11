@@ -1,53 +1,9 @@
-
-// let samplePosts = [
-//   {
-//     id: 'post001',
-//     channel: 'General',
-//     channelTopic: 'General1 channel topic',
-//     text: 'this is a test post',
-//     author: 'test00001',
-//     comments: [
-//       {
-//         id: 'comment0001',
-//         comment: 'this is a test comment',
-//         author: 'test00002'
-//       }
-//     ],
-//   },
-//   {
-//     id: 'post002',
-//     channel: 'General2',
-//     channelTopic: 'General2 channel topic',
-//     text: 'this is a test post2',
-//     author: 'test00003',
-//     comments: [
-//       {
-//         id: 'comment0002',
-//         comment: 'this is a test comment2',
-//         author: 'test00005'
-//       }
-//     ],
-//   },
-//   {
-//     id: 'post005',
-//     channel: 'Notice',
-//     channelTopic: 'General2 channel topic',
-//     text: 'this is a test post2',
-//     author: 'test00003',
-//     comments: [
-//       {
-//         id: 'comment0002',
-//         comment: 'this is a test comment2',
-//         author: 'test00005'
-//       }
-//     ],
-//   },
-// ]
-
+import { useScroll } from 'framer-motion'
 import LandingComponents from './components/landingComponents'
-import PostInput from './components/postInput'
-import RenderingPosts from './components/posts'
+// import PostInput from './components/postInput'
+// import RenderingPosts from './components/posts'
 import axios from 'axios'
+import PostBoard from './components/render'
 
 const getAllPost = async (userId) => {
   const returnedPosts = await axios.get(`${process.env.APP_URL}/api/getallposts/${userId}`)
@@ -59,7 +15,6 @@ const getAllPost = async (userId) => {
 }
 
 const AccountIndividualPage = async ({params}) => {
-
   const returnedPosts = await getAllPost(params.id)
 
   const categoryOpenHandler = () => {
@@ -73,9 +28,7 @@ const AccountIndividualPage = async ({params}) => {
     if(section =='firstRow' && !boolean) {
       return 'absolute top-0 right-0 bg-blue-900 h-full z-0 pt-24 px-2'
     }
-
   }
-
 
   return (
     <div className='flex flex-col justify-end w-full'>
@@ -111,9 +64,12 @@ const AccountIndividualPage = async ({params}) => {
       {/* breadcrumbs section */}
 
         <div className='w-full'>
-          <LandingComponents returnedPosts={returnedPosts} />
+          {/* <RenderingPosts returnedPosts={returnedPosts}/>
+          <div>
+          </div>
+          <PostInput />           */}
+          <PostBoard returnedPosts={returnedPosts}/>
         </div>
-
     </div>
   );
 }
