@@ -1,29 +1,24 @@
 'use client'
-
 import axios from 'axios'
+import { useSession } from 'next-auth/react'
 
-const Landing = () => {
-  // young
+// pages
+import LandingSideBarPublic from '../../sidebar/landingSideBar/landingSideBarPublic'
+import LandingSideBarLogged from '../../sidebar/landingSideBar/landingSideBarLogged'
+import FeaturedStreamers from './featuredStreamers/featuredStremers'
 
-  const buttonHandler = async (e) => {
-    console.log('button clicked')
+const LandingRender = ({streamers}) => {
 
-    try {
-      let request = await axios.post('/api/registerTask', {name: 'asdf'})
-
-      if(request) {
-        console.log('call success', request)
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  const session = useSession()
+  console.log(streamers, session, 'landing render')
 
   return (
-    <div className='pt-24'>
-      <p>Landing Page</p>
-      <button className='px-4 py-2 bg-sky-500 rounded-md' onClick={buttonHandler}>TEST API</button>
+    <div className='flex flex-row flex-nowrap'>
+      <LandingSideBarPublic streamers={streamers} />
+      <container>
+        <FeaturedStreamers streamers={streamers} />
+      </container>
     </div>
   );
 }
-export default Landing;
+export default LandingRender;
