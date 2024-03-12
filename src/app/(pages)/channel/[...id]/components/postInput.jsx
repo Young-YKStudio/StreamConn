@@ -53,7 +53,9 @@ const PostInput = ({mode, setMode, returnedPosts, isReplyActive, setIsReplyActiv
         } 
         const response = await axios.put('/api/editPost', sendingUpdatedPostData)
         if(response.status === 200) {
-          window.location.reload()
+          console.log(response.data)
+          // update useState
+          // window.location.reload()
         }
       } catch (error) {
         console.log(error, 'at api edit call')
