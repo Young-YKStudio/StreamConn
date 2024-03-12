@@ -11,7 +11,7 @@ const RenderingPosts = ({mode, setMode, returnedPosts, isReplyActive, setIsReply
         setSelectedPost(foundPost)
         setIsReplyActive(true)
         setMode('reply')
-      }      
+      }     
     } else if (id == selectedPost._id) {
       if (isReplyActive) {
         setIsReplyActive(false)

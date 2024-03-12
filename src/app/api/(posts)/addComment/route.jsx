@@ -21,7 +21,7 @@ export async function POST(req) {
 
   console.log('ID:', id, input)
 
-  const createdComment = await Comment.create({post: id, comment: input})
+  const createdComment = await Comment.create({post: id, body: input})
   if (!createdComment) {
     return NextResponse.json(
       {message: 'Error creating comment'},
