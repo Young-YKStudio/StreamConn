@@ -70,56 +70,8 @@ const AccountIndividualPage = async ({params}) => {
           <PostInput />           */}
           <PostBoard returnedPosts={returnedPosts}/>
         </div>
-
     </div>
   );
 }
 
 export default AccountIndividualPage;
-
-
-
-// let samplePosts = [
-//   {
-//     id: 'post001',
-//     channel: 'General',
-//     channelTopic: 'General1 channel topic',
-//     text: 'this is a test post',
-//     author: 'test00001',
-//     comments: [
-//       {
-//         id: 'comment0001',
-//         comment: 'this is a test comment',
-//         author: 'test00002'
-//       }
-//     ],
-//   },
-//   {
-//     id: 'post002',
-//     channel: 'General2',
-//     channelTopic: 'General2 channel topic',
-//     text: 'this is a test post2',
-//     author: 'test00003',
-//     comments: [
-//       {
-//         id: 'comment0002',
-//         comment: 'this is a test comment2',
-//         author: 'test00005'
-//       }
-//     ],
-//   },
-//   {
-//     id: 'post005',
-//     channel: 'Notice',
-//     channelTopic: 'General2 channel topic',
-//     text: 'this is a test post2',
-//     author: 'test00003',
-//     comments: [
-//       {
-//         id: 'comment0002',
-//         comment: 'this is a test comment2',
-//         author: 'test00005'
-//       }
-//     ],
-//   },
-// ]

@@ -1,8 +1,15 @@
 import DisplaySideBar from "./sections/displaySideBar";
+// import { useState, useEffect } from 'react'
+import axios from 'axios'
 
-// get streamers from api
+const SideBar = async ({session, user}) => {
 
-const SideBar = async ({session}) => {
+  // const [ displayingStreamers, setDisplayingStreamers ] = useState()
+
+  // useEffect(() => {
+
+  // },[session])
+  console.log(session.data.user.id, 'at sidebar server side')
 
   return (
     <DisplaySideBar session={session}/>

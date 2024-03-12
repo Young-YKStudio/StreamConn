@@ -5,7 +5,10 @@ import { MdPerson } from 'react-icons/md'
 import { useRouter, useParams } from 'next/navigation'
 import { useState } from 'react'
 import { BiArrowToLeft, BiArrowToRight } from "react-icons/bi";
-import { afreecaLogo, chzzkLogo } from '@/app/data/logoLinks'
+import Image from 'next/image'
+import afreecaImage from '../../../../images/afreecaTV_logo_rgb_light_symbol.png'
+import chzzkLogo from '../../../../images/chzzkLogo.png'
+import kickImage from '../../../../images/Kick-logo-green-k.png'
 import { useEffect } from 'react'
 
 const dummyLists = [
@@ -40,16 +43,19 @@ const dummyLists = [
 
 const platformDistributor = (platform) => {
   if(platform === 'Twitch') {
-    return <p><ImTwitch className='w-3 h-3 text-purple-600'/></p>
+    return <p><ImTwitch className='w-4 h-4 rounded-full text-purple-600'/></p>
   }
   if(platform === 'YouTube') {
-    return <p><ImYoutube className='w-3 h-3 text-red-600'/></p>
+    return <p><ImYoutube className='w-4 h-4 rounded-full text-red-600'/></p>
   }
   if(platform === 'Chzzk') {
-    return <img src={chzzkLogo} className='w-3 h-3'/>
+    return <Image src={chzzkLogo} alt='chzzkLogo' className='w-4 h-4 rounded-full'/>
   }
   if(platform === 'Afreeca') {
-    return <img src={afreecaLogo} className='w-3 h-3'/>
+    return <Image src={afreecaImage} alt='afreecaLogo' className='w-4 h-4 rounded-full'/>
+  }
+  if(platform === 'KICK') {
+    return <Image src={kickImage} alt='kickLogo' className='w-4 h-4 rounded-full'/>
   }
   return 
 }

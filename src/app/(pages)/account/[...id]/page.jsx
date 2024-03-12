@@ -1,4 +1,3 @@
-import SideBar from "@/app/components/sidebar/sideBar";
 import LoadingComponent from "@/app/components/loading/loadingComponent";
 import IndividualPageIntro from "./parts/Introduction";
 import { Suspense } from "react";
@@ -23,7 +22,6 @@ const AccountLanding = async ({params}) => {
   // TODO: set most of the site functionality here(합방, 이벤트 등등)
   return (
     <div className="flex flex-row flex-nowrap">
-      <SideBar />
       <Suspense fallback={<LoadingComponent />}>
         <IndividualPageIntro user={user}/>
       </Suspense>
