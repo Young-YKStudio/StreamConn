@@ -16,7 +16,7 @@ const LandingComponents = ({returnedPosts}) => {
   return (
     <div>
       <RenderingPosts isReplyActive={isReplyActive} setIsReplyActive={setIsReplyActive} returnedPosts={allPosts} />
-      <PostInput isReplyActive={isReplyActive} setIsReplyActive={setIsReplyActive} />
+      <PostInput isReplyActive={isReplyActive} setIsReplyActive={setIsReplyActive} allPosts={allPosts} setAllPosts={setAllPosts} />
     </div>
   );
 }
