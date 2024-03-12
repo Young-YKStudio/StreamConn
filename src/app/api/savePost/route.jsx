@@ -1,7 +1,7 @@
 'use server'
 
 import dbConnect from '@/app/util/DBConnect';
-import Post from '@/app/models/post'
+import Post from '@/app/models/Post'
 import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(req) {
