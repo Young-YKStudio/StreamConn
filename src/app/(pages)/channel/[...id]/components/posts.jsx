@@ -2,7 +2,7 @@
 
 import axios from 'axios'
 
-const RenderingPosts = ({mode, setMode, returnedPosts, isReplyActive, setIsReplyActive, selectedPost, setSelectedPost, inputtedText, setInputtedText, isEditActive, setIsEditActive}) => {
+const RenderingPosts = ({mode, setMode, returnedPosts, isReplyActive, setIsReplyActive, selectedPost, setSelectedPost, inputtedText, setInputtedText, isEditActive, setIsEditActive, allPosts}) => {
 
   const replyHandler = (e, id) => {
     if (selectedPost == undefined) {
@@ -87,15 +87,25 @@ const RenderingPosts = ({mode, setMode, returnedPosts, isReplyActive, setIsReply
 
   return (
     <section className='pt-24 pl-4'>
-      {returnedPosts && 
+      {allPosts && 
         <div className="flex flex-col gap-2">
-          {returnedPosts.map((post) => {
+          {allPosts.map((post) => {
             return <div key={post._id}>
               <p className="flex flex-row gap-3">{post.body}
+              {/* ternary for replies */}
                 <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={(e) => replyHandler(e, post._id)}>Reply</button>
                 <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={(e) => editHandler(e, post._id)}>Edit</button>
                 <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={(e) => deleteHandler(e, post._id)}>Delete</button>
               </p>
+              {post.comments.length > 0 && post.comments.map((reply, i) => (
+                <div
+                  key={reply._id + ' comment' + i}
+                  className='bg-white text-slate-900'
+                >
+                  {console.log(reply)}
+                  <p>{reply.body}</p>
+                </div>
+              ))}
             </div>
           })}
         </div>

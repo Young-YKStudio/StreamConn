@@ -4,7 +4,7 @@ import axios from 'axios'
 import { MdOutlineAddCircle } from 'react-icons/md'
 import { useState, useEffect } from 'react'
 
-const PostInput = ({mode, setMode, returnedPosts, isReplyActive, setIsReplyActive, selectedPost, setSelectedPost, inputtedText, setInputtedText, isEditActive, setIsEditActive}) => {
+const PostInput = ({mode, setMode, returnedPosts, isReplyActive, setIsReplyActive, selectedPost, setSelectedPost, inputtedText, setInputtedText, isEditActive, setIsEditActive, allPosts, setAllPosts}) => {
   
   const submitHandler = async (e) => {
     e.preventDefault()
@@ -28,6 +28,7 @@ const PostInput = ({mode, setMode, returnedPosts, isReplyActive, setIsReplyActiv
         const response = await axios.post('/api/createPost', sendingNewPostData)
         if (response) {
           window.location.reload()
+          // update useState
         }
       } catch (error) {
         console.log(error, 'at api new call')
@@ -53,8 +54,9 @@ const PostInput = ({mode, setMode, returnedPosts, isReplyActive, setIsReplyActiv
         } 
         const response = await axios.put('/api/editPost', sendingUpdatedPostData)
         if(response.status === 200) {
-          console.log(response.data)
+          // console.log(response.data)
           // update useState
+          setAllPosts(response.data)
           // window.location.reload()
         }
       } catch (error) {

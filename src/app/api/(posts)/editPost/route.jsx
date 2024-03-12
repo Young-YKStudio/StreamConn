@@ -35,7 +35,7 @@ export async function PUT(req) {
     )
   }
 
-  let allPost = await Post.find({}).populate({path: 'comments', model: Comment})
+  let allPost = (await Post.find({}).populate({path: 'comments', model: Comment}))
 
   return NextResponse.json(allPost, {status: 200})
 }
