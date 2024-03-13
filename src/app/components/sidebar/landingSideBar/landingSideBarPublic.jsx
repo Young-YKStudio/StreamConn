@@ -1,49 +1,55 @@
-import { ImTwitch, ImYoutube } from "react-icons/im";
 import { MdPerson } from 'react-icons/md'
-import { useRouter, useParams } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { BiArrowToLeft, BiArrowToRight } from "react-icons/bi";
-import Image from 'next/image'
-import afreecaImage from '@/images/afreecaTV_logo_rgb_light_symbol.png'
-import chzzkLogo from '@/images/chzzkLogo.png'
-import kickImage from '@/images/Kick-logo-green-k.png'
+import HoveredElement from "../elements/hoveredElement";
+import { motion } from "framer-motion";
+import { ShuffleArray2 } from "../elements/sharedFunctions";
 
 const LandingSideBarPublic = ({streamers}) => {
 
   const [ isSectionCollapsed, setIsSectionCollapsed ] = useState(false)
   const [ displayigStreamers, setDisplayingStreamers ] = useState()
+  const [ hoveredStreamer, setHoveredStreamer ] = useState()
 
   useEffect(() => {
-    let tempArry = []
-    let streamersWorkingArry = streamers 
-    let randomNumber = Math.floor(Math.random() * streamers.length)
-    // while (streamersWorkingArry.length > 0) {
-
-    // }
-      // let randomNumber = Math.floor(Math.random() * streamers.length)
-      // tempArry.push(streamers[randomNumber])
-
-      // if (!tempArry.includes(randomNumber)) {
-      //   tempArry.push(randomNumber)
-      // }
-    // }
-    console.log(streamersWorkingArry[randomNumber], 'aaass')
+    let workingArray = streamers
+    let shuffledArray = ShuffleArray2(workingArray)
+    return setDisplayingStreamers(shuffledArray)
   },[])
+
+  const onHoverHandler = (id) => {
+    setHoveredStreamer(id)
+  } 
+
+  const offHoverHandler = () => {
+    setHoveredStreamer()
+  }
+
+  const hoveredElementStyle = (condition) => {
+    if(condition) {
+      return 'absolute left-16 top-0 bg-sky-900 p-3 rounded-md w-48 flex flex-col gap-1'
+    }
+    if(!condition) {
+      return 'absolute left-40 top-0 bg-sky-900 p-3 rounded-md w-48 flex flex-col gap-1'
+    }
+  }
 
   return (
     <nav className="bg-sky-900 pt-20 h-full px-2">
       {/* title & fold */}
-      <div className="flex flex-row justify-between items-center">
+      <div className={!isSectionCollapsed ? 'flex flex-row justify-between items-center gap-2' : "flex flex-row justify-center items-center"}>
         {!isSectionCollapsed && <p className="text-sm font-bold">Recommended</p>}
-        <button onClick={() => setIsSectionCollapsed(!isSectionCollapsed)} className='hover:bg-white/20 p-2 rounded-md'>{isSectionCollapsed? <BiArrowToRight className='w-5 h-5'/> : <BiArrowToLeft className='w-5 h-5'/> }</button>
+        <button onClick={() => setIsSectionCollapsed(!isSectionCollapsed)} className='hover:bg-sky-950 p-2 rounded-md'>{isSectionCollapsed? <BiArrowToRight className='w-5 h-5'/> : <BiArrowToLeft className='w-5 h-5'/> }</button>
       </div>
 
       {/* recommended streamers */}
-      <div className="flex flex-col gap-2 text-sm">
-        {streamers && streamers.map((streamer) => (
+      <div className="flex flex-col text-sm">
+        {displayigStreamers && displayigStreamers.map((streamer) => (
           <div
             key={streamer._id + ' sidebarStremaer'}
             className="flex flex-row flex-nowrap items-center px-1.5 py-1.5 gap-2 hover:bg-sky-950 hover:cursor-pointer rounded-md relative"
+            onMouseEnter={() => onHoverHandler(streamer._id)}
+            onMouseLeave={() => offHoverHandler()}
           >
             {/* Icons */}
             {streamer.profile ?
@@ -61,11 +67,16 @@ const LandingSideBarPublic = ({streamers}) => {
                 <p className="text-xs text-slate-400">{streamer.introduction}</p>
               </div>
             }
-            <div
-              className="absolute left-48 bg-white w-24 h-8"
-            >
-
-            </div>
+            {hoveredStreamer === streamer._id &&
+              <motion.div
+                className={hoveredElementStyle(isSectionCollapsed)}
+                initial={{opacity: 0}}
+                animate={{opacity: 1}}
+                transition={{duration: 0.45}}
+              >
+                <HoveredElement collapsed={isSectionCollapsed} streamer={streamer} />
+              </motion.div>
+            }
           </div>
         ))}
       </div>
