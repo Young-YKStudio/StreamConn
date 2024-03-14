@@ -9,12 +9,12 @@ import FeaturedStreamers from './featuredStreamers/featuredStremers'
 
 const LandingRender = ({streamers}) => {
 
-  const session = useSession()
-  console.log(streamers, session, 'landing render')
+  let session = useSession()
+  // console.log(streamers, session, 'landing render')
 
   return (
     <div className='flex flex-row flex-nowrap h-full'>
-      <LandingSideBarPublic streamers={streamers} />
+      { session ? <LandingSideBarLogged streamers={streamers} session={session}/> : <LandingSideBarPublic streamers={streamers} /> }
       <container>
         <FeaturedStreamers streamers={streamers} />
       </container>

@@ -3,17 +3,17 @@ import { useState, useEffect } from 'react'
 import { BiArrowToLeft, BiArrowToRight } from "react-icons/bi";
 import HoveredElement from "../elements/hoveredElement";
 import { motion } from "framer-motion";
-import { ShuffleArray2 } from "../elements/sharedFunctions";
+import { ShuffleArrayLimit8, hoveredElementStyle } from "../elements/sharedFunctions";
 
 const LandingSideBarPublic = ({streamers}) => {
 
-  const [ isSectionCollapsed, setIsSectionCollapsed ] = useState(false)
+  const [ isSectionCollapsed, setIsSectionCollapsed ] = useState(true)
   const [ displayigStreamers, setDisplayingStreamers ] = useState()
   const [ hoveredStreamer, setHoveredStreamer ] = useState()
 
   useEffect(() => {
     let workingArray = streamers
-    let shuffledArray = ShuffleArray2(workingArray)
+    let shuffledArray = ShuffleArrayLimit8(workingArray)
     return setDisplayingStreamers(shuffledArray)
   },[])
 
@@ -23,15 +23,6 @@ const LandingSideBarPublic = ({streamers}) => {
 
   const offHoverHandler = () => {
     setHoveredStreamer()
-  }
-
-  const hoveredElementStyle = (condition) => {
-    if(condition) {
-      return 'absolute left-16 top-0 bg-sky-900 p-3 rounded-md w-48 flex flex-col gap-1'
-    }
-    if(!condition) {
-      return 'absolute left-40 top-0 bg-sky-900 p-3 rounded-md w-48 flex flex-col gap-1'
-    }
   }
 
   return (

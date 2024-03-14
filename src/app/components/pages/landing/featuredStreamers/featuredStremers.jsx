@@ -1,7 +1,5 @@
 const FeaturedStreamers = ({streamers}) => {
 
-  console.log(streamers, 'featured streamers render')
-
   return (
     <section className="pt-20 flex flex-col">
       <p>Featured Streamers</p>
