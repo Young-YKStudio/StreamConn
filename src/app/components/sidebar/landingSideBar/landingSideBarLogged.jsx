@@ -5,12 +5,15 @@ import { motion } from "framer-motion";
 import { hoveredElementStyle } from '../elements/sharedFunctions';
 import HoveredElement from '../elements/hoveredElement';
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
 const LandingSideBarLogged = ({streamers, session}) => {
 
   const [ isSectionCollapsed, setIsSectionCollapsed ] = useState(true)
   const [ hoveredStreamer, setHoveredStreamer ] = useState()
   const [ receivedFollowers, setReceivedFollowers ] = useState()
+
+  const router = useRouter()
 
   useEffect(() => {
 
@@ -44,6 +47,10 @@ const LandingSideBarLogged = ({streamers, session}) => {
     setHoveredStreamer()
   }
 
+  const userClickHandler = (id) => {
+    router.push(`/account/${id}`)
+  }
+
   return (
     <nav className="bg-sky-900 pt-20 h-full px-2">
       {/* Followed Streamers title and collapse button */}
@@ -60,6 +67,7 @@ const LandingSideBarLogged = ({streamers, session}) => {
             className="flex flex-row flex-nowrap items-center px-1.5 py-1.5 gap-2 hover:bg-sky-950 hover:cursor-pointer rounded-md relative"
             onMouseEnter={() => onHoverHandler(streamer._id)}
             onMouseLeave={() => offHoverHandler()}
+            onClick ={() => userClickHandler(streamer._id)}
           >
 
             {/* Icons */}

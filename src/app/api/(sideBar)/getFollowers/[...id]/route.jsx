@@ -30,14 +30,32 @@ export async function POST(req) {
     )
   }
 
-  if(foundUser.follows.length > 0) {
-    console.log(foundUser)
+  let shuffledFollows = []
+
+  foundUser.follows.forEach((follow) => {
+    if (follow.email != foundUser.email) {
+      shuffledFollows.push(follow)
+    }
+  })
+
+  if(shuffledFollows.length === 0) {
     return NextResponse.json(
-      foundUser.follows,
-      {message: 'Found followers'},
+      {message: 'No Followers'},
       {status: 200}
     )
   }
+
+  // loop follows array and check if user is already in
+  // shuffle array
+  
+  
+  console.log(shuffledFollows, 'at backend')
+
+  return NextResponse.json(
+    shuffledFollows,
+    {message: 'Found followers'},
+    {status: 200}
+  )
 
   // return NextResponse.json(
   //   foundUser,

@@ -10,14 +10,12 @@ import FeaturedStreamers from './featuredStreamers/featuredStremers'
 const LandingRender = ({streamers}) => {
 
   let session = useSession()
-  // console.log(streamers, session, 'landing render')
+  console.log(streamers, session, 'landing render')
 
   return (
     <div className='flex flex-row flex-nowrap h-full'>
-      { session ? <LandingSideBarLogged streamers={streamers} session={session}/> : <LandingSideBarPublic streamers={streamers} /> }
-      <container>
-        <FeaturedStreamers streamers={streamers} />
-      </container>
+      { session.status === 'authenticated' ? <LandingSideBarLogged streamers={streamers} session={session}/> : <LandingSideBarPublic streamers={streamers} /> }
+      <FeaturedStreamers streamers={streamers} />
     </div>
   );
 }
