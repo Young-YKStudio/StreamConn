@@ -45,11 +45,10 @@ export async function POST(req) {
     )
   }
 
-  // loop follows array and check if user is already in
-  // shuffle array
+  // sort array
   
   
-  console.log(shuffledFollows, 'at backend')
+  // console.log(shuffledFollows, 'at backend')
 
   return NextResponse.json(
     shuffledFollows,

@@ -10,7 +10,6 @@ import FeaturedStreamers from './featuredStreamers/featuredStremers'
 const LandingRender = ({streamers}) => {
 
   let session = useSession()
-  console.log(streamers, session, 'landing render')
 
   return (
     <div className='flex flex-row flex-nowrap h-full'>
