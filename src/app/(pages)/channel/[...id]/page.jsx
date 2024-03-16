@@ -1,9 +1,7 @@
 import { useScroll } from 'framer-motion'
-import LandingComponents from './components/landingComponents'
-// import PostInput from './components/postInput'
-// import RenderingPosts from './components/posts'
+// import LandingComponents from './components/landingComponents'
 import axios from 'axios'
-import PostBoard from './components/render'
+import PostBoard from './components/postBoard'
 
 const getAllPost = async (userId) => {
   const returnedPosts = await axios.get(`${process.env.APP_URL}/api/getallposts/${userId}`)
@@ -68,7 +66,7 @@ const AccountIndividualPage = async ({params}) => {
           <div>
           </div>
           <PostInput />           */}
-          <PostBoard returnedPosts={returnedPosts}/>
+          { <PostBoard returnedPosts={returnedPosts}/> }
         </div>
     </div>
   );
