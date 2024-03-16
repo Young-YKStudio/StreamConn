@@ -4,60 +4,99 @@ import axios from 'axios'
 import { MdOutlineAddCircle } from 'react-icons/md'
 import { useState, useEffect } from 'react'
 
-const PostInput = ({mode, setMode, returnedPosts, isReplyActive, setIsReplyActive, selectedPost, setSelectedPost, inputtedText, setInputtedText, isEditActive, setIsEditActive, allPosts, setAllPosts}) => {
+const PostInput = ({ 
+  mode, setMode, 
+  allPosts, setAllPosts, 
+  selectedPost, setSelectedPost, 
+  selectedComment, setSelectedComment, 
+  isReplyActive, setIsReplyActive, 
+  isEditActive, setIsEditActive,
+  isCommentActive, setIsCommentActive,
+  inputText, setInputText, 
+}) => {
   
   const submitHandler = async (e) => {
     e.preventDefault()
-    if (inputtedText == '') {
+    if (inputText == '') {
       return
     }
 
-    let id
-
-    if (selectedPost) {
-      id = selectedPost._id
-    }
-    
     // api call
     if (mode == 'new') {
-      let sendingNewPostData = {
-        input: inputtedText
-      } 
+      let sendingNewPostData = { input: inputText } 
   
       try {
         const response = await axios.post('/api/createPost', sendingNewPostData)
         if (response) {
-          window.location.reload()
-          // update useState
+          // window.location.reload()
+          setMode('new')
+          setAllPosts(response.data)
+          setSelectedPost()
+          setIsReplyActive(false)
+          setIsEditActive(false)
+          setInputText('')
         }
       } catch (error) {
         console.log(error, 'at api new call')
       }
     } else if (mode == 'reply') {
-      let sendingCommentData = {
-        id: id,
-        input: inputtedText
+      let sendingCommentData = { 
+        id: selectedPost._id,
+        input: inputText,
       }
+
       try {
         const response = await axios.post('/api/addComment', sendingCommentData)
         if (response) {
-          window.location.reload()
+          // window.location.reload()
+          setMode('new')
+          setAllPosts(response.data)
+          setSelectedPost()
+          setIsReplyActive(false)
+          setIsEditActive(false)
+          setInputText('')
         }
       } catch (error) {
         console.log(error, 'at api reply call')
       }
     } else if (mode == 'edit') {
+      let sendingUpdatedPostData = {
+        id: selectedPost._id,
+        input: inputText
+      } 
+
       try {
-        let sendingUpdatedPostData = {
-          id: selectedPost._id,
-          input: inputtedText
-        } 
         const response = await axios.put('/api/editPost', sendingUpdatedPostData)
         if(response.status === 200) {
-          // console.log(response.data)
-          // update useState
-          setAllPosts(response.data)
           // window.location.reload()
+          setMode('new')
+          setAllPosts(response.data)
+          setSelectedPost()
+          setSelectedComment()
+          setIsReplyActive(false)
+          setIsEditActive(false)
+          setInputText('')
+        }
+      } catch (error) {
+        console.log(error, 'at api edit call')
+      }
+    } else if (mode == 'editComment') {
+      let sendingUpdatedCommentData = {
+        id: selectedComment._id,
+        input: inputText
+      }
+      try {
+        const response = await axios.put('/api/editComment', sendingUpdatedCommentData)
+        if(response.status === 200) {
+          // window.location.reload()
+          setMode('new')
+          setAllPosts(response.data)
+          setSelectedPost()
+          setSelectedComment()
+          setIsReplyActive(false)
+          setIsEditActive(false)
+          setIsCommentActive(false)
+          setInputText('')
         }
       } catch (error) {
         console.log(error, 'at api edit call')
@@ -69,17 +108,22 @@ const PostInput = ({mode, setMode, returnedPosts, isReplyActive, setIsReplyActiv
 
   const cancelHandler = (e) => {
     e.preventDefault()
-    setInputtedText('')
+    setMode('new')
+    setSelectedPost()
     setIsReplyActive(false)
+    setIsEditActive(false)
+    setInputText('')
   }
 
   const operationHandler = () => {
-    if (mode == 'reply' && isReplyActive && selectedPost) {
-      return ( <input type='text' placeholder={'Reply to ' + selectedPost.body} value={inputtedText} onChange={(e) => setInputtedText(e.target.value)} className='w-full bg-transparent focus:ring-0 focus:outline-none text-xs'/> )
+    if (mode == 'reply' && isReplyActive && selectedPost ) {
+      return ( <input type='text' placeholder={'Reply to ' + selectedPost.body} value={inputText} onChange={(e) => setInputText(e.target.value)} className='w-full bg-transparent focus:ring-0 focus:outline-none text-xs'/> )
     } else if (mode == 'edit' && isEditActive && selectedPost) {
-      return ( <input type='text' value={inputtedText} onChange={(e) => setInputtedText(e.target.value)} className='w-full bg-transparent focus:ring-0 focus:outline-none text-xs'/> )
+      return ( <input type='text' value={inputText} onChange={(e) => setInputText(e.target.value)} className='w-full bg-transparent focus:ring-0 focus:outline-none text-xs'/> )
+    } else if (mode == 'editComment' && isCommentActive && selectedComment) {
+      return ( <input type='text' value={inputText} onChange={(e) => setInputText(e.target.value)} className='w-full bg-transparent focus:ring-0 focus:outline-none text-xs'/> )
     } else {
-      return ( <input type='text' placeholder='New message' value={inputtedText} onChange={(e) => setInputtedText(e.target.value)} className='w-full bg-transparent focus:ring-0 focus:outline-none text-xs'/> )
+      return ( <input type='text' placeholder='New message' value={inputText} onChange={(e) => setInputText(e.target.value)} className='w-full bg-transparent focus:ring-0 focus:outline-none text-xs'/> )
     }
   }
 
