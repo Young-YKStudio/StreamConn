@@ -5,8 +5,8 @@ import HomeSection from "../(sections)/home/homeSection";
 import ChannelsSection from "../(sections)/channels/channelsSection";
 import { useState } from 'react'
 
-const IndividualRenderContainer = ({user}) => {
-
+const IndividualRenderContainer = ({user, returnedPosts}) => {
+  
   const [ currentSection, setCurrentSection ] = useState('home')
 
   const sectionDistributor = (section) => {
@@ -14,7 +14,7 @@ const IndividualRenderContainer = ({user}) => {
       return <HomeSection />
     }
     if(section === 'channels') {
-      return <ChannelsSection />
+      return <ChannelsSection returnedPosts={returnedPosts} />
     }
   }
 

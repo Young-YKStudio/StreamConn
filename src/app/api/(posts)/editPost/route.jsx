@@ -7,7 +7,8 @@ import { NextRequest, NextResponse } from "next/server"
 
 export async function PUT(req) {
   const receivedData = await req.json()
-  const id = receivedData.id
+  const postId = receivedData.postId
+  const userId = receivedData.userId
   const input = receivedData.input
 
   try {
@@ -19,23 +20,20 @@ export async function PUT(req) {
     )
   }
 
-  if(!id || !input) {
+  if(!userId || !input ) {
     return NextResponse.json(
       {message: 'required userId and updating body'},
       {status: 500}
     )
   }
 
-  let updatedPost = await Post.findOneAndUpdate({ _id: id }, {body: input})
+  let updatedPost = await Post.findByIdAndUpdate({_id: postId}, {body: input})
 
   if(!updatedPost) {
-    return NextResponse.json(
-      {message: 'error in updating post'},
-      {status: 500}
-    )
+    return NextResponse.json({message: 'error in updating post'}, {status: 500})
   }
 
-  let allPost = (await Post.find().populate({path: 'comments', model: Comment}))
+  let allPost = (await Post.find({userId: userId}).populate({path: 'comments', model: Comment}))
 
   return NextResponse.json(allPost, {status: 200})
 }

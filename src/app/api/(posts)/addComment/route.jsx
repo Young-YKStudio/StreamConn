@@ -6,8 +6,9 @@ import { NextRequest, NextResponse } from "next/server"
 export async function POST(req) {
 
   const receivedData = await req.json();
-  // const id = receivedData.id
-  // const input = receivedData.input
+  const postId = receivedData.postId
+  const userId = receivedData.userId
+  const input = receivedData.input
 
   try {
     await dbConnect()
@@ -18,7 +19,7 @@ export async function POST(req) {
     )
   }
 
-  const createdComment = await Comment.create({post: receivedData.id, body: receivedData.input})
+  const createdComment = await Comment.create({postId: postId, body: input, userId: userId})
   if (!createdComment) {
     return NextResponse.json(
       {message: 'Error creating comment'},
@@ -26,7 +27,7 @@ export async function POST(req) {
     )
   }
 
-  let linkPost = await Post.findOne({_id: receivedData.id})
+  let linkPost = await Post.findOne({_id: postId})
   if (!linkPost) {
     return NextResponse.json(
       {message: 'Error linking comment to a post'},
@@ -37,6 +38,6 @@ export async function POST(req) {
   linkPost.comments.push(createdComment._id)
   await linkPost.save()
 
-  let allPost = await Post.find().populate({path: 'comments', model: Comment})
+  let allPost = await Post.find({ userId: userId }).populate({path: 'comments', model: Comment})
   return NextResponse.json(allPost, {status: 200})
 }

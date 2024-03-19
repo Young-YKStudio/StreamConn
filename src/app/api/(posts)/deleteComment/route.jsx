@@ -8,12 +8,16 @@ import { NextRequest, NextResponse } from "next/server"
 export async function PUT(req) {
   const data = await req.json()
 
+  const postId = data.postId
+  const commentId = data.commentId
+  const userId = data.userId
+
   await dbConnect();
 
   let foundPost
 
   try {
-    foundPost = await Post.findOne({ _id: data.postId }).populate({path: 'comments', model: Comment})
+    foundPost = await Post.findOne({ _id: postId }).populate({path: 'comments', model: Comment})
   } catch (error) {
       return new NextResponse('ERROR finding Post', { status: 400 })
   }
@@ -23,7 +27,7 @@ export async function PUT(req) {
     let filteredArray = []
     
     tempArray.forEach((comment) => {
-      if(comment._id != data.commentId) {
+      if(comment._id != commentId) {
         filteredArray.push(comment)
       }
     })
@@ -38,12 +42,12 @@ export async function PUT(req) {
   }
 
   try {
-    let deleteComment = await Comment.findByIdAndDelete({ _id: data.commentId })
+    let deleteComment = await Comment.findByIdAndDelete({ _id: commentId })
   } catch (error) {
     return new NextResponse('ERROR findBy in deleteComment', { status: 400 })
   }
 
-  let allPost = (await Post.find().populate({path: 'comments', model: Comment}))
+  let allPost = await Post.find({userId: userId}).populate({path: 'comments', model: Comment})
 
   return NextResponse.json(allPost, {status: 200})
 }

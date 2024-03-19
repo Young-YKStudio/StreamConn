@@ -12,7 +12,20 @@ const getUserInfo = async (user) => {
       return response.data.message
     }
   } catch (error) {
-    return 'error'
+    return 'error findOneUser'
+  }
+}
+
+const getAllPost = async (userId) => {
+  try {
+    const returnedPosts = await axios.get(`${process.env.APP_URL}/api/getallposts/${userId}`)
+    if(returnedPosts) {
+      return returnedPosts.data.message
+    } else {
+      return `${userId} did not call all posts`
+    }
+  } catch (error) {
+    return 'error getAllPosts'
   }
 }
 
@@ -30,6 +43,7 @@ const AccountLanding = async ({params}) => {
   
   const userId = params.id
   const user = await getUserInfo(userId)
+  const returnedPosts = await getAllPost(userId)
   const streamers = await getAllStreamers()
 
   // TODO: set most of the site functionality here(합방, 이벤트 등등)
@@ -37,7 +51,7 @@ const AccountLanding = async ({params}) => {
     <div className="flex flex-row flex-nowrap h-full">
       <Suspense fallback={<LoadingComponent />}>
         <LeftSideBar streamers={streamers} user={user} />
-        <IndividualRenderContainer user={user}/>
+        <IndividualRenderContainer user={user} returnedPosts={returnedPosts}/>
         {/* <IndividualPageIntro user={user}/> */}
       </Suspense>
     </div>

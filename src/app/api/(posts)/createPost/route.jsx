@@ -7,6 +7,7 @@ export async function POST(req) {
 
   const receivedData = await req.json();
   const input = receivedData.input
+  const userId = receivedData.userId
 
   try {
     await dbConnect()
@@ -17,10 +18,10 @@ export async function POST(req) {
     )
   }
 
-  const createdPost = await Post.create({body: input})
+  const createdPost = await Post.create({ body: input, userId: userId })
 
   if (createdPost) {
-    let allPost = (await Post.find().populate({path: 'comments', model: Comment}))
+    let allPost = (await Post.find({userId: userId}).populate({path: 'comments', model: Comment}))
 
     return NextResponse.json(allPost, {status: 200})
   }

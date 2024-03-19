@@ -48,8 +48,8 @@ const PostInput = ({
     } else if (mode == 'reply') {
       let sendingCommentData = { 
         postId: selectedPost._id,
-        input: inputText,
         userId: session.user.id,
+        input: inputText,
       }
 
       try {
@@ -69,6 +69,7 @@ const PostInput = ({
     } else if (mode == 'edit') {
       let sendingUpdatedPostData = {
         postId: selectedPost._id,
+        userId: session.user.id,
         input: inputText,
       } 
 
@@ -89,8 +90,9 @@ const PostInput = ({
       }
     } else if (mode == 'editComment') {
       let sendingUpdatedCommentData = {
-        commentId: selectedComment._id,
-        input: inputText
+        commentId: selectedComment._id,        
+        userId: session.user.id,
+        input: inputText,
       }
       try {
         const response = await axios.put('/api/editComment', sendingUpdatedCommentData)

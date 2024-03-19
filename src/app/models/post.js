@@ -4,13 +4,17 @@ const Schema = mongoose.Schema
 
 const postSchema = new Schema(
   {
-    title: String,
     body: String,
-    user: String,
+
     comments: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Comment',
     }],
+
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    }
   }, {timestamps: true}
 )
 

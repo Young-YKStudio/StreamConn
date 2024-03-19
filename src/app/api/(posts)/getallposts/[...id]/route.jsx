@@ -13,7 +13,7 @@ export async function GET(req) {
   await dbConnect();
   
   // let allPosts = await Post.find().populate('comments.body').exec()
-  let allPosts = await Post.find().populate({path: 'comments', model: Comment})
+  let allPosts = await Post.find({userId: userId}).populate({path: 'comments', model: Comment})
 
   if (allPosts) {
     return NextResponse.json({message: allPosts}, { status: 200 })
