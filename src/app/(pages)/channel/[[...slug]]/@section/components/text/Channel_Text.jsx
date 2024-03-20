@@ -1,6 +1,6 @@
 const ChannelTextPage = () => {
   return (
-    <p>Text page</p>
+    <p>Text pages</p>
   );
 }
 export default ChannelTextPage;
