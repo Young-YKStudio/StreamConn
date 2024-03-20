@@ -25,9 +25,10 @@ export const ImageDistributor = (platform) => {
   }
 }
 
+const ProfileRenderContainer = ({user}) => {
 
-const ProfileIndividual = ({user}) => {
-  console.log(user, 'profile')
+  console.log(user, 'profile render')
+
   return (
     <section className="flex flex-row justify-between w-full max-w-4xl pt-8">
       {/* Left Side */}
@@ -69,4 +70,4 @@ const ProfileIndividual = ({user}) => {
     </section>
   );
 }
-export default ProfileIndividual;
+export default ProfileRenderContainer;
