@@ -7,21 +7,21 @@ import { useState } from 'react'
 
 const IndividualRenderContainer = ({user}) => {
 
-  const [ currentSection, setCurrentSection ] = useState('home')
+  const [ currentSection, setCurrentSection ] = useState('Home')
 
   const sectionDistributor = (section) => {
-    if(section === 'home') {
+    if(section === 'Home') {
       return <HomeSection />
     }
-    if(section === 'channels') {
+    if(section.startsWith('Channel')) {
       return <ChannelsSection />
     }
   }
 
   return (
-    <div className="pt-20 px-4 text-white">
+    <div className="pt-20 px-4 text-white w-full flex flex-col items-center">
       <ProfileIndividual user={user}/>
-      <SectionTabs currentSection={currentSection} setCurrentSection={setCurrentSection} />
+      <SectionTabs currentSection={currentSection} setCurrentSection={setCurrentSection} user={user} />
       <div>
         {sectionDistributor(currentSection)}
       </div>

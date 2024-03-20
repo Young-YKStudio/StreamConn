@@ -48,7 +48,7 @@ const LandingSideBarLogged = ({streamers, session}) => {
   }
 
   const userClickHandler = (id) => {
-    router.push(`/account/${id}`)
+    router.push(`/channel/home/${id}`)
   }
 
   return (
