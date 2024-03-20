@@ -15,8 +15,9 @@ import ChannelPosts from './components/channelPosts'
 // }
 
 const ChannelsSection = async (params) => {
+
   // const userId = req.nextUrl.pathname.substr(-24)
-  // const userId = params.userId
+  const userId = params.userId
   const returnedPosts = params.returnedPosts
 
   // const categoryOpenHandler = () => {

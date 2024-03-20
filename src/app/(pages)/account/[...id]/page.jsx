@@ -40,7 +40,6 @@ const getAllStreamers = async () => {
 }
 
 const AccountLanding = async ({params}) => {
-  
   const userId = params.id
   const user = await getUserInfo(userId)
   const returnedPosts = await getAllPost(userId)
@@ -51,7 +50,7 @@ const AccountLanding = async ({params}) => {
     <div className="flex flex-row flex-nowrap h-full">
       <Suspense fallback={<LoadingComponent />}>
         <LeftSideBar streamers={streamers} user={user} />
-        <IndividualRenderContainer user={user} returnedPosts={returnedPosts}/>
+        <IndividualRenderContainer user={user} returnedPosts={returnedPosts} />
         {/* <IndividualPageIntro user={user}/> */}
       </Suspense>
     </div>
