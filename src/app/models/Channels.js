@@ -14,7 +14,9 @@ const channelSchema = new Schema(
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
-    }
+    },
+    isPrivate: Boolean,
+    type: String,
   },{timestamps: true}
 )
 
