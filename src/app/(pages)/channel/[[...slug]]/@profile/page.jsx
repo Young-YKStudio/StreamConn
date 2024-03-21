@@ -19,7 +19,7 @@ const ChannelProfileServer = async ({params}) => {
   const user = await getUserInfo(userId)
 
   return (
-    <div className="pt-20 px-4 text-white w-full flex flex-col items-center">
+    <div className="pt-20 px-4 text-white w-full flex justify-center">
       <Suspense fallback={<p>Loading...</p>}>
         <ProfileRenderContainer user={user} />
       </Suspense>
