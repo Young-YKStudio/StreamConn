@@ -31,7 +31,7 @@ const ChannelSectionPage = async ({params}) => {
   const sectionDistributor = (user, channel) => {
     let foundChannel = user.channels.find(ch => ch.channelName === channel)
     if(!foundChannel || channel ==='home') {
-      return <ChannelHomePage />
+      return <ChannelHomePage foundUser={foundUser} />
     }
     if(foundChannel.channelType === 'Text') {
       return <ChannelTextPage />
