@@ -9,7 +9,7 @@ const getUserInfo = async (user) => {
       return response.data.message
     } 
   } catch (err) {
-    return 'error'
+    return undefined
   }
 }
 
@@ -21,7 +21,7 @@ const ChannelProfileServer = async ({params}) => {
   return (
     <div className="pt-20 px-4 text-white w-full flex justify-center">
       <Suspense fallback={<p>Loading...</p>}>
-        <ProfileRenderContainer user={user} />
+        {user && <ProfileRenderContainer user={user} />}
       </Suspense>
     </div>
   );

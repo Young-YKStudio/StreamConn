@@ -13,7 +13,6 @@ const getAllStreamers = async () => {
 }
 
 const LeftSideBar = async ({params}) => {
-  console.log(params.slug , 'left side bar')
 
   const userId = params.slug[1]
   const streamers = await getAllStreamers()

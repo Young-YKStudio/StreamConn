@@ -26,7 +26,6 @@ const ChannelTabs = async ({params}) => {
 
   const allTabs = await getUserAndChannel(channelUser, channelName)
 
-  console.log(allTabs)
   return (
     <Suspense fallback={<p>Loading...</p>}>
       <TabRenderContainer channelUser={channelUser} channelName={channelName} foundUser={allTabs} />
