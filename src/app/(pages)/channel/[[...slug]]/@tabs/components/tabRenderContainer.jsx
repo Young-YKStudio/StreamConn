@@ -1,9 +1,10 @@
 'use client'
 
-import { MdAdd } from "react-icons/md";
+import { MdAdd, MdHome, MdPeopleAlt, MdCoPresent } from "react-icons/md";
 import { Fragment, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import AddChannelModal from "../../components/addChannelModal";
+import { FaHashtag } from "react-icons/fa6";
 
 export const channels = [
   {name: 'Event'},
@@ -12,14 +13,14 @@ export const channels = [
 
 export const tabButtonStyles = (currentSection, channel) => {
   if(currentSection !== channel) {
-    return 'text-gray-400 hover:text-white px-3 py-1.5 truncate'
+    return 'text-gray-400 hover:text-white px-3 py-1.5 truncate flex flex-row items-center gap-0.5'
   }
   if(currentSection === channel) {
-    return 'rounded-md px-3 py-1.5 font-medium bg-sky-800'
+    return 'rounded-md px-3 py-1.5 font-medium bg-sky-800 flex flex-row items-center gap-0.5'
   }
 }
 
-const TabRenderContainer = ({channelUser, channelName}) => {
+const TabRenderContainer = ({channelUser, channelName, foundUser}) => {
 
   const [ isModalOpen, setIsModalOpen ] = useState(false)
 
@@ -33,8 +34,10 @@ const TabRenderContainer = ({channelUser, channelName}) => {
     router.push(`/channel/${string}/${channelUser}`)
   }
 
+  // console.log(foundUser, 'at render')
+
   return (
-    <nav className="flex flex-row gap-2 w-full max-w-4xl justify-center sm:justify-start border-b border-sky-500 py-4 pt-8">
+    <nav className="flex flex-row gap-2 w-full max-w-4xl justify-center sm:justify-start border-b border-sky-500 py-4 px-4 pt-8">
 
       {/* responsive select */}
       <div className='sm:hidden w-full max-w-sm flex flex-row gap-4'>
@@ -65,20 +68,49 @@ const TabRenderContainer = ({channelUser, channelName}) => {
             className={tabButtonStyles(channelName, 'home')}
             onClick={(e) => router.push(`/channel/home/${channelUser}`)}
           >
-            Home
+            <MdHome className="w-5 h-5"/>Home
           </button>
-          {channels.map((tab) => (
-            <button
-              key={tab.name + 'tabsWide'}
-              className={tabButtonStyles(channelName, tab.name)}
-              onClick={e => tabButtonHandler(e, tab.name)}
-            >
-              {tab.name}
-            </button>
-          ))}
+          {foundUser.channels.map((tab) => {
+            if(tab.channelType === 'Text') {
+              return (
+                <button
+                  key={tab.channelName + 'tabsWide'}
+                  className={tabButtonStyles(channelName, tab.channelName)}
+                  onClick={e => tabButtonHandler(e, tab.channelName)}
+                >
+                  <FaHashtag className="w-4 h-4"/> {tab.channelName}
+                </button>
+              )
+            }
+            if(tab.channelType === 'Collaboration') {
+              return (
+                <button
+                  key={tab.channelName + 'tabsWide'}
+                  className={tabButtonStyles(channelName, tab.channelName)}
+                  onClick={e => tabButtonHandler(e, tab.channelName)}
+                >
+                  <MdPeopleAlt className="w-5 h-5"/> {tab.channelName}
+                </button>
+              )
+            }
+            if(tab.channelType === 'Participation') {
+              return (
+                <button
+                  key={tab.channelName + 'tabsWide'}
+                  className={tabButtonStyles(channelName, tab.channelName)}
+                  onClick={e => tabButtonHandler(e, tab.channelName)}
+                >
+                  <MdCoPresent className="w-5 h-5 mr-1"/> {tab.channelName}
+                </button>
+              )
+            }
+          }
+          )}
         </div>
-
-        <button className="px-3 py-2 bg-sky-950 rounded-md hover:bg-sky-800" onClick={(e) => setIsModalOpen(true)} ><MdAdd className="w-5 h-5 text-bold" /></button>
+        
+        <div>
+          <button className="px-3 py-2 bg-sky-950 rounded-md hover:bg-sky-800" onClick={(e) => setIsModalOpen(true)} ><MdAdd className="w-5 h-5 text-bold" /></button>
+        </div>
       </div>
 
       {/* modal */}

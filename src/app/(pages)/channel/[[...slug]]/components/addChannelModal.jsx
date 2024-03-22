@@ -1,5 +1,6 @@
 import { Dialog, Transition, Switch } from '@headlessui/react'
 import { MdClose, MdOutlineCircle, MdOutlineCheckCircle, MdCoPresent, MdPeopleAlt, MdLock, MdCheckCircle } from 'react-icons/md'
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FaHashtag } from "react-icons/fa6";
 import { Fragment, useState } from 'react'
 import axios from 'axios'
@@ -75,6 +76,8 @@ const AddChannelModal = ({isModalOpen, setIsModalOpen, channelUser}) => {
       channelType: 'Text'
     }
   )
+  const [ errorMessage, setErrorMessage ] = useState('')
+  const [ apiLoading, setApiLoading ] = useState(false)
 
   const { channelName, author, isPrivate, channelType } = channelSubmitForm
 
@@ -107,10 +110,14 @@ const AddChannelModal = ({isModalOpen, setIsModalOpen, channelUser}) => {
     return classes.filter(Boolean).join(' ')
   }
 
-  const submitHandler = (e) => {
-    // validate the form
+  const submitHandler = async (e) => {
     const specialCharacters = `/[!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?]+/ `
     const notValidated = specialCharacters.split('').some(char => channelName.includes(char)) 
+
+    if(notValidated) {
+      return setErrorMessage('Channel name should not contain special characters')
+    }
+
     const numberOfCharacters = () => {
       if(channelName.length > 2 && channelName.length < 16) {
         return true
@@ -118,7 +125,48 @@ const AddChannelModal = ({isModalOpen, setIsModalOpen, channelUser}) => {
         return false
       }
     }
-    console.log('clicked', numberOfCharacters())
+
+    if(!numberOfCharacters()) {
+      return setErrorMessage('Channel name should be between 2 and 16 characters')
+    }
+
+    if(errorMessage !== '') {
+      setErrorMessage('')
+    }
+
+    let sendingData = {
+      channelName: channelName,
+      channelOwner: channelUser,
+      isPrivate: isPrivate,
+      channelType: channelType
+    }
+
+    try {
+      setApiLoading(true)
+      const res = await axios.post(`/api/createChannel`, sendingData)
+      if(res.status === 200) {
+        setApiLoading(false)
+        setIsModalOpen(false)
+      }
+    } catch (err) {
+      setApiLoading(false)
+      if(err.response.data.message === 'Channel name already exists') {
+        setErrorMessage('Channel name already exists')
+      }
+      console.log(err.response.data.message)
+    }
+  }
+
+  const loadingButtons = (loading) => {
+    if(loading) {
+      return <button className='bg-sky-700/80 py-2 rounded-md flex items-center flex-row justify-center hover:cursor-progress'>
+        <AiOutlineLoading3Quarters className='w-4 h-4 animate-spin' /> Loading...
+      </button>
+    } else {
+      return <button className='bg-sky-700 py-2 rounded-md hover:bg-sky-500' onClick={submitHandler}>
+        Create Channel
+      </button>
+    }
   }
 
   return (
@@ -185,8 +233,9 @@ const AddChannelModal = ({isModalOpen, setIsModalOpen, channelUser}) => {
                         value={channelName} 
                         onChange={channelNameChangeHandler} 
                         placeholder='Enter channel name'
-                        className='bg-black/30 ring-0 border-none rounded-md focus:ring-0 text-sm px-4 py-2'
+                        className={`bg-black/30 ring-0 border-none rounded-md focus:ring-0 text-sm px-4 py-2 ${errorMessage !== '' && 'ring-2 ring-red-500'}`}
                       />
+                      {errorMessage !== '' && <p className='text-red-500 text-xs'>{errorMessage}</p>}
                     </div>
 
                     {/* private option */}
@@ -235,9 +284,9 @@ const AddChannelModal = ({isModalOpen, setIsModalOpen, channelUser}) => {
                     {/* buttons */}
                     <div className='flex flex-col gap-2 pt-2 text-sm'>
                       {channelName !== '' ? 
-                        <button className='bg-sky-500 py-2 rounded-md' onClick={submitHandler}>Create Channel</button>
+                        loadingButtons(apiLoading)
                         :
-                        <button className='bg-sky-500/40 py-2 rounded-md text-slate-300 cursor-not-allowed'>Create Channel</button>
+                        <button className='bg-sky-700/40 py-2 rounded-md text-slate-300 cursor-not-allowed'>Create Channel</button>
                       }
                       <button className='py-2 hover:text-red-600'>Cancel</button>
                     </div>
@@ -252,3 +301,5 @@ const AddChannelModal = ({isModalOpen, setIsModalOpen, channelUser}) => {
   );
 }
 export default AddChannelModal;
+
+// TODO: error handling for backends

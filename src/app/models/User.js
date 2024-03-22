@@ -38,7 +38,25 @@ const userSchema = new Schema(
     nickname: {
       type: String,
       unique: true,
-    }
+    },
+    blockedUsers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      }
+    ],
+    moderators: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      }
+    ],
+    channels: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Channel'
+      }
+    ]
   },{timestamps: true}
 )
 

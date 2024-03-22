@@ -21,11 +21,11 @@ const LandingSideBarLogged = ({streamers, session}) => {
       try {
         const res = await axios.post(`/api/getFollowers/${userId}`)
         if(res.status === 200 && res.status.message === 'No Followers') {
-          console.log(res.data, 'at logged side bar')
+          // console.log(res.data, 'at logged side bar')
           setReceivedFollowers([])
         }
         if(res.status === 200) {
-          console.log(res.data, 'at logged side bar')
+          // console.log(res.data, 'at logged side bar')
           // setReceivedFollowers(res.data)
         }
       } catch (err) {

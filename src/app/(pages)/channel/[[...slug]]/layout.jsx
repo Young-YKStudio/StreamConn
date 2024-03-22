@@ -1,4 +1,5 @@
 const ChannelLayout = ({children, profile, tabs, section, sidebar}) => {
+
   return (
     <div className="flex flex-row flex-nowrap h-full w-full">
       {sidebar}
