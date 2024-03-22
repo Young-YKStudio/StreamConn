@@ -27,7 +27,7 @@ export const ImageDistributor = (platform) => {
 
 const ProfileRenderContainer = ({user}) => {
 
-  console.log(user, 'profile render')
+  // console.log(user, 'profile render')
 
   return (
     <section className="flex flex-row justify-between w-full max-w-4xl pt-8">
@@ -48,11 +48,11 @@ const ProfileRenderContainer = ({user}) => {
 
           {/* follows */}
           <div className="flex flex-row items-center gap-4 font-light">
-            <p className="text-sm">{user.followers.length} <span className="text-slate-400">Followers</span></p>
+            <p className="text-sm">{user.followers && user.followers.length} <span className="text-slate-400">Followers</span></p>
             {/* add event number? */}
             <p> | </p>
             <div className="flex flex-row gap-3 items-center">
-              {user.platforms.length > 0 && user.platforms.map((platform) => (
+              {user.platforms && user.platforms.map((platform) => (
                 <div key={platform.name + user.nickname}>
                   {ImageDistributor(platform)}
                 </div>

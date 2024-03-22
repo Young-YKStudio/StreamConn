@@ -3,7 +3,6 @@ import dbConnect from '@/app/util/DBConnect'
 import { NextResponse } from 'next/server'
 
 export const GET = async (req) => {
-  // let user = req.nextUrl.pathname.substr(-24)
 
   console.log(req.nextUrl.pathname)
 
