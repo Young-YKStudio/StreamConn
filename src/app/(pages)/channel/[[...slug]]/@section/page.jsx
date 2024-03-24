@@ -26,6 +26,11 @@ const ChannelSectionPage = async ({params}) => {
   const channelName = params.slug[0]
   const channelUser = params.slug[1]
 
+  const channelData = {
+    channelName: params.slug[0],
+    channelOwner: params.slug[1],
+  }
+
   const foundUser = await getUserWithChannels(channelUser, channelName)
 
   const sectionDistributor = (user, channel) => {
@@ -34,7 +39,7 @@ const ChannelSectionPage = async ({params}) => {
       return <ChannelHomePage foundUser={foundUser} />
     }
     if(foundChannel.channelType === 'Text') {
-      return <ChannelTextPage />
+      return <ChannelTextPage channelData={channelData} />
     }
     if(foundChannel.channelType === 'Collaboration') {
       return <Channel_Collaboration />
