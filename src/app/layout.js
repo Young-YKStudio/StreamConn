@@ -1,13 +1,13 @@
 import './globals.css'
 import HeaderLanding from './components/headers/header/HeaderLanding'
-import SideBar from './components/sidebar/sideBar'
 
 import { getServerSession } from 'next-auth'
 import SessionProvider from './util/SessionProvider'
+import Providers from '@/redux/reduxProviders'
 
 export const metadata = {
   title: 'Stream Connect',
-  description: 'asdf',
+  description: 'Where all streamers and viewers meet',
 }
 
 export default async function RootLayout({ children }) {
@@ -17,12 +17,14 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className='text-white bg-black'>
-        <SessionProvider session={session}>
-          <HeaderLanding />
-          <div className='w-screen h-screen'>
-            {children}
-          </div>
-        </SessionProvider>
+        <Providers>
+          <SessionProvider session={session}>
+            <HeaderLanding />
+            <div className='w-screen h-screen'>
+              {children}
+            </div>
+          </SessionProvider>
+        </Providers>
       </body>
     </html>
   )
