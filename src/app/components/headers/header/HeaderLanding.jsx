@@ -5,8 +5,10 @@ import Link from "next/link";
 import { MdMoreVert, MdFavoriteBorder, MdFilterNone, MdLanguage } from 'react-icons/md'
 
 import { useState, useEffect } from 'react'
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { logOut } from '@/redux/slice'
 
 import { notLoggedInLinks, loggedInLinks, subMenuLinks, roleBasedLinksTemplate } from "@/app/data/headerLinks";
 
@@ -20,6 +22,7 @@ const HeaderLanding = () => {
 
   const { data: session } = useSession()
   const router = useRouter()
+  const dispatch = useDispatch()
   
   useEffect(() => {
     if(session) {
@@ -40,8 +43,7 @@ const HeaderLanding = () => {
   }
 
   const signOutProcess = async () => {
-    await signOut()
-    router.push('/')
+    dispatch(logOut('sending'))
   }
 
   const accountButtonHandler = (e, email) => {

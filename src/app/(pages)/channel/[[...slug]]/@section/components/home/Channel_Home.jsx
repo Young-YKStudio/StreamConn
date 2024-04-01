@@ -1,15 +1,13 @@
 'use client'
-
+import { setAuthWithOAuth } from "@/redux/slice";
 import { useDispatch } from "react-redux";
-import { toast } from 'react-hot-toast'
 
 const ChannelHomePage = ({foundUser}) => {
 
-
+  const dispatch = useDispatch()
 
   const testButtonHandler = (e) => {
-    console.log('button clicked')
-    toast.error('test error')
+    dispatch(setAuthWithOAuth({sample1: 'sample1'}))
   }
 
   return (
