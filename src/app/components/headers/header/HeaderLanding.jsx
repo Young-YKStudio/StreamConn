@@ -7,8 +7,9 @@ import { MdMoreVert, MdFavoriteBorder, MdFilterNone, MdLanguage } from 'react-ic
 import { useState, useEffect } from 'react'
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { logOut } from '@/redux/slice'
+import { useDispatch, useSelector } from "react-redux";
+import { logOut, setNewReduxAuth } from "@/redux/service/authService";
+import { setAuthUserReset, setAuthUserRedux } from "@/redux/slice";
 
 import { notLoggedInLinks, loggedInLinks, subMenuLinks, roleBasedLinksTemplate } from "@/app/data/headerLinks";
 
@@ -20,18 +21,28 @@ const HeaderLanding = () => {
   const [ searchedText, setSearchedText ] = useState('')
   const [ isSubLinkMenuOpen, setIsSubLinkMenuOpen ] = useState(false)
 
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const router = useRouter()
   const dispatch = useDispatch()
-  
+  let authStatus = useSelector((state) => state.redux.isAuthStored)
+
   useEffect(() => {
-    if(session) {
-      if(!session.user.isUpdated) {
-        router.push(`/account_update/${session.user.id}`)
-        console.log(session, 'not updated at headerLanding')
+    if(status === 'authenticated') {
+      const setAuthUserReduxFunction = async (status) => {
+        if(!status) {
+          let setReduxAuth = await setNewReduxAuth(session.user.id)
+          dispatch(setAuthUserRedux(setReduxAuth))
+        }
       }
+
+      setAuthUserReduxFunction(authStatus)
+
+      if(!session.user.isUpdated) {
+        return router.push(`/account_update/${session.user.id}`)
+      }
+
     }
-  }, [session])
+  }, [session, authStatus])
 
   const subMenubuttonHandler = (e) => {
     setIsSubLinkMenuOpen(!isSubLinkMenuOpen)
@@ -43,7 +54,10 @@ const HeaderLanding = () => {
   }
 
   const signOutProcess = async () => {
-    dispatch(logOut('sending'))
+    let loggginOut = await logOut()
+    if(loggginOut) {
+      dispatch(setAuthUserReset())
+    }
   }
 
   const accountButtonHandler = (e, email) => {
@@ -51,13 +65,14 @@ const HeaderLanding = () => {
   }
 
   return (
-    <nav className="bg-sky-950 grid grid-cols-3 p-4 absolute top-0 w-full z-10">
+    <nav className="bg-black/40 grid grid-cols-3 p-4 absolute top-0 w-full z-10">
       {/* Logo/left section */}
       <div className="flex flex-row gap-2 items-center">
         <Link href='/' className="truncate text-sky-500">Stream Connect</Link>
 
         {/* Auth enabled only */}
         <button className={smallButtonStyles}><MdFavoriteBorder className={iconStyles} /></button> 
+
         {/* Public */}
         <button className={smallButtonStyles}><MdFilterNone className={iconStyles} /></button>
         <button className={smallButtonStyles} onClick={subMenubuttonHandler}><MdMoreVert className={iconStyles} /></button>
@@ -90,7 +105,7 @@ const HeaderLanding = () => {
           {notLoggedInLinks && notLoggedInLinks.map((link) => {
             return <Link key={link.name} href={link.href} className="text-slate-400 hover:text-sky-500 mr-2">{link.name}</Link>
           })}
-          <button className={smallButtonStyles}><MdLanguage className={iconStyles} /></button>
+          {/* <button className={smallButtonStyles}><MdLanguage className={iconStyles} /></button> */}
         </div>
       }
     </nav>

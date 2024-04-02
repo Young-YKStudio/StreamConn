@@ -44,10 +44,11 @@ export const options = {
               credentials.password,
               foundUser.password
               )
-              if(match) {
+            if(match) {
               return foundUser
             }
           } else {
+            console.log('no user found')
             return null
           }
         } catch (error) {

@@ -1,20 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { toast } from 'react-hot-toast'
-import { signOut } from 'next-auth/react'
+import { signOut, signIn } from 'next-auth/react'
 import { redirect } from 'next/navigation'
+import axios from 'axios'
 
 // redux state
 const initialState = {
-  auth: {
-    userId: '',
-    userData: {},
-  },
+  auth: [],
+  isAuthStored: false,
   isLoading: false,
 }
 
 // slice
 export const slice = createSlice({
-  name: 'streamConnectRedux',
+  name: 'redux',
   initialState,
   reducers: {
     // loading status
@@ -25,17 +24,22 @@ export const slice = createSlice({
       state.isLoading = false
     },
     // Authentication
-    setAuthWithOAuth: (state, action) => {
-      console.log(state, 'state', action, 'action', 'from redux reducer')
-      toast(action.payload.sample1)
+    setAuthUserRedux: (state, action) => {
+      state.auth = [...state.auth, action.payload]
+      state.isAuthStored = true
     },
-    logOut: async (state, action) => {
-      await signOut()
-      redirect('/')
+    setAuthUserReset : (state) => {
+      state.auth = {}
+      state.isAuthStored = false
     }
   }
 })
 
-export const { setIsLoadingTrue, setIsLoadingFalse, setAuthWithOAuth, logOut } = slice.actions
+export const { 
+  setIsLoadingTrue, 
+  setIsLoadingFalse, 
+  setAuthUserRedux, 
+  setAuthUserReset,
+} = slice.actions
 
 export default slice.reducer
