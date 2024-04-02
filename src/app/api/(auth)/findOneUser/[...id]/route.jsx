@@ -1,6 +1,8 @@
 import User from "@/app/models/User";
+import Channel from "@/app/models/Channels";
 import dbConnect from "@/app/util/DBConnect";
 import { NextResponse, NextRequest } from "next/server";
+import { models } from "mongoose";
 
 export const GET = async (req) => {
   let params = req.nextUrl.pathname
@@ -15,10 +17,17 @@ export const GET = async (req) => {
     )
   }
 
-  let foundUser = await User.findOne({_id: userId})
+  let foundUser = await User.findOne({_id: userId}).populate('followers').populate('follows').populate('channels', {model: Channel})
+
+  if(!foundUser) {
+    return NextResponse.json(
+      { message: 'User not found'},
+      { status: 404 }
+    )
+  }
 
   return NextResponse.json(
-    { message: foundUser },
+    foundUser,
     { status: 200 }
   )
 }

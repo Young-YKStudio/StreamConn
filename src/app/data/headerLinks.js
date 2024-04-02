@@ -1,9 +1,5 @@
 export const notLoggedInLinks = [
   {
-    name: 'Tutorial',
-    href: '/tutorial'
-  },
-  {
     name: 'Login',
     href: '/login',
   },

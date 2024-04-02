@@ -11,36 +11,6 @@ import chzzkLogo from '../../../../images/chzzkLogo.png'
 import kickImage from '../../../../images/Kick-logo-green-k.png'
 import { useEffect } from 'react'
 
-const dummyLists = [
-  {
-    name: 'sample1',
-    id: 'samplesample1',
-    viewCount: 23,
-    category: 'sampleCat1',
-    platform: 'Twitch'
-  },
-  {
-    name: 'sample2',
-    id: 'samplesample2',
-    viewCount: 213,
-    category: 'sampleCat2asdfasddf',
-    platform: 'Chzzk'
-  },
-  {
-    id: 'samplesample3',
-    viewCount: 2453,
-    category: 'sampleCat3',
-    platform: 'Afreeca'
-  },
-  {
-    name: 'sample4',
-    id: 'samplesample4',
-    viewCount: 23654,
-    category: 'sampleCat4',
-    platform: 'YouTube'
-  },
-]
-
 const platformDistributor = (platform) => {
   if(platform === 'Twitch') {
     return <p><ImTwitch className='w-4 h-4 rounded-full text-purple-600'/></p>

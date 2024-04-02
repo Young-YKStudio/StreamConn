@@ -9,7 +9,9 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineEmail } from "react-icons/md";
-
+import { useDispatch, useSelector } from 'react-redux'
+import { signInOauth, signInEmail } from '@/redux/service/authService'
+import { setIsLoadingTrue, setIsLoadingFalse } from '@/redux/slice'
 
 const LoginPage = () => {
 
@@ -21,6 +23,7 @@ const LoginPage = () => {
   const [ providers, setProviders ] = useState()
   const [ credentialOpen, setCredentialOpen ] = useState(false)
   const { session, sessionStatus } = useSession()
+  const dispatch = useDispatch()
   
   useEffect(() => {
     (() => {
@@ -31,11 +34,8 @@ const LoginPage = () => {
   },[])
 
   useEffect(() => {
-    console.log(session, 'session on login page')
-    if(session) {
-      // router.push('/')
-    }
-  },[session])
+    console.log(sessionStatus, session, 'session on login page')
+  },[sessionStatus])
 
   const inputLabelStyle = 'block mb-2 text-sm font-medium'
   const inputBoxStyle = 'bg-slate-500 text-gray-900 text-sm rounded-md focus:outline-none focus:ring-2 focus:bg-slate-300 focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5'
@@ -54,23 +54,37 @@ const LoginPage = () => {
     }))
   }
 
+  const oAuthLoginHandler = async (e, id) => {
+    await signInOauth(id)
+  }
+
   const submitHandler = async (e, data) => {
     e.preventDefault()
-    // await loginAction(data)
-    const email = submitForm.email
-    const password = submitForm.password
 
-    const response = await signIn('credentials', {
-      redirect: false,
+    let sendingData = {
       email: email,
       password: password
-    })
-
-    if(response.status === 200) {
-      router.push('/')
-    } else {
-      console.log(response, sessionStatus, 'at response')
     }
+
+    try {
+      let loginRequest = await dispatch(signInEmail(sendingData))
+      // onsuccess route to home
+    } catch (err) {
+      return dispatch(setIsLoadingFalse())
+    }
+    // // await loginAction(data)
+
+    // const response = await signIn('credentials', {
+    //   redirect: false,
+    //   email: email,
+    //   password: password
+    // })
+
+    // if(response.status === 200) {
+    //   router.push('/')
+    // } else {
+    //   console.log(response, sessionStatus, 'at response')
+    // }
   }
 
   const credentialOpenHandler = (e) => {
@@ -78,7 +92,7 @@ const LoginPage = () => {
   }
 
   return (
-    <section className="flex justify-center items-center w-full px-4 pt-24">
+    <section className="flex justify-center items-center h-full w-full px-4 pt-12">
       <div className="relative rounded-md shadow bg-slate-800 w-full max-w-sm lg:max-w-md">
         <div className="flex flex-col items-center p-7">
           <h3 className="text-xl font-semibold">
@@ -90,7 +104,7 @@ const LoginPage = () => {
         <div className="flex flex-col gap-4 p-5 py-7 border-t border-slate-500">
           {/* Oauth Buttons */}
           <div className='flex items-center justify-center pt-2'>
-            {providers && <button className='flex gap-2 items-center p-2 bg-white/20 w-full justify-center rounded-md hover:bg-white/50' onClick={() => signIn(providers.id)}><FcGoogle className='w-5 h-5' />Sign in with {providers.name}</button>}
+            {providers && <button className='flex gap-2 items-center p-2 bg-white/20 w-full justify-center rounded-md hover:bg-white/50' onClick={(e) => oAuthLoginHandler(e, providers.id)}><FcGoogle className='w-5 h-5' />Sign in with {providers.name}</button>}
           </div>
           <div className='flex items-center justify-center pt-2'>
             <button className='flex gap-2 items-center p-2 bg-white/20 w-full justify-center rounded-md hover:bg-white/50' onClick={() => credentialOpenHandler()}><MdOutlineEmail className='w-5 h-5' />Sign in with Email</button>
