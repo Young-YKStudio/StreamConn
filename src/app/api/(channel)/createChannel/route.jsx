@@ -1,5 +1,5 @@
 import dbConnect from "@/app/util/DBConnect";
-import Channel from "@/app/models/Channels";
+import Channel from "@/app/models/channels";
 import User from '@/app/models/User';
 import { NextResponse } from "next/server";
 
