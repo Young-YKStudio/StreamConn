@@ -40,7 +40,6 @@ const HeaderLanding = () => {
       if(!session.user.isUpdated) {
         return router.push(`/account_update/${session.user.id}`)
       }
-
     }
   }, [session, authStatus])
 

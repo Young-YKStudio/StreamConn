@@ -1,5 +1,4 @@
 'use client'
-import { setAuthWithOAuth } from "@/redux/slice";
 import { useDispatch } from "react-redux";
 
 const ChannelHomePage = ({foundUser}) => {
@@ -7,7 +6,6 @@ const ChannelHomePage = ({foundUser}) => {
   const dispatch = useDispatch()
 
   const testButtonHandler = (e) => {
-    dispatch(setAuthWithOAuth({sample1: 'sample1'}))
   }
 
   return (

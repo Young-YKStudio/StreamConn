@@ -6,7 +6,7 @@ import axios from 'axios'
 
 // redux state
 const initialState = {
-  auth: [],
+  auth: undefined,
   isAuthStored: false,
   isLoading: false,
 }
@@ -25,11 +25,11 @@ export const slice = createSlice({
     },
     // Authentication
     setAuthUserRedux: (state, action) => {
-      state.auth = [...state.auth, action.payload]
+      state.auth = action.payload
       state.isAuthStored = true
     },
     setAuthUserReset : (state) => {
-      state.auth = {}
+      state.auth = undefined
       state.isAuthStored = false
     }
   }
