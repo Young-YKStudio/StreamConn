@@ -68,6 +68,7 @@ const LoginPage = () => {
 
     try {
       let loginRequest = await dispatch(signInEmail(sendingData))
+      // onsuccess route to home
     } catch (err) {
       return dispatch(setIsLoadingFalse())
     }

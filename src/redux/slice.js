@@ -4,7 +4,7 @@ import { signOut, signIn } from 'next-auth/react'
 import { redirect } from 'next/navigation'
 import axios from 'axios'
 
-// redux state
+// redux state -- immutable object
 const initialState = {
   auth: undefined,
   isAuthStored: false,
