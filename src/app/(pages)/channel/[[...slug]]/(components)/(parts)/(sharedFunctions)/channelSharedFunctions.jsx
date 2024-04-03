@@ -6,6 +6,7 @@ import chzzkLogo from '@/images/chzzkLogo.png'
 import kickImage from '@/images/Kick-logo-green-k.png'
 import { FaHashtag } from "react-icons/fa6";
 import { MdOutlineCircle, MdCoPresent, MdPeopleAlt, MdCheckCircle } from 'react-icons/md'
+import { toast } from 'react-hot-toast'
 
 export const ImageDistributor = (platform) => {
   if(platform.name === 'Twitch') {
@@ -95,6 +96,23 @@ export const userValidator = (currentUser, channelOwner) => {
   const moderator = channelOwner.moderators.find((user) => user._id === currentUser._id)
 
   if(moderator) {
+    return true
+  }
+
+  return false
+}
+
+export const channelNameValidator = (channelName) => {
+  const specialCharacters = `/[!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?]+/ `
+  const notValidated = specialCharacters.split('').some(char => channelName.includes(char)) 
+
+  if(notValidated) {
+    toast.error('Channel name should not contain special charactors')
+    return true
+  }
+
+  if(channelName.length < 2 || channelName.length > 16) {
+    toast.error('Channel name must be between 2 - 16 characters long')
     return true
   }
 

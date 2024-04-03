@@ -103,7 +103,7 @@ const ChannelTabs = ({channelOwner, channelName}) => {
       </div>
 
       {/* modal */}
-      {isModalOpen && <AddChannelModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} channelUser={channelOwner} />}
+      {isModalOpen && <AddChannelModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} channelUser={channelOwner} currentUser={currentUser} />}
 
     </nav>
   );

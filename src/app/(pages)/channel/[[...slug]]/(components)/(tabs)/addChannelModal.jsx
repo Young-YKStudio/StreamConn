@@ -3,8 +3,11 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Fragment, useState } from 'react'
 import axios from 'axios'
 import { motion } from 'framer-motion'
-import { channelTypeDistributor, channelTypes } from '../(parts)/(sharedFunctions)/channelSharedFunctions';
+import { channelTypeDistributor, channelTypes, channelNameValidator } from '../(parts)/(sharedFunctions)/channelSharedFunctions';
 import { MdClose, MdLock } from 'react-icons/md'
+import { addChannelRequest } from '@/redux/service/modalService';
+import { useDispatch } from 'react-redux';
+import { setIsLoadingTrue, setIsLoadingFalse } from '@/redux/slice';
 
 // 투표
 // 토토
@@ -12,12 +15,13 @@ import { MdClose, MdLock } from 'react-icons/md'
 // 도네
 // 돌림판
 
-const AddChannelModal = ({isModalOpen, setIsModalOpen, channelUser}) => {
+const AddChannelModal = ({isModalOpen, setIsModalOpen, channelUser, currentUser}) => {
 
   const [ channelSubmitForm, setChannelSubmitForm ] = useState(
     {
       channelName: '',
-      author: '',
+      channelOwner: channelUser._id,
+      author: currentUser._id,
       isPrivate: false,
       channelType: 'Text'
     }
@@ -25,7 +29,8 @@ const AddChannelModal = ({isModalOpen, setIsModalOpen, channelUser}) => {
   const [ errorMessage, setErrorMessage ] = useState('')
   const [ apiLoading, setApiLoading ] = useState(false)
 
-  const { channelName, author, isPrivate, channelType } = channelSubmitForm
+  const { channelName, isPrivate, channelType } = channelSubmitForm
+  const dispatch = useDispatch()
 
   const channelTypeButtonHandler = (e, type) => {
     if(type === channelType) {
@@ -57,50 +62,24 @@ const AddChannelModal = ({isModalOpen, setIsModalOpen, channelUser}) => {
   }
 
   const submitHandler = async (e) => {
-    const specialCharacters = `/[!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?]+/ `
-    const notValidated = specialCharacters.split('').some(char => channelName.includes(char)) 
 
-    if(notValidated) {
-      return setErrorMessage('Channel name should not contain special characters')
+    dispatch(setIsLoadingTrue())
+
+    let error = await channelNameValidator(channelName)
+
+    if(error) {
+      return dispatch(setIsLoadingFalse())
     }
 
-    const numberOfCharacters = () => {
-      if(channelName.length > 2 && channelName.length < 16) {
-        return true
-      } else {
-        return false
-      }
+    const request = await addChannelRequest(channelSubmitForm)
+
+    if(request) {
+      dispatch(setIsLoadingFalse())
+      setIsModalOpen(false)
+      return window.location.reload()
     }
 
-    if(!numberOfCharacters()) {
-      return setErrorMessage('Channel name should be between 2 and 16 characters')
-    }
-
-    if(errorMessage !== '') {
-      setErrorMessage('')
-    }
-
-    let sendingData = {
-      channelName: channelName,
-      channelOwner: channelUser,
-      isPrivate: isPrivate,
-      channelType: channelType
-    }
-
-    try {
-      setApiLoading(true)
-      const res = await axios.post(`/api/createChannel`, sendingData)
-      if(res.status === 200) {
-        setApiLoading(false)
-        setIsModalOpen(false)
-      }
-    } catch (err) {
-      setApiLoading(false)
-      if(err.response.data.message === 'Channel name already exists') {
-        setErrorMessage('Channel name already exists')
-      }
-      console.log(err.response.data.message)
-    }
+    return setIsModalOpen(false)
   }
 
   const loadingButtons = (loading) => {
@@ -181,7 +160,6 @@ const AddChannelModal = ({isModalOpen, setIsModalOpen, channelUser}) => {
                         placeholder='Enter channel name'
                         className={`bg-black/30 ring-0 border-none rounded-md focus:ring-0 text-sm px-4 py-2 ${errorMessage !== '' && 'ring-2 ring-red-500'}`}
                       />
-                      {errorMessage !== '' && <p className='text-red-500 text-xs'>{errorMessage}</p>}
                     </div>
 
                     {/* private option */}
