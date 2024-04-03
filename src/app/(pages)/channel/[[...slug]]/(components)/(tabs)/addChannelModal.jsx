@@ -79,7 +79,8 @@ const AddChannelModal = ({isModalOpen, setIsModalOpen, channelUser, currentUser}
       return window.location.reload()
     }
 
-    return setIsModalOpen(false)
+    dispatch(setIsLoadingFalse())
+    return 
   }
 
   const loadingButtons = (loading) => {
