@@ -1,40 +1,27 @@
 'use client'
-
-import { MdAdd, MdHome, MdPeopleAlt, MdCoPresent } from "react-icons/md";
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import AddChannelModal from "../../components/addChannelModal";
+import { tabButtonStyles, userValidator } from '../(parts)/(sharedFunctions)/channelSharedFunctions'
+import { MdAdd, MdHome, MdPeopleAlt, MdCoPresent } from "react-icons/md";
 import { FaHashtag } from "react-icons/fa6";
+import AddChannelModal from './addChannelModal';
+import { useSelector } from 'react-redux';
 
-export const channels = [
-  {name: 'Event'},
-  {name: 'ChannelOne'},
-]
-
-export const tabButtonStyles = (currentSection, channel) => {
-  if(currentSection !== channel) {
-    return 'text-gray-400 hover:text-white px-3 py-1.5 truncate flex flex-row items-center gap-0.5'
-  }
-  if(currentSection === channel) {
-    return 'rounded-md px-3 py-1.5 font-medium bg-sky-800 flex flex-row items-center gap-0.5'
-  }
-}
-
-const TabRenderContainer = ({channelUser, channelName, foundUser}) => {
+const ChannelTabs = ({channelOwner, channelName}) => {
 
   const [ isModalOpen, setIsModalOpen ] = useState(false)
 
   const router = useRouter()
-  
+
   const selectChangeHandler = (e, string) => {
-    router.push(`/channel/${string}/${channelUser}`)
+    router.push(`/channel/${string}/${channelOwner._id}`)
   }
   
   const tabButtonHandler = (e, string) => {
-    router.push(`/channel/${string}/${channelUser}`)
+    router.push(`/channel/${string}/${channelOwner._id}`)
   }
-
-  // console.log(foundUser, 'at render')
+  
+  const currentUser = useSelector((state) => state.redux.auth)
 
   return (
     <nav className="flex flex-row gap-2 w-full max-w-4xl justify-center sm:justify-start border-b border-sky-500 py-4 px-4 pt-8">
@@ -51,9 +38,9 @@ const TabRenderContainer = ({channelUser, channelName, foundUser}) => {
           value={channelName}
           onChange={(e) => selectChangeHandler(e, e.target.value)}
         >
-          {channels.map((tab) => (
-            <option key={tab.name + 'tabs'}>
-              {tab.name}
+          {channelOwner.channels.map((tab) => (
+            <option key={tab.channelName + 'tabs option with responsive'}>
+              {tab.channelName}
             </option>
           ))}
         </select>
@@ -66,11 +53,11 @@ const TabRenderContainer = ({channelUser, channelName, foundUser}) => {
         <div className="flex flex-wrap gap-4">
           <button
             className={tabButtonStyles(channelName, 'home')}
-            onClick={(e) => router.push(`/channel/home/${channelUser}`)}
+            onClick={(e) => router.push(`/channel/home/${channelOwner._id}`)}
           >
             <MdHome className="w-5 h-5"/>Home
           </button>
-          {foundUser.channels.map((tab) => {
+          {channelOwner.channels.map((tab) => {
             if(tab.channelType === 'Text') {
               return (
                 <button
@@ -109,17 +96,18 @@ const TabRenderContainer = ({channelUser, channelName, foundUser}) => {
         </div>
         
         <div>
-          <button className="px-3 py-2 bg-sky-950 rounded-md hover:bg-sky-800" onClick={(e) => setIsModalOpen(true)} ><MdAdd className="w-5 h-5 text-bold" /></button>
+          {currentUser && userValidator(currentUser, channelOwner) &&
+            <button className="px-3 py-2 bg-sky-950 rounded-md hover:bg-sky-800" onClick={(e) => setIsModalOpen(true)} ><MdAdd className="w-5 h-5 text-bold" /></button>
+          }
         </div>
       </div>
 
       {/* modal */}
-      {isModalOpen && <AddChannelModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} channelUser={channelUser} />}
+      {isModalOpen && <AddChannelModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} channelUser={channelOwner} currentUser={currentUser} />}
 
     </nav>
   );
 }
-export default TabRenderContainer;
-
+export default ChannelTabs;
 
 // TODO: add click handler on responsive add button

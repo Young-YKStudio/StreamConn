@@ -1,8 +1,7 @@
 import User from "@/app/models/User";
 import Channel from "@/app/models/Channels";
 import dbConnect from "@/app/util/DBConnect";
-import { NextResponse, NextRequest } from "next/server";
-import { models } from "mongoose";
+import { NextResponse } from "next/server";
 
 export const GET = async (req) => {
   let params = req.nextUrl.pathname
