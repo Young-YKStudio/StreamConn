@@ -37,7 +37,7 @@ export const POST = async (req) => {
   }
 
   const sendingData = {
-    channelOwner: foundChannelOwner
+    channelOwner: foundChannelOwner,
   }
   
   return NextResponse.json(
