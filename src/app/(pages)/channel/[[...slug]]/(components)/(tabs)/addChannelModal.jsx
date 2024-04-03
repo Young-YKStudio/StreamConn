@@ -1,70 +1,16 @@
 import { Dialog, Transition, Switch } from '@headlessui/react'
-import { MdClose, MdOutlineCircle, MdOutlineCheckCircle, MdCoPresent, MdPeopleAlt, MdLock, MdCheckCircle } from 'react-icons/md'
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { FaHashtag } from "react-icons/fa6";
 import { Fragment, useState } from 'react'
 import axios from 'axios'
 import { motion } from 'framer-motion'
-
-const channelTypes = [
-  { type: 'Text' },
-  { type: 'Collaboration' },
-  { type: 'Participation' },
-]
+import { channelTypeDistributor, channelTypes } from '../(parts)/(sharedFunctions)/channelSharedFunctions';
+import { MdClose, MdLock } from 'react-icons/md'
 
 // 투표
 // 토토
 // 미션 socket 필수
 // 도네
 // 돌림판
-
-const channelTypeDistributor = (type, selected) => {
-  if(type === 'Text') {
-    return (
-      <div className={selected === 'Text' ? 'flex flex-row justify-between items-center bg-black/30 px-3 py-2 rounded-md' : 'flex flex-row justify-between items-center bg-black/10 hover:bg-white/10 hover:cursor-pointer px-3 py-2 rounded-md'}>
-        <div className='flex flex-row gap-2 items-center'>
-          <FaHashtag className='w-5 h-5'/>
-          <div className='text-sm'>
-            <p className='font-medium'>Text Channel</p>
-            <p className='text-slate-300 text-xs'>Send messages, images, GIFs, share opinions</p>
-          </div>
-        </div>
-        {selected === 'Text' ? <MdCheckCircle className='w-5 h-5 text-sky-500' /> : <MdOutlineCircle className='w-5 h-5' />}
-      </div>
-    )
-  }
-
-  if(type === 'Collaboration') {
-    return (
-      <div className={selected === 'Collaboration' ? 'flex flex-row justify-between items-center bg-black/30 px-3 py-2 rounded-md' : 'flex flex-row justify-between items-center bg-black/10 hover:bg-white/10 hover:cursor-pointer px-3 py-2 rounded-md'}>
-        <div className='flex flex-row gap-2 items-center'>
-          <MdPeopleAlt className='w-5 h-5'/>
-          <div className='text-sm'>
-            <p className='font-medium'>Collaboration Channel</p>
-            <p className='text-slate-300 text-xs'>Connect and schedule with other streamers</p>
-          </div>
-        </div>
-        {selected === 'Collaboration' ? <MdCheckCircle className='w-5 h-5 text-sky-500' /> : <MdOutlineCircle className='w-5 h-5' />}
-      </div>
-    )
-  }
-
-  if(type === 'Participation') {
-    return (
-      <div className={selected === 'Participation' ? 'flex flex-row justify-between items-center bg-black/30 px-3 py-2 rounded-md' : 'flex flex-row justify-between items-center bg-black/10 hover:bg-white/10 hover:cursor-pointer px-3 py-2 rounded-md'}>
-        <div className='flex flex-row gap-2 items-center'>
-          <MdCoPresent className='w-5 h-5'/>
-          <div className='text-sm'>
-            <p className='font-medium'>Participation Channel</p>
-            <p className='text-slate-300 text-xs'>Connect and schedule with stream viewers</p>
-          </div>
-        </div>
-        {selected === 'Participation' ? <MdCheckCircle className='w-5 h-5 text-sky-500' /> : <MdOutlineCircle className='w-5 h-5' />}
-      </div>
-    )
-  }
-
-}
 
 const AddChannelModal = ({isModalOpen, setIsModalOpen, channelUser}) => {
 

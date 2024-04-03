@@ -1,14 +1,13 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { tabButtonStyles } from '../(parts)/(sharedFunctions)/channelSharedFunctions'
+import { tabButtonStyles, userValidator } from '../(parts)/(sharedFunctions)/channelSharedFunctions'
 import { MdAdd, MdHome, MdPeopleAlt, MdCoPresent } from "react-icons/md";
 import { FaHashtag } from "react-icons/fa6";
 import AddChannelModal from './addChannelModal';
+import { useSelector } from 'react-redux';
 
 const ChannelTabs = ({channelOwner, channelName}) => {
-
-  console.log(channelOwner, channelName)
 
   const [ isModalOpen, setIsModalOpen ] = useState(false)
 
@@ -21,6 +20,8 @@ const ChannelTabs = ({channelOwner, channelName}) => {
   const tabButtonHandler = (e, string) => {
     router.push(`/channel/${string}/${channelOwner._id}`)
   }
+  
+  const currentUser = useSelector((state) => state.redux.auth)
 
   return (
     <nav className="flex flex-row gap-2 w-full max-w-4xl justify-center sm:justify-start border-b border-sky-500 py-4 px-4 pt-8">
@@ -95,7 +96,9 @@ const ChannelTabs = ({channelOwner, channelName}) => {
         </div>
         
         <div>
-          <button className="px-3 py-2 bg-sky-950 rounded-md hover:bg-sky-800" onClick={(e) => setIsModalOpen(true)} ><MdAdd className="w-5 h-5 text-bold" /></button>
+          {currentUser && userValidator(currentUser, channelOwner) &&
+            <button className="px-3 py-2 bg-sky-950 rounded-md hover:bg-sky-800" onClick={(e) => setIsModalOpen(true)} ><MdAdd className="w-5 h-5 text-bold" /></button>
+          }
         </div>
       </div>
 
