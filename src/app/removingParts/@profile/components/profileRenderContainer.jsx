@@ -1,6 +1,7 @@
 'use client'
 import { TbHttpConnect } from "react-icons/tb";
 import { ImTwitch, ImYoutube } from 'react-icons/im'
+import { MdPerson } from 'react-icons/md'
 import Image from 'next/image'
 import Link from 'next/link'
 import afreecaImage from '@/images/afreecaTV_logo_rgb_light_symbol.png'
@@ -27,14 +28,14 @@ export const ImageDistributor = (platform) => {
 
 const ProfileRenderContainer = ({user}) => {
 
-  // console.log(user, 'profile render')
+  console.log(user, 'profile render')
 
   return (
     <section className="flex flex-row justify-between w-full max-w-4xl pt-8">
       {/* Left Side */}
       <div className="flex flex-row gap-4 items-center">
         {/* Image */}
-        <img src={user.profile}  className="w-20 h-20 rounded-full"/>
+        {user.profile ? <img src={user.profile} alt='streamer logo' className="w-20 h-20 rounded-full" /> : <div className="bg-sky-950 rounded-full p-2"><MdPerson className="h-16 w-16" /></div>}
 
         {/* streamer info */}
         <div>

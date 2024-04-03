@@ -40,7 +40,6 @@ export const signInEmail = async (loginData) => {
       return window.history.pushState({}, '', '/')
     }
   } catch (err) {
-    console.log(err)
     return toast.error('Please check your email and password')
   }
 

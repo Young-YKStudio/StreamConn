@@ -28,10 +28,10 @@ export const slice = createSlice({
       state.auth = action.payload
       state.isAuthStored = true
     },
-    setAuthUserReset : (state) => {
+    setAuthUserReset: (state) => {
       state.auth = undefined
       state.isAuthStored = false
-    }
+    },
   }
 })
 
