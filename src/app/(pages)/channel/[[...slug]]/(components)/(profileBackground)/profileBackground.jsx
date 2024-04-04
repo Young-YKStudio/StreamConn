@@ -4,6 +4,7 @@ import { MdPerson } from 'react-icons/md'
 import { useSelector, useDispatch } from "react-redux";
 import { setIsLoadingTrue, setIsLoadingFalse } from "@/redux/slice";
 import { useState } from 'react'
+import { followStreamer } from '@/redux/service/followAndSubscribe'
 
 import { ImageDistributor, accountNotLoggedEvent, followButtonStyle, profileButtonDistributor } from "../(parts)/(sharedFunctions)/channelSharedFunctions";
 
@@ -18,7 +19,11 @@ const ChannelProfileBackGround = ({channelOwner}) => {
   }
 
   const addFollowFunction = () => {
-    console.log('triggered')
+    let sendingData = {
+      loggedUser: loggedUser,
+      channelOwner: channelOwner
+    }
+    followStreamer(sendingData)
   }
 
   const addSubscriptionFunction = () => {

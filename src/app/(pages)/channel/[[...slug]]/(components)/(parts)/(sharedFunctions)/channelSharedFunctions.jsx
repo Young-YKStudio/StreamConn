@@ -8,7 +8,6 @@ import { FaHashtag } from "react-icons/fa6";
 import { MdOutlineCircle, MdCoPresent, MdPeopleAlt, MdCheckCircle } from 'react-icons/md'
 import { toast } from 'react-hot-toast'
 import { PiStarBold, PiStarFill, PiHeartBold, PiHeartBreakFill, PiHeartFill } from 'react-icons/pi'
-import { followStreamer } from '@/redux/service/followAndSubscribe'
 
 export const ImageDistributor = (platform) => {
   if(platform.name === 'Twitch') {
