@@ -4,6 +4,7 @@ import ChannelSideBar from './(components)/(parts)/(sidebar)/sideBar';
 import ChannelProfileBackGround from './(components)/(profileBackground)/profileBackground';
 import ChannelTabs from './(components)/(tabs)/channelTabs';
 import ChannelSectionLanding from './(components)/(sections)/sectionsLanding';
+import Loading from './(components)/loading';
 
 const getCurrentChannel = async (reqData) => {
   const channel = await axios.post(`${process.env.APP_URL}/api/getCurrentChannel`, reqData);
@@ -26,13 +27,13 @@ const DynamicChannelPage = async ({params}) => {
     <div className="flex flex-row flex-nowrap h-full w-full">
       {/* sidebar here */}
       <ChannelSideBar />
-      <Suspense fallback={<p>Loading...</p>}>
+      <Suspense fallback={<Loading />}>
         <div className="w-full flex flex-col items-center">
           <div className='w-full flex flex-col items-center bg-white/10 pt-24 pb-4 px-4'>
-            <ChannelProfileBackGround channelOwner={channelData.channelOwner}/>
+            <ChannelProfileBackGround channelOwner={channelData.channelOwner} channel={sendingData.channel}/>
           </div>
           <ChannelTabs channelOwner={channelData.channelOwner} channelName={sendingData.channel}/>
-          <ChannelSectionLanding channelName={sendingData.channel} channelOwner={channelData.channelOwner}/>
+          <ChannelSectionLanding channelName={sendingData.channel} channelData={channelData}/>
         </div>
       </Suspense>
     </div>

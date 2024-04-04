@@ -5,8 +5,9 @@ import afreecaImage from '@/images/afreecaTV_logo_rgb_light_symbol.png'
 import chzzkLogo from '@/images/chzzkLogo.png'
 import kickImage from '@/images/Kick-logo-green-k.png'
 import { FaHashtag } from "react-icons/fa6";
-import { MdOutlineCircle, MdCoPresent, MdPeopleAlt, MdCheckCircle } from 'react-icons/md'
+import { MdOutlineCircle, MdCoPresent, MdPeopleAlt, MdCheckCircle, MdOutlineEdit } from 'react-icons/md'
 import { toast } from 'react-hot-toast'
+import { PiStarBold, PiStarFill, PiHeartBold, PiHeartBreakFill, PiHeartFill } from 'react-icons/pi'
 
 export const ImageDistributor = (platform) => {
   if(platform.name === 'Twitch') {
@@ -117,4 +118,72 @@ export const channelNameValidator = (channelName) => {
   }
 
   return false
+}
+
+export const accountNotLoggedEvent = (e) => {
+  e.preventDefault()
+  toast.error('You must be logged in')
+}
+
+// profile functions
+
+export const followButtonStyle = (state) => {
+  if(state) {
+    return 'rounded-md px-3 py-1.5 font-medium bg-sky-800 flex flex-row items-center gap-0.5 hover:bg-red-900 flex flex-row gap-1 tracking-wide'
+  }
+
+  return 'rounded-md px-3 py-1.5 font-medium bg-sky-800 flex flex-row items-center gap-0.5 hover:bg-sky-950 flex flex-row gap-1 tracking-wide'
+}
+
+export const profileButtonDistributor = (loggedUser, channelOwner, setModalOn, addFollowFunction, addSubscriptionFunction, isFollowedButtonHovered, setHoverOnFollows, setHoverOffFollows, unfollowFunction) => {
+  if(!loggedUser) {
+    return (
+      <div className="flex items-end h-full gap-2 pb-4 text-sm">
+        <button onClick={(e) => accountNotLoggedEvent(e)} className={followButtonStyle()}><PiHeartBold className="w-5 h-5"/>Follow</button>
+        <button onClick={(e) => accountNotLoggedEvent(e)} className={followButtonStyle()}><PiStarBold className="w-5 h-5"/>Subscribe</button>
+      </div>
+    )
+  }
+  if(loggedUser._id === channelOwner._id) {
+    return (
+      <div className="flex items-end h-full gap-2 pb-4 text-sm">
+        <button onClick={(e) => setModalOn(e)} className={followButtonStyle()}><MdOutlineEdit className="w-5 h-5"/>Manage Account</button>
+      </div>
+    )
+  }
+
+  let followedChannel = channelOwner.followers.find((user) => user = loggedUser._id)
+
+  // TODO: add more condition for subscriptions
+  if(followedChannel) {
+
+    return (
+      <div className="flex items-end h-full gap-2 pb-4 text-sm">
+        <button 
+          onClick={(e) => unfollowFunction(e)} 
+          className={followButtonStyle(isFollowedButtonHovered)}
+          onMouseEnter={(e) => setHoverOnFollows(e)}
+          onMouseLeave={(e) => setHoverOffFollows(e)}
+        >
+          {isFollowedButtonHovered ?
+          <>
+            <PiHeartBreakFill className="w-5 h-5"/>Unfollow
+          </>
+          :
+          <>
+            <PiHeartFill className="w-5 h-5"/>Followed
+          </>
+          }
+        </button>
+        <button onClick={(e) => addSubscriptionFunction(e)} className={followButtonStyle()}><PiStarBold className="w-5 h-5"/>Subscribe</button>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex items-end h-full gap-2 pb-4 text-sm">
+      <button onClick={(e) => addFollowFunction(e)} className={followButtonStyle()}><PiHeartBold className="w-5 h-5"/>Follow</button>
+      <button onClick={(e) => addSubscriptionFunction(e)} className={followButtonStyle()}><PiStarBold className="w-5 h-5"/>Subscribe</button>
+    </div>
+  )
 }

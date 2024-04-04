@@ -1,3 +1,5 @@
+// USED IN HEADER, and REDUX
+
 import User from "@/app/models/User";
 import Channel from "@/app/models/Channels";
 import dbConnect from "@/app/util/DBConnect";
@@ -23,6 +25,12 @@ export const GET = async (req) => {
       { message: 'User not found'},
       { status: 404 }
     )
+  }
+
+  let followers = foundUser.followers
+
+  let returningData = {
+    user: foundUser
   }
 
   return NextResponse.json(

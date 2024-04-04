@@ -1,13 +1,78 @@
 'use client'
 import { TbHttpConnect } from "react-icons/tb";
 import { MdPerson } from 'react-icons/md'
+import { useSelector, useDispatch } from "react-redux";
+import { setIsLoadingTrue, setIsLoadingFalse } from "@/redux/slice";
+import { useState } from 'react'
+import { followStreamer, unfollowStreamer } from '@/redux/service/followAndSubscribe'
+import { useRouter } from 'next/navigation'
 
-import { ImageDistributor } from "../(parts)/(sharedFunctions)/channelSharedFunctions";
+import { ImageDistributor, accountNotLoggedEvent, followButtonStyle, profileButtonDistributor } from "../(parts)/(sharedFunctions)/channelSharedFunctions";
 
-const ChannelProfileBackGround = ({channelOwner}) => {
+const ChannelProfileBackGround = ({channelOwner, channel}) => {
+
+  const [ isEditModal, setIsEditModal ] = useState(false)
+  const [ isFollowedButtonHovered, setIsFollowedButtonHovered ] = useState(false)
+
+  let loggedUser = useSelector((state) => state.redux.auth)
+  const dispatch = useDispatch()
+  const router = useRouter()
+
+  const setModalOn = () => {
+    console.log('setting modal on')
+  }
+
+  const setHoverOnFollows = (e) => {
+    setIsFollowedButtonHovered(true)
+  }
+
+  const setHoverOffFollows = (e) => {
+    setIsFollowedButtonHovered(false)
+  }
+
+  const addFollowFunction = async () => {
+
+    dispatch(setIsLoadingTrue())
+
+    let sendingData = {
+      loggedUser: loggedUser,
+      channelOwner: channelOwner
+    }
+    let request = await followStreamer(sendingData)
+
+    if(request) {
+      dispatch(setIsLoadingFalse())
+      return router.refresh()
+    }
+
+    return dispatch(setIsLoadingFalse())
+  }
+
+  const unfollowFunction = async () => {
+
+    dispatch(setIsLoadingTrue())
+
+    let sendingData = {
+      loggedUser: loggedUser,
+      channelOwner: channelOwner
+    }
+
+    let request = await unfollowStreamer(sendingData)
+
+    if(request) {
+      dispatch(setIsLoadingFalse())
+      return router.refresh()
+    }
+
+    return dispatch(setIsLoadingFalse())
+  }
+
+  const addSubscriptionFunction = () => {
+    console.log('adding subscription function')
+  } 
 
   return (
-    <section className="flex flex-row justify-between w-full max-w-4xl pt-8">
+    <section className="flex flex-col md:flex-row justify-between w-full max-w-4xl pt-8">
       {/* Left Side */}
       <div className="flex flex-row gap-4 items-center">
         {/* Image */}
@@ -40,9 +105,8 @@ const ChannelProfileBackGround = ({channelOwner}) => {
       </div>
 
       {/* right side */}
-      <div>
-        <button>follow</button>
-        <button>Subscribe</button>
+      <div className="pt-6">
+        {profileButtonDistributor(loggedUser, channelOwner, setModalOn, addFollowFunction, addSubscriptionFunction, isFollowedButtonHovered, setHoverOnFollows, setHoverOffFollows, unfollowFunction)}
       </div>
     </section>
   );

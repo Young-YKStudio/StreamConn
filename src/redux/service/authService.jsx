@@ -1,7 +1,6 @@
 import { signOut, signIn } from 'next-auth/react'
 import axios from 'axios'
 import { toast } from 'react-hot-toast'
-import { Router } from 'next/router'
 
 export const signInOauth = async (provider) => {
   await signIn(provider, {callbackUrl: '/'})

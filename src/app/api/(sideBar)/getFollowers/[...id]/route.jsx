@@ -45,10 +45,9 @@ export async function POST(req) {
     )
   }
 
-  // sort array
+  //TODO: after follow function done,  sort array
   
   
-  // console.log(shuffledFollows, 'at backend')
 
   return NextResponse.json(
     shuffledFollows,

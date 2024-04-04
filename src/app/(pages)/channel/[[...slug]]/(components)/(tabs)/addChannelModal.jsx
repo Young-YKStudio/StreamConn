@@ -1,7 +1,6 @@
 import { Dialog, Transition, Switch } from '@headlessui/react'
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Fragment, useState } from 'react'
-import axios from 'axios'
 import { motion } from 'framer-motion'
 import { channelTypeDistributor, channelTypes, channelNameValidator } from '../(parts)/(sharedFunctions)/channelSharedFunctions';
 import { MdClose, MdLock } from 'react-icons/md'
