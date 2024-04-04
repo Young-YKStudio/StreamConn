@@ -1,13 +1,32 @@
 'use client'
 import { TbHttpConnect } from "react-icons/tb";
 import { MdPerson } from 'react-icons/md'
+import { useSelector, useDispatch } from "react-redux";
+import { setIsLoadingTrue, setIsLoadingFalse } from "@/redux/slice";
+import { useState } from 'react'
 
-import { ImageDistributor } from "../(parts)/(sharedFunctions)/channelSharedFunctions";
+import { ImageDistributor, accountNotLoggedEvent, followButtonStyle, profileButtonDistributor } from "../(parts)/(sharedFunctions)/channelSharedFunctions";
 
 const ChannelProfileBackGround = ({channelOwner}) => {
 
+  const [ isEditModal, setIsEditModal ] = useState(false)
+
+  let loggedUser = useSelector((state) => state.redux.auth)
+
+  const setModalOn = () => {
+    console.log('setting modal on')
+  }
+
+  const addFollowFunction = () => {
+    console.log('triggered')
+  }
+
+  const addSubscriptionFunction = () => {
+    console.log('adding subscription function')
+  } 
+
   return (
-    <section className="flex flex-row justify-between w-full max-w-4xl pt-8">
+    <section className="flex flex-col md:flex-row justify-between w-full max-w-4xl pt-8">
       {/* Left Side */}
       <div className="flex flex-row gap-4 items-center">
         {/* Image */}
@@ -40,10 +59,14 @@ const ChannelProfileBackGround = ({channelOwner}) => {
       </div>
 
       {/* right side */}
-      <div>
+      <div className="pt-6">
+        {profileButtonDistributor(loggedUser, channelOwner, setModalOn, addFollowFunction, addSubscriptionFunction)}
+      </div>
+      {/* <div className="flex items-baselineh h-full gap-2">
+        {!loggedUser && <p>not logged in</p>}
         <button>follow</button>
         <button>Subscribe</button>
-      </div>
+      </div> */}
     </section>
   );
 }

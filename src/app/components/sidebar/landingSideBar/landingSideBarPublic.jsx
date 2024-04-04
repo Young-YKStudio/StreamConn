@@ -4,12 +4,15 @@ import { BiArrowToLeft, BiArrowToRight } from "react-icons/bi";
 import HoveredElement from "../elements/hoveredElement";
 import { motion } from "framer-motion";
 import { ShuffleArrayLimit8, hoveredElementStyle } from "../elements/sharedFunctions";
+import { useRouter } from 'next/navigation';
 
 const LandingSideBarPublic = ({streamers}) => {
 
   const [ isSectionCollapsed, setIsSectionCollapsed ] = useState(true)
   const [ displayigStreamers, setDisplayingStreamers ] = useState()
   const [ hoveredStreamer, setHoveredStreamer ] = useState()
+
+  const router = useRouter()
 
   useEffect(() => {
     let workingArray = streamers
@@ -23,6 +26,10 @@ const LandingSideBarPublic = ({streamers}) => {
 
   const offHoverHandler = () => {
     setHoveredStreamer()
+  }
+
+  const userClickHandler = (e, id) => {
+    router.push(`/channel/home/${id}`)
   }
 
   return (
@@ -43,6 +50,7 @@ const LandingSideBarPublic = ({streamers}) => {
               className="flex flex-row flex-nowrap items-center px-1.5 py-1.5 gap-2 hover:bg-sky-950 hover:cursor-pointer rounded-md relative"
               onMouseEnter={() => onHoverHandler(streamer._id)}
               onMouseLeave={() => offHoverHandler()}
+              onClick={(e) => userClickHandler(e, streamer._id)}
             >
               {/* Icons */}
               {streamer.profile ?

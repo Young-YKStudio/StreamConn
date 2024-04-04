@@ -7,6 +7,8 @@ import kickImage from '@/images/Kick-logo-green-k.png'
 import { FaHashtag } from "react-icons/fa6";
 import { MdOutlineCircle, MdCoPresent, MdPeopleAlt, MdCheckCircle } from 'react-icons/md'
 import { toast } from 'react-hot-toast'
+import { PiStarBold, PiStarFill, PiHeartBold, PiHeartBreakFill, PiHeartFill } from 'react-icons/pi'
+import { followStreamer } from '@/redux/service/followAndSubscribe'
 
 export const ImageDistributor = (platform) => {
   if(platform.name === 'Twitch') {
@@ -117,4 +119,42 @@ export const channelNameValidator = (channelName) => {
   }
 
   return false
+}
+
+export const accountNotLoggedEvent = (e) => {
+  e.preventDefault()
+  toast.error('You must be logged in')
+}
+
+// profile functions
+
+export const followButtonStyle = () => {
+  return 'rounded-md px-3 py-1.5 font-medium bg-sky-800 flex flex-row items-center gap-0.5 hover:bg-sky-950 flex flex-row gap-1'
+}
+
+export const profileButtonDistributor = (loggedUser, channelOwner, setModalOn, addFollowFunction, addSubscriptionFunction) => {
+  if(!loggedUser) {
+    return (
+      <div className="flex items-end h-full gap-2 pb-4 text-sm">
+        <button onClick={(e) => accountNotLoggedEvent(e)} className={followButtonStyle()}><PiHeartBold className="w-5 h-5"/>Follow</button>
+        <button onClick={(e) => accountNotLoggedEvent(e)} className={followButtonStyle()}><PiStarBold className="w-5 h-5"/>Subscribe</button>
+      </div>
+    )
+  }
+  if(loggedUser._id === channelOwner._id) {
+    return (
+      <div className="flex items-end h-full gap-2 pb-4 text-sm">
+        <button onClick={(e) => setModalOn(e)} className={followButtonStyle()}><PiHeartBold className="w-5 h-5"/>Edit Profile</button>
+      </div>
+    )
+  }
+
+  let followedChannel = loggedUser.followers.find((user) => user._id === channelOwner._id)
+
+  return (
+    <div className="flex items-end h-full gap-2 pb-4 text-sm">
+      <button onClick={(e) => addFollowFunction(e)} className={followButtonStyle()}><PiHeartBold className="w-5 h-5"/>Follow</button>
+      <button onClick={(e) => addSubscriptionFunction(e)} className={followButtonStyle()}><PiStarBold className="w-5 h-5"/>Subscribe</button>
+    </div>
+  )
 }

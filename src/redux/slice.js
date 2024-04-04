@@ -9,6 +9,7 @@ const initialState = {
   auth: undefined,
   isAuthStored: false,
   isLoading: false,
+  streamers: undefined,
 }
 
 // slice
