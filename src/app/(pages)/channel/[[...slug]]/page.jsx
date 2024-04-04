@@ -4,6 +4,7 @@ import ChannelSideBar from './(components)/(parts)/(sidebar)/sideBar';
 import ChannelProfileBackGround from './(components)/(profileBackground)/profileBackground';
 import ChannelTabs from './(components)/(tabs)/channelTabs';
 import ChannelSectionLanding from './(components)/(sections)/sectionsLanding';
+import { channel } from 'diagnostics_channel';
 
 const getCurrentChannel = async (reqData) => {
   const channel = await axios.post(`${process.env.APP_URL}/api/getCurrentChannel`, reqData);
@@ -29,7 +30,7 @@ const DynamicChannelPage = async ({params}) => {
       <Suspense fallback={<p>Loading...</p>}>
         <div className="w-full flex flex-col items-center">
           <div className='w-full flex flex-col items-center bg-white/10 pt-24 pb-4 px-4'>
-            <ChannelProfileBackGround channelOwner={channelData.channelOwner}/>
+            <ChannelProfileBackGround channelOwner={channelData.channelOwner} channel={sendingData.channel}/>
           </div>
           <ChannelTabs channelOwner={channelData.channelOwner} channelName={sendingData.channel}/>
           <ChannelSectionLanding channelName={sendingData.channel} channelOwner={channelData.channelOwner}/>

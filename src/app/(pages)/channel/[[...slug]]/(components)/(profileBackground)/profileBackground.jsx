@@ -4,26 +4,67 @@ import { MdPerson } from 'react-icons/md'
 import { useSelector, useDispatch } from "react-redux";
 import { setIsLoadingTrue, setIsLoadingFalse } from "@/redux/slice";
 import { useState } from 'react'
-import { followStreamer } from '@/redux/service/followAndSubscribe'
+import { followStreamer, unfollowStreamer } from '@/redux/service/followAndSubscribe'
+import { useRouter } from 'next/navigation'
 
 import { ImageDistributor, accountNotLoggedEvent, followButtonStyle, profileButtonDistributor } from "../(parts)/(sharedFunctions)/channelSharedFunctions";
 
-const ChannelProfileBackGround = ({channelOwner}) => {
+const ChannelProfileBackGround = ({channelOwner, channel}) => {
 
   const [ isEditModal, setIsEditModal ] = useState(false)
+  const [ isFollowedButtonHovered, setIsFollowedButtonHovered ] = useState(false)
 
   let loggedUser = useSelector((state) => state.redux.auth)
+  const dispatch = useDispatch()
+  const router = useRouter()
 
   const setModalOn = () => {
     console.log('setting modal on')
   }
 
-  const addFollowFunction = () => {
+  const setHoverOnFollows = (e) => {
+    setIsFollowedButtonHovered(true)
+  }
+
+  const setHoverOffFollows = (e) => {
+    setIsFollowedButtonHovered(false)
+  }
+
+  const addFollowFunction = async () => {
+
+    dispatch(setIsLoadingTrue())
+
     let sendingData = {
       loggedUser: loggedUser,
       channelOwner: channelOwner
     }
-    followStreamer(sendingData)
+    let request = await followStreamer(sendingData)
+
+    if(request) {
+      dispatch(setIsLoadingFalse())
+      return router.refresh()
+    }
+
+    return dispatch(setIsLoadingFalse())
+  }
+
+  const unfollowFunction = async () => {
+
+    dispatch(setIsLoadingTrue())
+
+    let sendingData = {
+      loggedUser: loggedUser,
+      channelOwner: channelOwner
+    }
+
+    let request = await unfollowStreamer(sendingData)
+
+    if(request) {
+      dispatch(setIsLoadingFalse())
+      return router.refresh()
+    }
+
+    return dispatch(setIsLoadingFalse())
   }
 
   const addSubscriptionFunction = () => {
@@ -65,13 +106,8 @@ const ChannelProfileBackGround = ({channelOwner}) => {
 
       {/* right side */}
       <div className="pt-6">
-        {profileButtonDistributor(loggedUser, channelOwner, setModalOn, addFollowFunction, addSubscriptionFunction)}
+        {profileButtonDistributor(loggedUser, channelOwner, setModalOn, addFollowFunction, addSubscriptionFunction, isFollowedButtonHovered, setHoverOnFollows, setHoverOffFollows, unfollowFunction)}
       </div>
-      {/* <div className="flex items-baselineh h-full gap-2">
-        {!loggedUser && <p>not logged in</p>}
-        <button>follow</button>
-        <button>Subscribe</button>
-      </div> */}
     </section>
   );
 }

@@ -127,11 +127,15 @@ export const accountNotLoggedEvent = (e) => {
 
 // profile functions
 
-export const followButtonStyle = () => {
-  return 'rounded-md px-3 py-1.5 font-medium bg-sky-800 flex flex-row items-center gap-0.5 hover:bg-sky-950 flex flex-row gap-1'
+export const followButtonStyle = (state) => {
+  if(state) {
+    return 'rounded-md px-3 py-1.5 font-medium bg-sky-800 flex flex-row items-center gap-0.5 hover:bg-red-900 flex flex-row gap-1 tracking-wide'
+  }
+
+  return 'rounded-md px-3 py-1.5 font-medium bg-sky-800 flex flex-row items-center gap-0.5 hover:bg-sky-950 flex flex-row gap-1 tracking-wide'
 }
 
-export const profileButtonDistributor = (loggedUser, channelOwner, setModalOn, addFollowFunction, addSubscriptionFunction) => {
+export const profileButtonDistributor = (loggedUser, channelOwner, setModalOn, addFollowFunction, addSubscriptionFunction, isFollowedButtonHovered, setHoverOnFollows, setHoverOffFollows, unfollowFunction) => {
   if(!loggedUser) {
     return (
       <div className="flex items-end h-full gap-2 pb-4 text-sm">
@@ -148,7 +152,34 @@ export const profileButtonDistributor = (loggedUser, channelOwner, setModalOn, a
     )
   }
 
-  let followedChannel = loggedUser.followers.find((user) => user._id === channelOwner._id)
+  let followedChannel = channelOwner.followers.find((user) => user = loggedUser._id)
+
+  // TODO: add more condition for subscriptions
+  if(followedChannel) {
+
+    console.log(channelOwner,'channelOwner', loggedUser, 'loggedUser')
+    return (
+      <div className="flex items-end h-full gap-2 pb-4 text-sm">
+        <button 
+          onClick={(e) => unfollowFunction(e)} 
+          className={followButtonStyle(isFollowedButtonHovered)}
+          onMouseEnter={(e) => setHoverOnFollows(e)}
+          onMouseLeave={(e) => setHoverOffFollows(e)}
+        >
+          {isFollowedButtonHovered ?
+          <>
+            <PiHeartBreakFill className="w-5 h-5"/>Unfollow
+          </>
+          :
+          <>
+            <PiHeartFill className="w-5 h-5"/>Followed
+          </>
+          }
+        </button>
+        <button onClick={(e) => addSubscriptionFunction(e)} className={followButtonStyle()}><PiStarBold className="w-5 h-5"/>Subscribe</button>
+      </div>
+    )
+  }
 
   return (
     <div className="flex items-end h-full gap-2 pb-4 text-sm">

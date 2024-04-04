@@ -16,7 +16,7 @@ const ChannelSideBar = async () => {
 
   const streamers = await getAllStreamers()
   return (
-    <Suspense fallback={<p className='pt-24'>Loading...</p>}>
+    <Suspense fallback={<p className='pt-24'></p>}>
       <ChannelSideBarRender streamers={streamers} />
     </Suspense>
   );

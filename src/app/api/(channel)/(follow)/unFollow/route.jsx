@@ -1,9 +1,9 @@
 // USED in followAndSubscribe within redux
 import dbConnect from "@/app/util/DBConnect";
-import User from '@/app/models/User'
+import User from "@/app/models/User";
 import { NextResponse } from "next/server";
 
-export async function POST(req) {
+export const POST = async (req) => {
   const { channelOwner, loggedUser } = await req.json()
 
   try {
@@ -31,31 +31,13 @@ export async function POST(req) {
       {status: 404}
     )
   }
-  
-  // if logged user already follows current channel owner
-  let duplicatedFollower = foundLoggedUser.follows.find((followingStreamer) => followingStreamer._id == channelOwner._id)
 
-  if(duplicatedFollower) {
-    return NextResponse.json(
-      {message: 'You are already following this streamer'},
-      {status: 404}
-    )
-  }
-
-  // if channel owner already has current logged user as follower
-  let duplicatedFollows = foundChannelOwner.followers.find((followedUser) =>  followedUser._id == foundLoggedUser._id)
-  
-  if(duplicatedFollows) {
-    return NextResponse.json(
-      {message: 'Streamer already has this follower'},
-      {status: 404}
-    )
-  }
-
-  foundLoggedUser.follows.push(foundChannelOwner)
+  // find and delete channelOwner's follower for loggedUser
+  let filteredFollowers = foundChannelOwner.followers.filter((followedUser) => followedUser._id == foundLoggedUser._id)
 
   try {
-    await foundLoggedUser.save()
+    foundChannelOwner.followers = filteredFollowers
+    await foundChannelOwner.save()
   } catch (err) {
     return NextResponse.json(
       {message: 'error at updating user'},
@@ -63,10 +45,12 @@ export async function POST(req) {
     )
   }
 
-  foundChannelOwner.followers.push(foundLoggedUser)
+  // find and delete loggedUser's follows for channel owner
+  let filteredFollows = foundLoggedUser.follows.filter((followingStreaer) => followingStreaer._id == foundChannelOwner._id)
 
   try {
-    await foundChannelOwner.save()
+    foundLoggedUser.follows = filteredFollows
+    await foundLoggedUser.save()
   } catch (err) {
     return NextResponse.json(
       {message: 'error at updating user'},
