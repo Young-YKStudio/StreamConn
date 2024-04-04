@@ -5,7 +5,7 @@ import afreecaImage from '@/images/afreecaTV_logo_rgb_light_symbol.png'
 import chzzkLogo from '@/images/chzzkLogo.png'
 import kickImage from '@/images/Kick-logo-green-k.png'
 import { FaHashtag } from "react-icons/fa6";
-import { MdOutlineCircle, MdCoPresent, MdPeopleAlt, MdCheckCircle } from 'react-icons/md'
+import { MdOutlineCircle, MdCoPresent, MdPeopleAlt, MdCheckCircle, MdOutlineEdit } from 'react-icons/md'
 import { toast } from 'react-hot-toast'
 import { PiStarBold, PiStarFill, PiHeartBold, PiHeartBreakFill, PiHeartFill } from 'react-icons/pi'
 
@@ -147,7 +147,7 @@ export const profileButtonDistributor = (loggedUser, channelOwner, setModalOn, a
   if(loggedUser._id === channelOwner._id) {
     return (
       <div className="flex items-end h-full gap-2 pb-4 text-sm">
-        <button onClick={(e) => setModalOn(e)} className={followButtonStyle()}><PiHeartBold className="w-5 h-5"/>Edit Profile</button>
+        <button onClick={(e) => setModalOn(e)} className={followButtonStyle()}><MdOutlineEdit className="w-5 h-5"/>Manage Account</button>
       </div>
     )
   }
@@ -157,7 +157,6 @@ export const profileButtonDistributor = (loggedUser, channelOwner, setModalOn, a
   // TODO: add more condition for subscriptions
   if(followedChannel) {
 
-    console.log(channelOwner,'channelOwner', loggedUser, 'loggedUser')
     return (
       <div className="flex items-end h-full gap-2 pb-4 text-sm">
         <button 
