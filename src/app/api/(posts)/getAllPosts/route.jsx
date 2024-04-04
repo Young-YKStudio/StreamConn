@@ -1,7 +1,7 @@
 'use server'
 
 import dbConnect from '@/app/util/DBConnect';
-import Channel from '@/app/models/channels';
+import Channel from '@/app/models/Channels';
 import Post from '@/app/models/post'
 import Comment from '@/app/models/comment'
 import { NextRequest, NextResponse } from "next/server"
