@@ -1,4 +1,5 @@
-const Channel_Collaboration = () => {
+const Channel_Collaboration = ({channel}) => {
+  // console.log(channel, 'at collaboration')
   return (
     <p>Collaboration page</p>
   );

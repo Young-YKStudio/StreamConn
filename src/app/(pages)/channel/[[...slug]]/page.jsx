@@ -33,7 +33,7 @@ const DynamicChannelPage = async ({params}) => {
             <ChannelProfileBackGround channelOwner={channelData.channelOwner} channel={sendingData.channel}/>
           </div>
           <ChannelTabs channelOwner={channelData.channelOwner} channelName={sendingData.channel}/>
-          <ChannelSectionLanding channelName={sendingData.channel} channelOwner={channelData.channelOwner}/>
+          <ChannelSectionLanding channelName={sendingData.channel} channelData={channelData}/>
         </div>
       </Suspense>
     </div>
