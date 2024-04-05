@@ -1,5 +1,8 @@
-import SpinnerOverlay from "@/redux/components/loadingParts/spinnerOverlay"
-
 export default function Loading() {
-  return <SpinnerOverlay />
+  return (
+    <div className='spinnerContainer'>
+      <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+      <p>Loading...</p>
+    </div>
+  )
 }

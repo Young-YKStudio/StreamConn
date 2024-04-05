@@ -9,7 +9,7 @@ const initialState = {
   auth: undefined,
   isAuthStored: false,
   isLoading: false,
-  streamers: undefined,
+  allStreamers: [],
 }
 
 // slice
@@ -33,14 +33,31 @@ export const slice = createSlice({
       state.auth = undefined
       state.isAuthStored = false
     },
-  }
-})
+    setInitialAllStreamersUpdate: (state, action) => {
+      state.allStreamers = action.payload
+    },
+    setAllStreamersUpdate: (state, action) => {
+      state.allStreamers.map((reduxStreamer) => {
+        action.payload.forEach(receivedStreamer => {
+          if(reduxStreamer._id === receivedStreamer._id) {
+            return reduxStreamer
+          }
+          return {
+            ...reduxStreamer,
+            receivedStreamer
+          }
+        })
+      })
+    }}
+  })
 
 export const { 
   setIsLoadingTrue, 
   setIsLoadingFalse, 
   setAuthUserRedux, 
   setAuthUserReset,
+  setInitialAllStreamersUpdate,
+  setAllStreamersUpdate,
 } = slice.actions
 
 export default slice.reducer

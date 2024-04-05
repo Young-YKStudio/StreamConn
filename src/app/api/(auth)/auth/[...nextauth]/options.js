@@ -37,7 +37,7 @@ export const options = {
         await dbConnect()
         try {
           const allUsers = await User.find().lean().exec()
-          const foundUser = allUsers.find((user) =>  user.email = credentials.email)
+          const foundUser = allUsers.find((user) =>  user.email == credentials.email)
 
           if(foundUser) {
             const match = await bcrypt.compare(

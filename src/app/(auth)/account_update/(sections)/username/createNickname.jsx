@@ -2,46 +2,49 @@
 
 import { motion } from 'framer-motion'
 import { bluebuttonDark } from '@/app/components/buttons/buttonStyles';
-import { useState } from 'react'
-import axios from 'axios'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { useSelector, useDispatch } from 'react-redux'
+import { setIsLoadingTrue, setIsLoadingFalse } from '@/redux/slice'; 
+import { updateUsername } from '@/redux/service/authWelcomeService';
 
-const CreateNickname = ({user, setCurrentPage}) => {
+const CreateNickname = () => {
 
   const [ inputtedText, setInputtedText ] = useState('')
   const [ message, setMessage ] = useState()
+
+  const router = useRouter()
+  const loggedUser = useSelector((state) => state.redux.auth)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if(loggedUser) {
+      if(loggedUser.nickname) {
+        router.push('/account_update/addFollows')
+      }
+    }
+  },[loggedUser])
 
   const focusHandler = (e) => {
     setMessage()
   }
 
   const submitBtnHandler = async (e) => {    
-    // validate
-    if(inputtedText === '') {
-      console.log('no inputted text')
-      return
-    }
 
-    console.log(user)
-
-    if(inputtedText.length > 16) {
-      setMessage('Nickname cannot be more than 16 characters')
-      return
-    }
-
-    // api call
     let sendingData = {
+      id: loggedUser._id,
       nickname: inputtedText
     }
 
-    try {
-      const response = await axios.put(`/api/updateNickname/${user._id}`, sendingData)
-      if(response.status === 200) {
-        setCurrentPage('addFollows')
-      }
-    } catch (error) {
-      console.log(error)
-      // setMessage(error.response.data.message)
+    dispatch(setIsLoadingTrue())
+
+    let update = await updateUsername(sendingData)
+    if(update) {
+      dispatch(setIsLoadingFalse())
+      return router.push('/account_update/addFollows')
     }
+
+    dispatch(setIsLoadingFalse())
   }
 
   return (
@@ -54,7 +57,7 @@ const CreateNickname = ({user, setCurrentPage}) => {
     >
       <div className='w-1/3 flex flex-col justify-center items-center gap-6'>
         <div className='flex flex-col items-center gap-6'>
-          <p className="text-3xl">Create your nickname</p>
+          <p className="text-3xl">Create your username</p>
         </div>
         <div className='mt-2 flex flex-col items-center w-full gap-4'>
           <input 
@@ -64,7 +67,7 @@ const CreateNickname = ({user, setCurrentPage}) => {
             className='block w-full rounded-md border-0 py-1.5 ring-inset ring-sky-500 focus:ring-sky-500 text-gray-900'
             onChange={(e) => setInputtedText(e.target.value)}
             onFocus={focusHandler}
-            placeholder='Nickname'
+            placeholder='username'
           />
           {message && <p className='text-red-500'>{message}</p>}
         </div>

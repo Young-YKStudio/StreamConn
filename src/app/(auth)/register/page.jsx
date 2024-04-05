@@ -5,6 +5,9 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
+import { useDispatch } from 'react-redux'
+import { signIn } from 'next-auth/react'
+import { toast } from 'react-hot-toast'
 
 const Register = () => {
 
@@ -12,12 +15,14 @@ const Register = () => {
     email: '',
     password: '',
     confirmPassword: '',
+    nickname: '',
   })
   const [ message, setMessage ] = useState('')
 
   const router = useRouter()
+  const dispatch = useDispatch()
 
-  const { email, password, confirmPassword } = submitForm
+  const { email, password, confirmPassword, nickname } = submitForm
 
   const changeHandler = (e) => {
     setSubmitForm((prev) => ({
@@ -26,15 +31,44 @@ const Register = () => {
     }))
   }
 
+  const loginAfterRegister = async () => {
+
+    try {
+      const loginAttemp = await signIn('credentials', {
+        redirect: false,
+        email: email,
+        password: password
+      })
+  
+      if(loginAttemp.status !== 200) {
+        return toast.error('Error at creating account. Please try again later')
+      }
+  
+      if(loginAttemp.status === 200) {
+        return router.push('/')
+      }
+    } catch (err) {
+      return toast.error('Error at creating account. Please try again later')
+    }
+  }
+
   const submitHandler = async (e) => {
     e.preventDefault()
 
     if(password !== confirmPassword) {
-      return setMessage('Please check your passwords')
+      return toast.error('Please check your passwords')
     }
 
     if(password.length < 6) {
-      return setMessage('Password must be at least 6 characters')
+      return toast.error('Password must be at least 6 characters')
+    }
+
+    if(nickname.length < 2) {
+      return toast.error('Username must be at least 2 characters')
+    }
+    
+    if(nickname.length > 16) {
+      return toast.error('Username must be less than 16 characters')
     }
 
     try {
@@ -42,15 +76,12 @@ const Register = () => {
       const request = await axios.post('api/register', submitForm)
       // TODO: login with successed email and token 
       if(request.status === 200) {
-        router.push(`/account_update/${request.data.message._id}`)
+        return loginAfterRegister()
       } 
     } catch (e) {
-      setMessage('Please try again')
-      console.log(e, 'error?')
-      setMessage(e.response.data)
+      return toast.error(e.response.data)
     }
 
-    // console.log('submit triggered', submitForm)
   }
 
   const inputLabelStyle = 'block mb-2 text-sm font-medium'
@@ -71,6 +102,10 @@ const Register = () => {
             <div>
               <label htmlFor='email' className={inputLabelStyle}>Email</label>
               <input type='email' name='email' className={inputBoxStyle} placeholder='Enter your email address' required value={email} onChange={changeHandler}/>
+            </div>
+            <div>
+              <label htmlFor='nickname' className={inputLabelStyle}>Username</label>
+              <input type='text' name='nickname' className={inputBoxStyle} placeholder='Enter your username' required value={nickname} onChange={changeHandler}/>
             </div>
             <div>
               <label htmlFor='password' className={inputLabelStyle}>Password</label>

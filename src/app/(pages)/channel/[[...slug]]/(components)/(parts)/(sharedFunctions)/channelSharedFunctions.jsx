@@ -108,12 +108,29 @@ export const channelNameValidator = (channelName) => {
   const notValidated = specialCharacters.split('').some(char => channelName.includes(char)) 
 
   if(notValidated) {
-    toast.error('Channel name should not contain special charactors')
+    toast.error('Channel name should not contain special characters')
     return true
   }
 
   if(channelName.length < 2 || channelName.length > 16) {
     toast.error('Channel name must be between 2 - 16 characters long')
+    return true
+  }
+
+  return false
+}
+
+export const usernameValidator = (username) => {
+  const specialCharacters = `/[!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?]+/ `
+  const notValidated = specialCharacters.split('').some(char => username.includes(char)) 
+
+  if(notValidated) {
+    toast.error('Username should not contain special characters')
+    return true
+  }
+
+  if(username.length < 2 || username.length > 16) {
+    toast.error('Username must be between 2 - 16 characters long')
     return true
   }
 

@@ -29,6 +29,13 @@ export const ShuffleArrayLimit8 = (array) => {
   return workingArray
 }
 
+export const SortingUserArrayHighToLow = (array) => {
+
+  let sortedArray = array.toSorted(function(a, b){return a.follows.length - b.follows.length})
+
+  console.log(sortedArray)
+}
+
 // shared styles
 export const hoveredElementStyle = (condition) => {
   if(condition) {
