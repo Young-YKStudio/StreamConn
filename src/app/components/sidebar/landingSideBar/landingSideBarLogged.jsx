@@ -7,14 +7,18 @@ import { hoveredElementStyle } from '../elements/sharedFunctions';
 import HoveredElement from '../elements/hoveredElement';
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import { useSelector } from 'react-redux'
 
-const LandingSideBarLogged = ({streamers, session}) => {
+const LandingSideBarLogged = ({session}) => {
 
   const [ isSectionCollapsed, setIsSectionCollapsed ] = useState(true)
   const [ hoveredStreamer, setHoveredStreamer ] = useState()
   const [ receivedFollowers, setReceivedFollowers ] = useState([])
 
   const router = useRouter()
+  const streamers = useSelector((state) =>  state.redux.allStreamers)
+
+  console.log(streamers)
 
   useEffect(() => {
 
