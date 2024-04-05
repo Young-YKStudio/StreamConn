@@ -1,15 +1,13 @@
 'use client'
 
 import GoBackButton from './components/goBackButton'
-import AskStreamer from './components/askStreamer'
-import Introduction from './components/introduction'
 import AddStreamerAddress from './components/addStreamerAddress'
 import AddStreamerInformation from './components/addStreamerInformation'
-import AddFollows from './components/addFollows'
-import CreateNickname from './components/createNickname'
 import AskPlatform from './components/askPlatform'
 import NotSupported from './components/notsupported'
 import { AnimatePresence } from 'framer-motion'
+import { useSelector } from 'react-redux'
+import { useSession } from 'next-auth/react'
 
 import { useState } from 'react'
 
@@ -53,6 +51,11 @@ const Account_Update_Render = ({user, allStreamers}) => {
       hrefChecked: false,
     },
   ])
+
+
+  const loggedUser = useSelector((state) => state.redux.auth)
+  const session = useSession()
+  console.log(session)
       // ask platform
       // ask stream address
       // search and add follows via platforms
@@ -60,29 +63,18 @@ const Account_Update_Render = ({user, allStreamers}) => {
   
   const currentSectionDistributor = (section) => {
     // TODO: read user info and set initial section
-    if(section === 'intro') {
-      return <Introduction user={user} setCurrentPage={setCurrentPage} />
-    }
-    if(section === 'streamer') {
-      return <AskStreamer user={user} setCurrentPage={setCurrentPage} />
-    }
+
     if(section === 'notSupported') {
-      return <NotSupported user={user} setCurrentPage={setCurrentPage} />
+      return <NotSupported user={loggedUser} setCurrentPage={setCurrentPage} />
     }
     if(section === 'streamingPlatforms') {
-      return <AskPlatform user={user} setCurrentPage={setCurrentPage} platforms={platforms} setPlatforms={setPlatforms}/>
+      return <AskPlatform user={loggedUser} setCurrentPage={setCurrentPage} platforms={platforms} setPlatforms={setPlatforms}/>
     }
     if(section === 'askPlatformAddress') {
-      return <AddStreamerAddress user={user} setCurrentPage={setCurrentPage} platforms={platforms} setPlatforms={setPlatforms}/>
+      return <AddStreamerAddress user={loggedUser} setCurrentPage={setCurrentPage} platforms={platforms} setPlatforms={setPlatforms}/>
     }
     if(section === 'streamerIntro') {
-      return <AddStreamerInformation user={user} setCurrentPage={setCurrentPage} />
-    }
-    if(section === 'createNickname') {
-      return <CreateNickname user={user} setCurrentPage={setCurrentPage} />
-    }
-    if(section === 'addFollows') {
-      return <AddFollows user={user} setCurrentPage={setCurrentPage} allStreamers={allStreamers} />
+      return <AddStreamerInformation user={loggedUser} setCurrentPage={setCurrentPage} />
     }
   }
 

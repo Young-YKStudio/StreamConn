@@ -1,5 +1,7 @@
 import HeaderRender from "./header/headerRender"
 import axios from 'axios'
+import { Suspense } from "react"
+import LoadingComponent from '@/app/components/loading/loadingComponent'
 
 const getAllStreamers = async () => {
   
@@ -15,10 +17,13 @@ const getAllStreamers = async () => {
 
 const HeaderLanding = async () => {
 
+
   const streamers = await getAllStreamers()
 
   return (
-    <HeaderRender allStreamers={streamers}/>
+    <Suspense fallback={<LoadingComponent />}>
+      <HeaderRender allStreamers={streamers}/>
+    </Suspense>
   );
 }
 export default HeaderLanding;

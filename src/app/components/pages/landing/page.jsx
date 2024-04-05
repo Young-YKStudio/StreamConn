@@ -14,7 +14,7 @@ const LandingRender = () => {
 
   return (
     <div className='flex flex-row flex-nowrap h-full'>
-      { session.status === 'authenticated' ? <LandingSideBarLogged session={session}/> : <LandingSideBarPublic /> }
+      { session.status === 'authenticated' ? <LandingSideBarLogged /> : <LandingSideBarPublic /> }
       <FeaturedStreamers />
     </div>
   );

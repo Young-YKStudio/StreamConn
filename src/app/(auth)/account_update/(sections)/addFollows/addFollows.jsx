@@ -11,12 +11,17 @@ import Image from 'next/image';
 import afreecaImage  from '../../../../../images/afreecaTV_logo_rgb_light_symbol.png'
 import kickImage from '../../../../../images/Kick-logo-green-k.png'
 import { useRouter } from 'next/navigation'
+import { useSelector, useDispatch } from 'react-redux'
+import { setIsLoadingTrue, setIsLoadingFalse } from '@/redux/slice';
 
-const AddFollows = ({user, setCurrentPage, allStreamers}) => {
+const AddFollowsRender = () => {
 
   const [ searchField, setSearchField ] = useState('')
   const [ matchedStreamers, setMatchedStreamers ] = useState([])
   const [ favoritedStreamers, setFavoritedStreamers ] = useState([])
+
+  const loggedUser = useSelector((state) => state.redux.auth)
+  const allStreamers = useSelector((state) => state.redux.allStreamers)
 
   const router = useRouter()
 
@@ -128,7 +133,7 @@ const AddFollows = ({user, setCurrentPage, allStreamers}) => {
       transition={{ease: "linear", duration: 0.75}} 
       className="flex flex-col justify-center items-center w-full h-full gap-20"
     >
-      <div className='w-1/3 flex flex-col justify-center items-center gap-6'>
+      <div className='min-w-sm flex flex-col justify-center items-center gap-6'>
         <div className='flex flex-col items-center gap-6'>
           <p className="text-3xl">Add your favorite streamers</p>
         </div>
@@ -218,4 +223,4 @@ const AddFollows = ({user, setCurrentPage, allStreamers}) => {
     </motion.section>  
   );
 }
-export default AddFollows;
+export default AddFollowsRender;

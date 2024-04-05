@@ -6,7 +6,7 @@ import { MdMoreVert, MdFavoriteBorder, MdFilterNone, MdLanguage } from 'react-ic
 
 import { useState, useEffect } from 'react'
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut, setNewReduxAuth } from "@/redux/service/authService";
 import { setAuthUserReset, setAuthUserRedux, setAllStreamersUpdate, setInitialAllStreamersUpdate } from "@/redux/slice";
@@ -23,6 +23,7 @@ const HeaderRender = ({allStreamers}) => {
 
   const { data: session, status } = useSession()
   const router = useRouter()
+  const path = usePathname()
   const dispatch = useDispatch()
   let authStatus = useSelector((state) => state.redux.isAuthStored)
   let allStreamersRedux = useSelector((state) => state.redux.allStreamers)
@@ -40,10 +41,7 @@ const HeaderRender = ({allStreamers}) => {
 
     if(status === 'authenticated') {
 
-      if(!session.user.isUpdated) {
-        return router.push(`/account_update/${session.user.id}`)
-      }
-
+      
       const setAuthUserReduxFunction = async (status) => {        
         if(!status) {
           let setReduxAuth = await setNewReduxAuth(session.user.id)
@@ -52,8 +50,15 @@ const HeaderRender = ({allStreamers}) => {
       }
       
       setAuthUserReduxFunction(authStatus)
+
+      if(!session.user.isUpdated) {
+        if(path.startsWith('/account_update')) {
+          return
+        }
+        return router.push(`/account_update/welcome/`)
+      }
     }
-  }, [session, authStatus])
+  }, [session, authStatus, path])
 
   const subMenubuttonHandler = (e) => {
     setIsSubLinkMenuOpen(!isSubLinkMenuOpen)

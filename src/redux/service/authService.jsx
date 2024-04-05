@@ -23,6 +23,7 @@ export const setNewReduxAuth = async (userId) => {
 }
 
 export const signInEmail = async (loginData) => {
+
   
   try {
     const loginAttemp = await signIn('credentials', {
@@ -30,16 +31,16 @@ export const signInEmail = async (loginData) => {
       email: loginData.email,
       password: loginData.password
     })
-
+    
     if(loginAttemp.status !== 200) {
       return toast.error('Please check your email and password?')
     }
-
+    
     if(loginAttemp.status === 200) {
       return window.history.pushState({}, '', '/')
     }
   } catch (err) {
     return toast.error('Please check your email and password')
   }
-
+  
 }

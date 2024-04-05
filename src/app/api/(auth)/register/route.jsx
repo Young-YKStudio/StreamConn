@@ -6,7 +6,7 @@ import bcrypt from 'bcryptjs'
 import { NextResponse } from "next/server";
 
 export const POST = async (req) => {
-  const { email, password } = await req.json()
+  const { email, password, nickname } = await req.json()
 
   await dbConnect()
 
@@ -16,10 +16,17 @@ export const POST = async (req) => {
     return new NextResponse('Email is already registered', { status: 400 })
   }
 
+  const duplicateNickname = await User.findOne({nickname: nickname})
+
+  if(duplicateNickname) {
+    return new NextResponse('Username is already taken', { status: 400 })
+  }
+
   const hashedPassword = await bcrypt.hash(password, 10)
   const newUser = new User({
     email,
     password: hashedPassword,
+    nickname: nickname
   })
 
   try {
@@ -30,6 +37,7 @@ export const POST = async (req) => {
       { status: 200 },
     )
   } catch (e) {
-    return new NextResponse(e, { status: 500 })
+    console.log(e)
+    return new NextResponse('Error at updating user. Please try gain later.', { status: 500 })
   }
 }

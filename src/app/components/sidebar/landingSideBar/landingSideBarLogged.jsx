@@ -3,46 +3,41 @@ import { BiArrowToLeft, BiArrowToRight } from "react-icons/bi";
 import { MdPerson } from 'react-icons/md';
 import { ImNotification } from "react-icons/im";
 import { motion } from "framer-motion";
-import { hoveredElementStyle } from '../elements/sharedFunctions';
+import { hoveredElementStyle, ShuffleArrayLimit8, SortingUserArrayHighToLow } from '../elements/sharedFunctions';
 import HoveredElement from '../elements/hoveredElement';
-import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { useSelector } from 'react-redux'
 
-const LandingSideBarLogged = ({session}) => {
+const LandingSideBarLogged = () => {
 
   const [ isSectionCollapsed, setIsSectionCollapsed ] = useState(true)
   const [ hoveredStreamer, setHoveredStreamer ] = useState()
   const [ receivedFollowers, setReceivedFollowers ] = useState([])
+  const [ recommendedStreamers, setRecommendedStreamers ] = useState()
 
   const router = useRouter()
   const streamers = useSelector((state) =>  state.redux.allStreamers)
-
-  console.log(streamers)
+  const loggedUser = useSelector((state) => state.redux.auth)
 
   useEffect(() => {
-
-    const getfollowers = async (id) => {
-      try {
-        const res = await axios.post(`/api/getFollowers/${id}`)
-        if(res.status === 200 && res.status.message === 'No Followers') {
-          // console.log(res.data, 'at logged side bar')
-          setReceivedFollowers([])
-        }
-        if(res.status === 200) {
-          // console.log(res.data, 'at logged side bar')
-          // setReceivedFollowers(res.data)
-        }
-      } catch (err) {
-        console.log(err)
+    if(streamers && loggedUser) {
+      if(streamers.length > 0) {
+        const followedStreamers = loggedUser.follows
+        let sortedArray = followedStreamers.toSorted((a, b) => a.follows.length - b.follows.length)
+        console.log(sortedArray)
       }
     }
+  },[loggedUser, streamers])
 
-    if(session?.data) {
-      let userId = session.data.user.id
-      getfollowers(userId)
+  useEffect(() => {
+    if(streamers) {
+      if(streamers.length > 0) {
+        let workingArray = streamers
+        let shuffledArray = ShuffleArrayLimit8(workingArray)
+        return setRecommendedStreamers(shuffledArray)
+      }
     }
-  },[session])
+  },[streamers])
 
   const onHoverHandler = (id) => {
     setHoveredStreamer(id)
@@ -66,7 +61,7 @@ const LandingSideBarLogged = ({session}) => {
           <button onClick={() => setIsSectionCollapsed(!isSectionCollapsed)} className='hover:bg-sky-950 p-2 rounded-md'>{isSectionCollapsed? <BiArrowToRight className='w-5 h-5'/> : <BiArrowToLeft className='w-5 h-5'/> }</button>
         </div>
 
-        <div className='flex flex-col items-center text-center py-4 gap-2'>
+        <div className='flex flex-col items-center text-center py-4 gap-2 border-b border-slate-400 mb-2'>
           {receivedFollowers.length == 0 ?
           <>
             <ImNotification className='w-8 h-8 text-yellow-500'/>
@@ -83,7 +78,7 @@ const LandingSideBarLogged = ({session}) => {
         </div>
         
         <div className='flex flex-col text-sm'>
-          {streamers && streamers.map((streamer) => (
+          {recommendedStreamers && recommendedStreamers.map((streamer) => (
             <div
               key={streamer._id + ' sidebarStreamerLogged'}
               className="flex flex-row flex-nowrap items-center px-1.5 py-1.5 gap-2 hover:bg-sky-950 hover:cursor-pointer rounded-md relative"
