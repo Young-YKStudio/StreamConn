@@ -32,3 +32,20 @@ export const updateUsername = async (sendingData) => {
     return false
   }
 }
+
+export const updateStreamerIntro = async (sendingData) => {
+  if(sendingData.input === '') {
+    toast.error('Introduction cannot be empty')
+    return false
+  }
+
+  try {
+    const res = await axios.put('/api/auth/updateStreamerIntro', sendingData)
+    if(res.status === 200) {
+      return true
+    }
+  } catch (err) {
+    toast.error(err.response.data.message)
+    return false
+  }
+}

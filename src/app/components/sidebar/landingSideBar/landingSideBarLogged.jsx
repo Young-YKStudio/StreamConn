@@ -24,7 +24,6 @@ const LandingSideBarLogged = () => {
       if(streamers.length > 0) {
         const followedStreamers = loggedUser.follows
         let sortedArray = followedStreamers.toSorted((a, b) => a.follows.length - b.follows.length)
-        console.log(sortedArray)
       }
     }
   },[loggedUser, streamers])

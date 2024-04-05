@@ -3,34 +3,35 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { bluebuttonDark } from '@/app/components/buttons/buttonStyles';
-import axios from 'axios'
+import { useSelector, useDispatch } from 'react-redux'
+import { updateStreamerIntro } from '@/redux/service/authWelcomeService';
+import { setIsLoadingFalse, setIsLoadingTrue } from '@/redux/slice';
 
-const AddStreamerInformation = ({user, setCurrentPage}) => {
+const AddStreamerInformation = () => {
 
   const [ inputtedText, setInputtedText ] = useState('')
+
+  const dispatch = useDispatch()
+  const loggedUser = useSelector((state) => state.redux.auth)
 
   const nextBtnHandler = async (e) => {
     e.preventDefault()
 
-    // validations
-    if(inputtedText === '') {
-      console.log('no inputted text')
-      return
-    }
+    dispatch(setIsLoadingTrue())
 
-    // api call
     let sendingData = {
+      id: loggedUser._id,
       input: inputtedText
     }
 
-    try {
-      const response = await axios.put(`/api/updateIntroduction/${user._id}`, sendingData)
-      if(response.status === 200) {
-        setCurrentPage('createNickname')
-      }
-    } catch (error) {
-      console.log(error, 'at api call')
+    let request = await updateStreamerIntro(sendingData)
+
+    if(request) {
+      dispatch(setIsLoadingFalse())
+      console.log('success')
     }
+
+    dispatch(setIsLoadingFalse())
   }
 
   return (

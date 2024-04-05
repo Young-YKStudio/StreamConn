@@ -2,7 +2,6 @@
 
 import GoBackButton from './components/goBackButton'
 import AddStreamerAddress from './components/addStreamerAddress'
-import AddStreamerInformation from './components/addStreamerInformation'
 import AskPlatform from './components/askPlatform'
 import NotSupported from './components/notsupported'
 import { AnimatePresence } from 'framer-motion'
@@ -72,9 +71,6 @@ const Account_Update_Render = ({user, allStreamers}) => {
     }
     if(section === 'askPlatformAddress') {
       return <AddStreamerAddress user={loggedUser} setCurrentPage={setCurrentPage} platforms={platforms} setPlatforms={setPlatforms}/>
-    }
-    if(section === 'streamerIntro') {
-      return <AddStreamerInformation user={loggedUser} setCurrentPage={setCurrentPage} />
     }
   }
 
