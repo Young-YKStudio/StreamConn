@@ -39,10 +39,10 @@ export const SortingUserArrayHighToLow = (array) => {
 // shared styles
 export const hoveredElementStyle = (condition) => {
   if(condition) {
-    return 'absolute left-16 top-0 bg-sky-900 p-3 rounded-md w-48 flex flex-col gap-1'
+    return 'absolute left-16 top-0 bg-sky-900 p-3 rounded-md w-48 flex flex-col gap-1 shadow-md'
   }
   if(!condition) {
-    return 'absolute left-40 top-0 bg-sky-900 p-3 rounded-md w-48 flex flex-col gap-1'
+    return 'absolute left-36 top-0 bg-sky-900 p-3 rounded-md w-48 flex flex-col gap-1 shadow-md'
   }
 }
 

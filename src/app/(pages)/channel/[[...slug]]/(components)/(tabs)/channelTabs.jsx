@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { tabButtonStyles, userValidator } from '../(parts)/(sharedFunctions)/channelSharedFunctions'
 import { MdAdd, MdHome, MdPeopleAlt, MdCoPresent } from "react-icons/md";
@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 const ChannelTabs = ({channelOwner, channelName}) => {
 
   const [ isModalOpen, setIsModalOpen ] = useState(false)
+  const [ tabTypes, setTabTypes ] = useState([])
 
   const router = useRouter()
 
@@ -22,6 +23,20 @@ const ChannelTabs = ({channelOwner, channelName}) => {
   }
   
   const currentUser = useSelector((state) => state.redux.auth)
+
+  useEffect(() => {
+    if(currentUser) {
+      if(currentUser.channels && tabTypes.length === 0) {
+        console.log('triggered')
+        const types = currentUser.channels.map((type) => type.channelType)
+        const filteredTypes = types.filter((type, index) => types.indexOf(type) === index)
+        return setTabTypes((prev) => ([...filteredTypes]))
+      }
+    }
+
+  }, [currentUser])
+
+  console.log(currentUser)
 
   return (
     <nav className="flex flex-row gap-2 w-full max-w-4xl justify-center sm:justify-start border-b border-sky-500 py-4 px-4 pt-8">
@@ -57,7 +72,12 @@ const ChannelTabs = ({channelOwner, channelName}) => {
           >
             <MdHome className="w-5 h-5"/>Home
           </button>
-          {channelOwner.channels.map((tab) => {
+          { tabTypes.length > 0  &&
+          <>
+            {tabTypes.map((tab) => (tabTypes))}
+          </>
+          }
+          {/* {channelOwner.channels.map((tab) => {
             if(tab.channelType === 'Text') {
               return (
                 <button
@@ -92,7 +112,7 @@ const ChannelTabs = ({channelOwner, channelName}) => {
               )
             }
           }
-          )}
+          )} */}
         </div>
         
         <div>

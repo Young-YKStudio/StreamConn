@@ -48,8 +48,6 @@ export const POST = async (req) => {
   // find and delete loggedUser's follows for channel owner
   let filteredFollows = foundLoggedUser.follows.filter((followingStreamer) => followingStreamer._id.toString() !== foundChannelOwner._id.toString())
 
-  console.log(filteredFollowers, 'backend')
-
   try {
     foundLoggedUser.follows = filteredFollows
     await foundLoggedUser.save()
