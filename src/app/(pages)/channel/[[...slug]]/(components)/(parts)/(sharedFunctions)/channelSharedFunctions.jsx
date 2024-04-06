@@ -169,7 +169,7 @@ export const profileButtonDistributor = (loggedUser, channelOwner, setModalOn, a
     )
   }
 
-  let followedChannel = channelOwner.followers.find((user) => user = loggedUser._id)
+  let followedChannel = loggedUser.follows.find((streamer) => streamer._id == channelOwner._id)
 
   // TODO: add more condition for subscriptions
   if(followedChannel) {

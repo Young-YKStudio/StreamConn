@@ -27,29 +27,29 @@ const HeaderRender = ({allStreamers}) => {
   const dispatch = useDispatch()
   let authStatus = useSelector((state) => state.redux.isAuthStored)
   let allStreamersRedux = useSelector((state) => state.redux.allStreamers)
+  let authUpdate = useSelector((state) => state.redux.forceAuthUpdate)
 
   useEffect(() => {
 
+    
     if(allStreamersRedux.length === 0) {
       dispatch(setInitialAllStreamersUpdate(allStreamers))
     }
-
+    
     if(allStreamersRedux.length > 0) {
       let tempArray = Object.assign([], allStreamers)
       dispatch(setAllStreamersUpdate(tempArray))
     }
-
+    
     if(status === 'authenticated') {
-
       
-      const setAuthUserReduxFunction = async (status) => {        
-        if(!status) {
-          let setReduxAuth = await setNewReduxAuth(session.user.id)
-          dispatch(setAuthUserRedux(setReduxAuth))
-        }
+      
+      const setAuthUserReduxFunction = async () => {        
+        let setReduxAuth = await setNewReduxAuth(session.user.id)
+        dispatch(setAuthUserRedux(setReduxAuth))
       }
       
-      setAuthUserReduxFunction(authStatus)
+      setAuthUserReduxFunction()
 
       if(!session.user.isUpdated) {
         if(path.startsWith('/account_update')) {
@@ -58,7 +58,7 @@ const HeaderRender = ({allStreamers}) => {
         return router.push(`/account_update/welcome/`)
       }
     }
-  }, [session, authStatus, path])
+  }, [session, authStatus, path, authUpdate])
 
   const subMenubuttonHandler = (e) => {
     setIsSubLinkMenuOpen(!isSubLinkMenuOpen)

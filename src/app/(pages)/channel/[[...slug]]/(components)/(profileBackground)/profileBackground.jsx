@@ -2,7 +2,7 @@
 import { TbHttpConnect } from "react-icons/tb";
 import { MdPerson } from 'react-icons/md'
 import { useSelector, useDispatch } from "react-redux";
-import { setIsLoadingTrue, setIsLoadingFalse } from "@/redux/slice";
+import { setIsLoadingTrue, setIsLoadingFalse, setForceAuthUpdate } from "@/redux/slice";
 import { useState } from 'react'
 import { followStreamer, unfollowStreamer } from '@/redux/service/followAndSubscribe'
 import { useRouter } from 'next/navigation'
@@ -41,6 +41,7 @@ const ChannelProfileBackGround = ({channelOwner, channel}) => {
     let request = await followStreamer(sendingData)
 
     if(request) {
+      dispatch(setForceAuthUpdate())
       dispatch(setIsLoadingFalse())
       return router.refresh()
     }
@@ -60,6 +61,7 @@ const ChannelProfileBackGround = ({channelOwner, channel}) => {
     let request = await unfollowStreamer(sendingData)
 
     if(request) {
+      dispatch(setForceAuthUpdate())
       dispatch(setIsLoadingFalse())
       return router.refresh()
     }

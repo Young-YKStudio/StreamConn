@@ -19,8 +19,6 @@ const CollaborationRender = ({channel}) => {
     setInputtedText(e.target.value)
   }
 
-  console.log(channel,)
-
   const submitHandler = async (e) => {
 
     dispatch(setIsLoadingTrue())
@@ -35,7 +33,6 @@ const CollaborationRender = ({channel}) => {
     let request = await NewPostCollarboration(sendingData)
     if(request) {
       dispatch(setIsLoadingFalse())
-      console.log('success')
       return router.refresh()
     }
     dispatch(setIsLoadingFalse())
@@ -46,7 +43,7 @@ const CollaborationRender = ({channel}) => {
       <div>
         {channel && channel.posts.map((post) => {
           return <div
-            key={'colloaboration post' + post.id}
+            key={'colloaboration post' + post._id}
           >
             {post.body}
           </div>

@@ -1,3 +1,4 @@
+'use client'
 const LoadingComponent = () => {
   return (
     <div className='spinnerContainer'>

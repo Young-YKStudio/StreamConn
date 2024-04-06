@@ -1,6 +1,6 @@
 import CollaborationRender from "./collaborationRender";
 import { Suspense } from "react";
-import { LoadingComponent } from '@/app/components/loading/loadingComponent'
+import Loading from "../../../loading";
 import axios from 'axios'
 
 const getPopulatedChannelData = async (id) => {
@@ -24,7 +24,7 @@ const Channel_Collaboration = async ({channel}) => {
   let channelData = await getPopulatedChannelData(channel._id)
 
   return (
-    <Suspense fallback={<LoadingComponent />}>
+    <Suspense fallback={<Loading />}>
       <CollaborationRender channel={channelData} />
     </Suspense>
   );
