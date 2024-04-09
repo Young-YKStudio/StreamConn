@@ -36,6 +36,28 @@ export const tabButtonStyles = (currentSection, channel) => {
   }
 }
 
+export const channelTypeButtonStyles = (currentChannelType, selectedChannelType) => {
+  if(currentChannelType === selectedChannelType) {
+    return 'rounded-md px-3 py-1.5 font-medium bg-sky-800 flex flex-row gap-2 items-center z-30'
+  }
+
+  return 'rounded-md px-3 py-1.5 font-medium bg-sky-950 hover:bg-sky-800 flex flex-row gap-2 items-center z-30'
+}
+
+export const channelTypeButtonIcons = (channelType) => {
+  if(channelType === 'Text') {
+    return <FaHashtag className='w-4 h-4'/>
+  }
+
+  if(channelType === 'Collaboration') {
+    return <MdPeopleAlt className='w-5 h-5'/>
+  }
+
+  if(channelType === 'Participation') {
+    return <MdCoPresent className='w-5 h-5'/>
+  }
+}
+
 export const channelTypes = [
   { type: 'Text' },
   { type: 'Collaboration' },
@@ -169,7 +191,7 @@ export const profileButtonDistributor = (loggedUser, channelOwner, setModalOn, a
     )
   }
 
-  let followedChannel = channelOwner.followers.find((user) => user = loggedUser._id)
+  let followedChannel = loggedUser.follows.find((streamer) => streamer._id == channelOwner._id)
 
   // TODO: add more condition for subscriptions
   if(followedChannel) {

@@ -10,6 +10,7 @@ const initialState = {
   isAuthStored: false,
   isLoading: false,
   allStreamers: [],
+  forceAuthUpdate: false,
 }
 
 // slice
@@ -48,7 +49,11 @@ export const slice = createSlice({
           }
         })
       })
-    }}
+    },
+    setForceAuthUpdate: (state) => {
+      state.forceAuthUpdate = !state.forceAuthUpdate
+    }
+  }
   })
 
 export const { 
@@ -58,6 +63,7 @@ export const {
   setAuthUserReset,
   setInitialAllStreamersUpdate,
   setAllStreamersUpdate,
+  setForceAuthUpdate,
 } = slice.actions
 
 export default slice.reducer

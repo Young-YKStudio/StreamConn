@@ -18,8 +18,8 @@ const iconStyles = 'w-5 h-5 text-slate-400 '
 
 const HeaderRender = ({allStreamers}) => {
 
-  const [ searchedText, setSearchedText ] = useState('')
   const [ isSubLinkMenuOpen, setIsSubLinkMenuOpen ] = useState(false)
+  const [ isAccountButtonClicked, setIsAccountButtonClicked ] = useState(false)
 
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -27,29 +27,32 @@ const HeaderRender = ({allStreamers}) => {
   const dispatch = useDispatch()
   let authStatus = useSelector((state) => state.redux.isAuthStored)
   let allStreamersRedux = useSelector((state) => state.redux.allStreamers)
+  let authUpdate = useSelector((state) => state.redux.forceAuthUpdate)
 
   useEffect(() => {
-
-    if(allStreamersRedux.length === 0) {
-      dispatch(setInitialAllStreamersUpdate(allStreamers))
-    }
-
-    if(allStreamersRedux.length > 0) {
-      let tempArray = Object.assign([], allStreamers)
-      dispatch(setAllStreamersUpdate(tempArray))
-    }
-
-    if(status === 'authenticated') {
-
+  
+    if(allStreamersRedux) {
       
-      const setAuthUserReduxFunction = async (status) => {        
-        if(!status) {
-          let setReduxAuth = await setNewReduxAuth(session.user.id)
-          dispatch(setAuthUserRedux(setReduxAuth))
-        }
+      if(allStreamersRedux.length === 0) {
+        dispatch(setInitialAllStreamersUpdate(allStreamers))
       }
       
-      setAuthUserReduxFunction(authStatus)
+      if(allStreamersRedux.length > 0) {
+        let tempArray = Object.assign([], allStreamers)
+        dispatch(setAllStreamersUpdate(tempArray))
+      }
+    }
+    
+    
+    if(status === 'authenticated') {
+      
+      
+      const setAuthUserReduxFunction = async () => {        
+        let setReduxAuth = await setNewReduxAuth(session.user.id)
+        dispatch(setAuthUserRedux(setReduxAuth))
+      }
+      
+      setAuthUserReduxFunction()
 
       if(!session.user.isUpdated) {
         if(path.startsWith('/account_update')) {
@@ -58,7 +61,7 @@ const HeaderRender = ({allStreamers}) => {
         return router.push(`/account_update/welcome/`)
       }
     }
-  }, [session, authStatus, path])
+  }, [session, authStatus, path, authUpdate])
 
   const subMenubuttonHandler = (e) => {
     setIsSubLinkMenuOpen(!isSubLinkMenuOpen)
@@ -107,7 +110,7 @@ const HeaderRender = ({allStreamers}) => {
         </div>
       }
       {/* search section */}
-      <Header_SearchBox searchedText={searchedText} setSearchedText={setSearchedText} />
+      <Header_SearchBox />
 
       {/* link elements section */}
       {session ? <div className="flex justify-end w-full items-center gap-2 text-slate-400">

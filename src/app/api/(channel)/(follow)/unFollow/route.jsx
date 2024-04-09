@@ -33,7 +33,7 @@ export const POST = async (req) => {
   }
 
   // find and delete channelOwner's follower for loggedUser
-  let filteredFollowers = foundChannelOwner.followers.filter((followedUser) => followedUser._id == foundLoggedUser._id)
+  let filteredFollowers = foundChannelOwner.followers.filter((followedUser) => followedUser._id.toString() !== foundLoggedUser._id.toString())
 
   try {
     foundChannelOwner.followers = filteredFollowers
@@ -46,7 +46,7 @@ export const POST = async (req) => {
   }
 
   // find and delete loggedUser's follows for channel owner
-  let filteredFollows = foundLoggedUser.follows.filter((followingStreaer) => followingStreaer._id == foundChannelOwner._id)
+  let filteredFollows = foundLoggedUser.follows.filter((followingStreamer) => followingStreamer._id.toString() !== foundChannelOwner._id.toString())
 
   try {
     foundLoggedUser.follows = filteredFollows

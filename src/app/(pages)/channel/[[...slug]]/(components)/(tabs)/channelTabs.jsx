@@ -1,15 +1,17 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { tabButtonStyles, userValidator } from '../(parts)/(sharedFunctions)/channelSharedFunctions'
-import { MdAdd, MdHome, MdPeopleAlt, MdCoPresent } from "react-icons/md";
+import { tabButtonStyles, userValidator, channelTypeButtonStyles, channelTypeButtonIcons } from '../(parts)/(sharedFunctions)/channelSharedFunctions'
+import { MdAdd, MdHome, MdPeopleAlt, MdCoPresent, MdOutlineArrowDropDown, MdOutlineArrowDropUp, MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { FaHashtag } from "react-icons/fa6";
 import AddChannelModal from './addChannelModal';
+import ChannelListsPopUp from './channelsListPopUp';
 import { useSelector } from 'react-redux';
 
 const ChannelTabs = ({channelOwner, channelName}) => {
 
   const [ isModalOpen, setIsModalOpen ] = useState(false)
+  const [ tabOpen, setTabOpen ] = useState('')
 
   const router = useRouter()
 
@@ -23,6 +25,41 @@ const ChannelTabs = ({channelOwner, channelName}) => {
   
   const currentUser = useSelector((state) => state.redux.auth)
 
+  let tabTypes
+
+  if(channelOwner) {
+    if(channelOwner.channels) {
+      const types = channelOwner.channels.map((type) => type.channelType)
+      const filteredTypes = types.filter((type, index) => types.indexOf(type) === index)
+      tabTypes = filteredTypes
+    }
+  }
+
+  const tabOpenChanger = (e, tabType, state) => {
+    if(state === tabType) {
+      return setTabOpen('')
+    }
+
+    return setTabOpen(tabType)
+  }
+
+  const tabButtonDistributor = (tabType, channels, state) => {
+    return (
+      <div 
+        className='relative'
+        key={tabType + 'tabtypes'}
+      >
+        <button 
+          onClick={(e) => tabOpenChanger(e, tabType, state)}
+          className={channelTypeButtonStyles(tabType, state)}
+        >
+          {channelTypeButtonIcons(tabType)}{tabType} {tabOpen === tabType ? <MdKeyboardArrowUp className='w-5 h-5'/> : <MdKeyboardArrowDown className='w-5 h-5' />}
+        </button>
+        {tabOpen === tabType && <ChannelListsPopUp tabType={tabType} channels={channels}/>}
+      </div>
+    )
+  }
+  
   return (
     <nav className="flex flex-row gap-2 w-full max-w-4xl justify-center sm:justify-start border-b border-sky-500 py-4 px-4 pt-8">
 
@@ -52,12 +89,22 @@ const ChannelTabs = ({channelOwner, channelName}) => {
       <div className='hidden sm:flex sm:flex-row sm:justify-between w-full'>
         <div className="flex flex-wrap gap-4">
           <button
-            className={tabButtonStyles(channelName, 'home')}
+            className='rounded-md px-3 py-1.5 font-medium bg-sky-950 hover:bg-sky-800 flex flex-row gap-2 items-center'
             onClick={(e) => router.push(`/channel/home/${channelOwner._id}`)}
-          >
+            >
             <MdHome className="w-5 h-5"/>Home
           </button>
-          {channelOwner.channels.map((tab) => {
+          {tabTypes.length > 0 && tabTypes.map((tab) => (
+            tabButtonDistributor(tab, channelOwner.channels, tabOpen)
+            // <button
+            // key={tab + 'tabtypes'}
+            // className={tabButtonStyles(channelName, tab)}
+            // onClick={(e) => router.push(`/channel/${tab}/${channelOwner._id}`)}
+            // >
+            //   {tab}
+            // </button>
+          ))}
+          {/* {channelOwner.channels.map((tab) => {
             if(tab.channelType === 'Text') {
               return (
                 <button
@@ -92,7 +139,7 @@ const ChannelTabs = ({channelOwner, channelName}) => {
               )
             }
           }
-          )}
+          )} */}
         </div>
         
         <div>
