@@ -1,5 +1,5 @@
 import dbConnect from '@/app/util/DBConnect'
-import Channel from '@/app/models/channels'
+import Channel from '@/app/models/Channels'
 import Post from '@/app/models/post'
 // import Comment from '@/app/models/comment'
 import { NextRequest, NextResponse } from "next/server"
@@ -8,9 +8,8 @@ export async function POST(req) {
   const receivedData = await req.json();
 
   const input = receivedData.input
+  const channelId = receivedData.channelId
   const userId = receivedData.userId
-  const channelName = receivedData.channelName
-  const channelOwnerId = receivedData.channelOwnerId
 
   try {
     await dbConnect()
@@ -18,12 +17,12 @@ export async function POST(req) {
     return NextResponse.json({ message: 'error at connecting database at addPost' }, { status: 500 })
   }
 
-  let createdPost = await Post.create({ body: input, userId: userId })
+  let createdPost = await Post.create({ body: input, userId: userId, channelId: channelId })
   if (!createdPost) {
     return NextResponse.json({ message: 'error creating a post at addPost' }, { status: 501 })
   }
   
-  let foundChannel = await Channel.findOne({ channelName: channelName, channelOwner: channelOwnerId }).populate({ path: 'posts', model: Post })
+  let foundChannel = await Channel.findById(channelId).populate({ path: 'posts', populate: { path: 'comments' } })
   if (!foundChannel) {
     return NextResponse.json({ message: 'error finding valid channel at addPost' }, { status: 502 })
   }

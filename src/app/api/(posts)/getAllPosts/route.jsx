@@ -2,28 +2,23 @@
 
 import dbConnect from '@/app/util/DBConnect';
 import Channel from '@/app/models/Channels';
-import Post from '@/app/models/post'
-import Comment from '@/app/models/comment'
+// import Post from '@/app/models/post'
+// import Comment from '@/app/models/comment'
 import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(req) {
-  const receivedData = await req.json();
-
-  const channelName = receivedData.channelName
-  const channelOwner = receivedData.channelOwner
+  const {channelId} = await req.json();
 
   await dbConnect();
-  
-  let foundChannel = await Channel.find({ channelName: channelName, channelOwner: channelOwner }).populate({ path: 'posts', populate: { path: 'comments' } })
-  if (foundChannel) {
-    let allPosts = foundChannel[0].posts
-    
-    if (allPosts.length > 0) {
-      return NextResponse.json({ message: allPosts }, { status: 200 })
-    } else {
-      return new NextResponse('No post found', { status: 200 })
-    }
-  } else {
-    return new NextResponse('No channel found', { status: 500 })
+
+  let foundChannel = await Channel.findById(channelId).populate({ path: 'posts', populate: { path: 'comments' } })
+  // let foundChannel = await Channel.findById(channelId).populate({ path: 'posts', populate: 
+  //                                                               { path: 'comments', populate: 
+  //                                                               { path: 'user', select: 'nickname', options: {strictPopulate: false} } } } )
+  if (!foundChannel) {
+    return new NextResponse('No post found', { status: 200 })
   }
+
+  return NextResponse.json(foundChannel, { status: 200 })
+
 }

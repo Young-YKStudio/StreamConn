@@ -17,7 +17,7 @@ export async function PUT(req) {
     return NextResponse.json({ message: 'error connecting DB from deleteComment' }, { status: 500 })
   }
   
-  let foundPost = await Post.findById(postId).populate({ path: 'comments', model: Comment })
+  let foundPost = await Post.findById(postId).populate('comments')
   if (!foundPost) {
     return NextResponse.json({ message: 'Error finding post from deleteComment' }, { status: 502 })
   }
@@ -43,7 +43,7 @@ export async function PUT(req) {
     return NextResponse.json({ message: 'Error deleting comment from deleteComment' }, { status: 501 })
   }
 
-  let allPosts = await Post.find().populate({ path: 'comments', model: Comment })
+  let allPosts = await Post.find({ channelId: foundPost.channelId }).populate('comments')
 
   return NextResponse.json(allPosts, { status: 200 })
 }
