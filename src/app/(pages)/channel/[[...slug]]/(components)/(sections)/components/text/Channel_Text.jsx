@@ -1,25 +1,28 @@
 import axios from 'axios'
-// import PostLanding from './postLanding'
+import { Suspense } from "react"
+import { LoadingComponent } from '@/app/components/loading/loadingComponent'
+import TextRender from './textRender'
 
-const getAllPosts = async (channelData) => {
-  const response = await axios.post(`${process.env.APP_URL}/api/getAllPosts`, channelData)
+const getAllPosts = async (channelId) => {
+  const requestData = {
+    channelId: channelId,
+  }
+
+  const response = await axios.post(`${process.env.APP_URL}/api/getAllPosts`, requestData)
   if (response.status == 200) {
-    return response.data.message
+    return response.data
   } else {
     return 'Error getting initial post data'
   }
 }
 
-const Channel_Text = async ({ channelData }) => {
-  // const initAllPosts = await getAllPosts(channelData)
-  console.log(channelData)
+const Channel_Text = async ({ channel }) => {
+  const initChannelData = await getAllPosts(channel._id)
 
   return (
-    <div className='w-full'>
-      <p>Channel {channelData.channelName} {channelData.channelOwner.email} Texts Page</p>
-      {/* <PostLanding channelData={channelData} initAllPosts={initAllPosts} /> */}
-    </div>
+    <Suspense fallback={<LoadingComponent />}>
+      <TextRender channel={initChannelData} />
+    </Suspense>
   )
 }
-
 export default Channel_Text;

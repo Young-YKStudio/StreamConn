@@ -6,6 +6,10 @@ const postSchema = new Schema(
   {
     title: String,
     body: String,
+    channelId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Channel',
+    },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
