@@ -1,10 +1,11 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { tabButtonStyles, userValidator } from '../(parts)/(sharedFunctions)/channelSharedFunctions'
-import { MdAdd, MdHome, MdPeopleAlt, MdCoPresent, MdOutlineArrowDropDown, MdOutlineArrowDropUp } from "react-icons/md";
+import { tabButtonStyles, userValidator, channelTypeButtonStyles, channelTypeButtonIcons } from '../(parts)/(sharedFunctions)/channelSharedFunctions'
+import { MdAdd, MdHome, MdPeopleAlt, MdCoPresent, MdOutlineArrowDropDown, MdOutlineArrowDropUp, MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { FaHashtag } from "react-icons/fa6";
 import AddChannelModal from './addChannelModal';
+import ChannelListsPopUp from './channelsListPopUp';
 import { useSelector } from 'react-redux';
 
 const ChannelTabs = ({channelOwner, channelName}) => {
@@ -34,12 +35,28 @@ const ChannelTabs = ({channelOwner, channelName}) => {
     }
   }
 
-  const buttonDistributor = (tabType, channels) => {
-    console.log(channels, tabType)
+  const tabOpenChanger = (e, tabType, state) => {
+    if(state === tabType) {
+      return setTabOpen('')
+    }
+
+    return setTabOpen(tabType)
+  }
+
+  const tabButtonDistributor = (tabType, channels, state) => {
     return (
-      <button key={tabType + 'tabtypes'}>
-        {tabType}
-      </button>
+      <div 
+        className='relative'
+        key={tabType + 'tabtypes'}
+      >
+        <button 
+          onClick={(e) => tabOpenChanger(e, tabType, state)}
+          className={channelTypeButtonStyles(tabType, state)}
+        >
+          {channelTypeButtonIcons(tabType)}{tabType} {tabOpen === tabType ? <MdKeyboardArrowUp className='w-5 h-5'/> : <MdKeyboardArrowDown className='w-5 h-5' />}
+        </button>
+        {tabOpen === tabType && <ChannelListsPopUp tabType={tabType} channels={channels}/>}
+      </div>
     )
   }
   
@@ -72,13 +89,13 @@ const ChannelTabs = ({channelOwner, channelName}) => {
       <div className='hidden sm:flex sm:flex-row sm:justify-between w-full'>
         <div className="flex flex-wrap gap-4">
           <button
-            className={tabButtonStyles(channelName, 'home')}
+            className='rounded-md px-3 py-1.5 font-medium bg-sky-950 hover:bg-sky-800 flex flex-row gap-2 items-center'
             onClick={(e) => router.push(`/channel/home/${channelOwner._id}`)}
             >
             <MdHome className="w-5 h-5"/>Home
           </button>
           {tabTypes.length > 0 && tabTypes.map((tab) => (
-            buttonDistributor(tab, channelOwner.channels)
+            tabButtonDistributor(tab, channelOwner.channels, tabOpen)
             // <button
             // key={tab + 'tabtypes'}
             // className={tabButtonStyles(channelName, tab)}

@@ -30,16 +30,19 @@ const HeaderRender = ({allStreamers}) => {
   let authUpdate = useSelector((state) => state.redux.forceAuthUpdate)
 
   useEffect(() => {
-
-    
-    if(allStreamersRedux.length === 0) {
-      dispatch(setInitialAllStreamersUpdate(allStreamers))
+  
+    if(allStreamersRedux) {
+      
+      if(allStreamersRedux.length === 0) {
+        dispatch(setInitialAllStreamersUpdate(allStreamers))
+      }
+      
+      if(allStreamersRedux.length > 0) {
+        let tempArray = Object.assign([], allStreamers)
+        dispatch(setAllStreamersUpdate(tempArray))
+      }
     }
     
-    if(allStreamersRedux.length > 0) {
-      let tempArray = Object.assign([], allStreamers)
-      dispatch(setAllStreamersUpdate(tempArray))
-    }
     
     if(status === 'authenticated') {
       
