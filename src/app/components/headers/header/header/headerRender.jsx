@@ -18,8 +18,8 @@ const iconStyles = 'w-5 h-5 text-slate-400 '
 
 const HeaderRender = ({allStreamers}) => {
 
-  const [ searchedText, setSearchedText ] = useState('')
   const [ isSubLinkMenuOpen, setIsSubLinkMenuOpen ] = useState(false)
+  const [ isAccountButtonClicked, setIsAccountButtonClicked ] = useState(false)
 
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -110,7 +110,7 @@ const HeaderRender = ({allStreamers}) => {
         </div>
       }
       {/* search section */}
-      <Header_SearchBox searchedText={searchedText} setSearchedText={setSearchedText} />
+      <Header_SearchBox />
 
       {/* link elements section */}
       {session ? <div className="flex justify-end w-full items-center gap-2 text-slate-400">
