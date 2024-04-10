@@ -72,7 +72,7 @@ const LandingSideBarPublic = () => {
                 {!isSectionCollapsed &&
                   <div className='w-full truncate'>
                     <p className="text-sm font-semibold">{streamer.nickname}</p>
-                    <p className="text-xs text-slate-400">{streamer.introduction}</p>
+                    <p className="text-xs text-slate-400 text-ellipsis overflow-hidden">{streamer.introduction}</p>
                   </div>
                 }
                 {hoveredStreamer === streamer._id &&

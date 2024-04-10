@@ -28,6 +28,10 @@ const userSchema = new Schema(
     },
     profile: String,
     locale: String,
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
     isStreamer: Boolean,
     platforms: [
       {

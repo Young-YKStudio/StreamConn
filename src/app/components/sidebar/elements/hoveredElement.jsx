@@ -14,7 +14,7 @@ const HoveredElement = ({streamer}) => {
         }
         <p className="text-lg font-bold">{streamer.nickname}</p>
       </div>
-      <p className="truncate py-1 text-left">{streamer.introduction}</p>
+      <p className="truncate py-1 text-left text-xs">{streamer.introduction}</p>
       <div className="flex flex-row flex-nowrap gap-1.5 items-center justify-between">
         <p className="text-xs text-slate-300">{NumberFormatter(streamer.followers.length)} followers</p>
         <div className="flex flex-row flex-nowrap gap-1.5 items-center">

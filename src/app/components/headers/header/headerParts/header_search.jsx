@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
+import { usePathname } from 'next/navigation'
 import HeaderSearchPopUp from './headerSearchPopUp'
 
 const Header_SearchBox = () => {
@@ -8,7 +9,7 @@ const Header_SearchBox = () => {
   const [ searchedStreamers, setSearchedStreamers ] = useState([])
 
   const allStreamers = useSelector(state => state.redux.allStreamers)
-
+  const path = usePathname()
 
   const searchButtonHandler = (e) => {
     setSearchedText(e.target.value)
@@ -24,9 +25,13 @@ const Header_SearchBox = () => {
     }
   },[searchedText])
 
+  useEffect(() => {
+    return setSearchedText('')
+  },[path])
+
   return (
     <div className="flex flex-row flex-nowrap justify-center relative">
-      <input type='text' value={searchedText} placeholder='Search streamers' onChange={(e) => setSearchedText(e.target.value)} className="max-w-xs w-full text-slate-400 px-4 py-1 bg-transparent rounded-md focus:outline-none focus:ring-0"/>
+      <input type='text' value={searchedText} placeholder='Search streamers' onChange={(e) => setSearchedText(e.target.value)} className="max-w-xs w-full text-slate-200 px-4 py-1 bg-transparent rounded-md focus:outline-none focus:ring-0 text-xs"/>
       {searchedStreamers.length > 0 && <HeaderSearchPopUp searchedStreamers={searchedStreamers} />}
     </div>
   );
