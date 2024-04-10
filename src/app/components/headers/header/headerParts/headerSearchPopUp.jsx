@@ -1,9 +1,15 @@
 import Link from 'next/link'
 import { MdPerson } from 'react-icons/md';
+import { motion } from 'framer-motion'
 
 const HeaderSearchPopUp = ({searchedStreamers}) => {
   return (
-    <div className="absolute top-8 bg-sky-800 w-full max-w-xs m-2 px-4 py-2 rounded-md shadow-md z-40">
+    <motion.div 
+      className="absolute top-8 bg-sky-800 w-full max-w-xs m-2 px-4 py-2 rounded-md shadow-md z-40"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{duration: 0.2}}
+    >
       <p className='block text-sm font-semibold border-b border-white/40 border-0.5 pb-1'>Searched Streamers</p>
       <div className='pb-2 flex flex-col divide-y devide-solid divide-white/40 gap-2'>
         {searchedStreamers.length > 0 && searchedStreamers.map((streamer) => (
@@ -28,7 +34,7 @@ const HeaderSearchPopUp = ({searchedStreamers}) => {
             </div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }
 export default HeaderSearchPopUp;

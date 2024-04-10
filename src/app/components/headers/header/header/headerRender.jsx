@@ -3,6 +3,7 @@
 import Header_SearchBox from "../headerParts/header_search";
 import SubLinks from "../headerParts/subLInks";
 import Link from "next/link";
+import AuthButton from "../headerParts/authButton";
 import { MdMoreVert, MdFavoriteBorder, MdFilterNone, MdLanguage } from 'react-icons/md'
 
 import { useState, useEffect } from 'react'
@@ -81,20 +82,8 @@ const HeaderRender = ({allStreamers}) => {
       <Header_SearchBox />
 
       {/* link elements section */}
-      {session ? <div className="flex justify-end w-full items-center gap-2 text-slate-400">
-          {/* my account */}
-          <button onClick={(e) => accountButtonHandler(e, session.user.email)} className=" hover:text-sky-500">My Account</button>
-          {/* logout */}
-          <button onClick={() => signOutProcess()} className=" hover:text-sky-500">Logout</button>
-        </div> 
-        :
-        <div className="flex justify-end w-full items-center gap-2">
-          {notLoggedInLinks && notLoggedInLinks.map((link) => {
-            return <Link key={link.name} href={link.href} className="text-slate-400 hover:text-sky-500 mr-2">{link.name}</Link>
-          })}
-          {/* <button className={smallButtonStyles}><MdLanguage className={iconStyles} /></button> */}
-        </div>
-      }
+      <AuthButton status={status} session={session} />
+
     </nav>
   );
 }

@@ -28,7 +28,7 @@ const SubLinks = () => {
   return (
     <div className='relative'>
       <button onClick={popUpbuttonHandler} className={buttonStyleDistributor(isPopUpOpen)}>
-        <MdMoreVert className='w-5 h-5 text-slate-200' />
+        <MdMoreVert className='w-4 h-4 text-slate-200' />
       </button>
 
       {isPopUpOpen && <SubLinksPopUp />}
