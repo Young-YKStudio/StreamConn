@@ -393,3 +393,6 @@ const TextRender = ({channel}) => {
   )
 }
 export default TextRender;
+
+// api call 리덕스쪽에 옮겨주시고 error handling 유저한테 보여주는거 만들어 주세요.
+// 그 외에는 코드 맘에 듭니다. 아주 잘하셨어요.
