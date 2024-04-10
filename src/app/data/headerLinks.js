@@ -1,3 +1,7 @@
+import { MdEventAvailable, MdApps } from 'react-icons/md'
+
+const smallIconSize = 'w-4 h-4'
+
 export const notLoggedInLinks = [
   {
     name: 'Login',
@@ -19,13 +23,33 @@ export const loggedInLinks = [
 export const subMenuLinks = [
   {
     name: 'Events',
-    href: '/events'
+    href: '/event',
+    icon: <MdEventAvailable className={smallIconSize} />
   },
   {
 
-    name: 'Browse',
-    href:  '/browse'
+    name: 'Categories',
+    href:  '/categories',
+    icon: <MdApps className={smallIconSize} />
   }
+]
+
+export const supportsLinks = [
+  {
+    name: 'Help'
+  },
+  {
+    name: 'Guidelines'
+  },
+  {
+    name: 'Security'
+  },
+  {
+    name: 'Privacy Policy'
+  },
+  {
+    name: 'Terms of Service'
+  },
 ]
 
 export const roleBasedLinksTemplate = [

@@ -1,6 +1,7 @@
 'use client'
 
 import Header_SearchBox from "../headerParts/header_search";
+import SubLinks from "../headerParts/subLInks";
 import Link from "next/link";
 import { MdMoreVert, MdFavoriteBorder, MdFilterNone, MdLanguage } from 'react-icons/md'
 
@@ -13,12 +14,8 @@ import { setAuthUserReset, setAuthUserRedux, setAllStreamersUpdate, setInitialAl
 
 import { notLoggedInLinks, loggedInLinks, subMenuLinks, roleBasedLinksTemplate } from "@/app/data/headerLinks";
 
-const smallButtonStyles = "flex justify-center items-center p-2 rounded-md hover:bg-slate-700"
-const iconStyles = 'w-5 h-5 text-slate-400 '
-
 const HeaderRender = ({allStreamers}) => {
 
-  const [ isSubLinkMenuOpen, setIsSubLinkMenuOpen ] = useState(false)
   const [ isAccountButtonClicked, setIsAccountButtonClicked ] = useState(false)
 
   const { data: session, status } = useSession()
@@ -32,7 +29,6 @@ const HeaderRender = ({allStreamers}) => {
   useEffect(() => {
   
     if(allStreamersRedux) {
-      
       if(allStreamersRedux.length === 0) {
         dispatch(setInitialAllStreamersUpdate(allStreamers))
       }
@@ -45,8 +41,6 @@ const HeaderRender = ({allStreamers}) => {
     
     
     if(status === 'authenticated') {
-      
-      
       const setAuthUserReduxFunction = async () => {        
         let setReduxAuth = await setNewReduxAuth(session.user.id)
         dispatch(setAuthUserRedux(setReduxAuth))
@@ -61,16 +55,8 @@ const HeaderRender = ({allStreamers}) => {
         return router.push(`/account_update/welcome/`)
       }
     }
+
   }, [session, authStatus, path, authUpdate])
-
-  const subMenubuttonHandler = (e) => {
-    setIsSubLinkMenuOpen(!isSubLinkMenuOpen)
-  }
-
-  const subLinkButtonHandler = (e, link) => {
-    console.log(link, 'link button clicked')
-    setIsSubLinkMenuOpen(!isSubLinkMenuOpen)
-  }
 
   const signOutProcess = async () => {
     let loggginOut = await logOut()
@@ -88,27 +74,9 @@ const HeaderRender = ({allStreamers}) => {
       {/* Logo/left section */}
       <div className="flex flex-row gap-2 items-center">
         <Link href='/' className="truncate text-sky-500">Stream Connect</Link>
-
-        {/* Auth enabled only */}
-        <button className={smallButtonStyles}><MdFavoriteBorder className={iconStyles} /></button> 
-
-        {/* Public */}
-        <button className={smallButtonStyles}><MdFilterNone className={iconStyles} /></button>
-        <button className={smallButtonStyles} onClick={subMenubuttonHandler}><MdMoreVert className={iconStyles} /></button>
+        <SubLinks />
       </div>
 
-      {/* Sub hidden menu */}
-      {isSubLinkMenuOpen && <div className="w-24 h-24 bg-white/40 absolute top-12 left-56 rounded-md flex flex-col">
-          <div className="relative flex flex-end">
-            <p>close</p>
-          </div>
-          {subMenuLinks && subMenuLinks.map((link, i) => {
-            return <div key={'sublink'+i}>
-              <Link href={link.href} onClick={(e) => setIsSubLinkMenuOpen(false)}>{link.name}</Link>
-            </div>
-          })}
-        </div>
-      }
       {/* search section */}
       <Header_SearchBox />
 
