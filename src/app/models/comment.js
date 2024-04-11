@@ -11,11 +11,15 @@ const commentSchema = new Schema(
       ref: 'Post',
     },
 
-    userId: {
+    commentOwner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
+      autopopulate: { select: 'nickname' },
     },
-  }, {timestamps: true})
+  }, { timestamps: true }
+)
+
+commentSchema.plugin(require('mongoose-autopopulate'));
 
 const Comment = mongoose.models.Comment || mongoose.model("Comment", commentSchema)
 export default Comment

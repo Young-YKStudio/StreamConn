@@ -9,7 +9,7 @@ export async function POST(req) {
 
   const input = receivedData.input
   const channelId = receivedData.channelId
-  const userId = receivedData.userId
+  const postOwner = receivedData.postOwner
 
   try {
     await dbConnect()
@@ -17,7 +17,7 @@ export async function POST(req) {
     return NextResponse.json({ message: 'error at connecting database at addPost' }, { status: 500 })
   }
 
-  let createdPost = await Post.create({ body: input, userId: userId, channelId: channelId })
+  let createdPost = await Post.create({ body: input, postOwner: postOwner, channelId: channelId })
   if (!createdPost) {
     return NextResponse.json({ message: 'error creating a post at addPost' }, { status: 501 })
   }
