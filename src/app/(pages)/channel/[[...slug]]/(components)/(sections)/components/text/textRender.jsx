@@ -8,6 +8,9 @@ import { useRouter, redirect } from 'next/navigation'
 import { MdOutlineAddCircle } from 'react-icons/md'
 
 const TextRender = ({channel}) => {
+
+  console.log(channel, 'at front')
+
   const router = useRouter()
   const dispatch = useDispatch()
   const loggedUser = useSelector((state) => state.redux.auth)

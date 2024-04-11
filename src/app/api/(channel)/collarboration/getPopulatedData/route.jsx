@@ -1,12 +1,13 @@
 import dbConnect from "@/app/util/DBConnect";
 import Channel from "@/app/models/Channels";
+import Comment from '@/app/models/comment';
 import Post from "@/app/models/post";
 import User from '@/app/models/User';
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
 
-  const {id} = await req.json()
+  const {channelId} = await req.json()
 
   try { 
     await dbConnect()
@@ -17,7 +18,7 @@ export async function POST(req) {
     )
   }
 
-  const foundChannel = await Channel.findOne({_id: id}).populate({path: 'posts', model: Post})
+  const foundChannel = await Channel.findOne({_id: channelId}).populate({path: 'posts', model: Post, populate: {path: 'comments', model: Comment, populate: {path: 'userId', model: User}}, populate: {path: 'userId', model: User}})
 
   if(!foundChannel) {
     return NextResponse.json(

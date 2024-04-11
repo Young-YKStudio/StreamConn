@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Suspense } from "react"
-import { LoadingComponent } from '@/app/components/loading/loadingComponent'
+import Loading from '../../../loading'
 import TextRender from './textRender'
 
 const getAllPosts = async (channelId) => {
@@ -8,7 +8,7 @@ const getAllPosts = async (channelId) => {
     channelId: channelId,
   }
 
-  const response = await axios.post(`${process.env.APP_URL}/api/getAllPosts`, requestData)
+  const response = await axios.post(`${process.env.APP_URL}/api/collarboration/getPopulatedData`, requestData)
   if (response.status == 200) {
     return response.data
   } else {
@@ -20,7 +20,7 @@ const Channel_Text = async ({ channel }) => {
   const initChannelData = await getAllPosts(channel._id)
 
   return (
-    <Suspense fallback={<LoadingComponent />}>
+    <Suspense fallback={<Loading />}>
       <TextRender channel={initChannelData} />
     </Suspense>
   )

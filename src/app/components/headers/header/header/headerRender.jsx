@@ -4,20 +4,15 @@ import Header_SearchBox from "../headerParts/header_search";
 import SubLinks from "../headerParts/subLInks";
 import Link from "next/link";
 import AuthButton from "../headerParts/authButton";
-import { MdMoreVert, MdFavoriteBorder, MdFilterNone, MdLanguage } from 'react-icons/md'
 
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useSession } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { logOut, setNewReduxAuth } from "@/redux/service/authService";
-import { setAuthUserReset, setAuthUserRedux, setAllStreamersUpdate, setInitialAllStreamersUpdate } from "@/redux/slice";
-
-import { notLoggedInLinks, loggedInLinks, subMenuLinks, roleBasedLinksTemplate } from "@/app/data/headerLinks";
+import { setNewReduxAuth } from "@/redux/service/authService";
+import { setAuthUserRedux, setAllStreamersUpdate, setInitialAllStreamersUpdate } from "@/redux/slice";
 
 const HeaderRender = ({allStreamers}) => {
-
-  const [ isAccountButtonClicked, setIsAccountButtonClicked ] = useState(false)
 
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -59,17 +54,6 @@ const HeaderRender = ({allStreamers}) => {
 
   }, [session, authStatus, path, authUpdate])
 
-  const signOutProcess = async () => {
-    let loggginOut = await logOut()
-    if(loggginOut) {
-      dispatch(setAuthUserReset())
-    }
-  }
-
-  const accountButtonHandler = (e, email) => {
-    console.log(email)
-  }
-
   return (
     <nav className="bg-black/40 grid grid-cols-3 p-4 absolute top-0 w-full z-10">
       {/* Logo/left section */}
@@ -83,7 +67,6 @@ const HeaderRender = ({allStreamers}) => {
 
       {/* link elements section */}
       <AuthButton status={status} session={session} />
-
     </nav>
   );
 }
