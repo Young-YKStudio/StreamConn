@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Suspense } from "react"
-import { LoadingComponent } from '@/app/components/loading/loadingComponent'
+import Loading from './../../../loading'
 import TextRender from './textRender'
 
 const getAllPosts = async (channelId) => {
@@ -20,7 +20,7 @@ const Channel_Text = async ({ channel }) => {
   const initChannelData = await getAllPosts(channel._id)
 
   return (
-    <Suspense fallback={<LoadingComponent />}>
+    <Suspense fallback={<Loading />}>
       <TextRender channel={initChannelData} />
     </Suspense>
   )

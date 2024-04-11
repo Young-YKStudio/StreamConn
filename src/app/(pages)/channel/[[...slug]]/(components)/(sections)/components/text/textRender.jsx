@@ -333,12 +333,14 @@ const TextRender = ({channel}) => {
     }
   }
   
+  console.log('CHAN:', channel)
+
   return (
     <div>
       <div className='flex flex-col gap-2'>
         { channel && channel.posts.map((post) => {
           return <div key={post._id} >
-            <p className='flex flex-row gap-3'>{post.body}
+            <p className='flex flex-row gap-3'>{post.body}-{post.userId.nickname}
               { loggedUser ? 
                   <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={ (e) => replyPostHandler(e, post._id) }>Reply</button>
                 :
@@ -357,7 +359,7 @@ const TextRender = ({channel}) => {
             </p>
             { post && post.comments.map((comment) => (
               <div key={comment._id} className='bg-white text-slate-900' >
-                <p className="flex flex-row gap-3">{comment.body}
+                <p className="flex flex-row gap-3">{comment.body}-{comment.nickname}
                   { (loggedUser && ((comment.userId == loggedUser._id))) ?
                       <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={ (e) => editCommentHandler(e, post._id, comment._id) }>Edit</button>
                     :
