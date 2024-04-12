@@ -49,3 +49,15 @@ export const updateStreamerIntro = async (sendingData) => {
     return false
   }
 }
+
+export const updateIsUpdated = async (sendingData) => {
+  try {
+    const res = await axios.put('/api/auth/updateIsUpdated', sendingData)
+    if(res.status === 200) {
+      return true
+    }
+  } catch (err) {
+    toast.error(err.response.data.message)
+    return false
+  }
+}
