@@ -11,7 +11,6 @@ export async function PUT(req) {
 
   const channelId = receivedData.channelId
   const postId = receivedData.postId
-  // const userId = receivedData.userId
 
   try {
     await dbConnect()
@@ -50,26 +49,6 @@ export async function PUT(req) {
   if (!deleteComments) {
     return new NextResponse('ERROR deleting all comments for a post from deletePost', { status: 500 })
   }
-
-  // if (foundPost.comments && foundPost.comments.length == 0) {
-  //   let justDeletePost = await Post.findByIdAndDelete(postId)
-  //   if (!justDeletePost) {
-  //     return new NextResponse('ERROR just deleting post from deletePost', { status: 404 })
-  //   }
-
-  //   let allPosts = await Post.find().populate({ path: 'comments', model: Comment })
-  //   return NextResponse.json(allPosts, { status: 200 })
-  // }
-
-  // let deleteComments = await Comment.deleteMany({ _id: { $in: foundPost.comments }})
-  // if (!deleteComments) {
-  //   return new NextResponse('ERROR deleting all comments for a post from deletePost', { status: 500 })
-  // }
-
-  // let deletePost = await Post.findByIdAndDelete(postId)
-  // if (!deletePost) {
-  //   return new NextResponse('ERROR deleting a post from deletePost', { status: 500 })
-  // }
 
   let allPosts = await Post.find({ channelId: channelId }).populate('comments')
 

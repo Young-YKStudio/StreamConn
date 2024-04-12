@@ -10,7 +10,6 @@ export async function PUT(req) {
 
   const commentId = receivedData.commentId
   const input = receivedData.input
-  const userId = receivedData.userId
 
   try {
     await dbConnect();

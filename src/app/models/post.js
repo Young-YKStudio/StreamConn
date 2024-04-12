@@ -4,22 +4,28 @@ const Schema = mongoose.Schema
 
 const postSchema = new Schema(
   {
-    title: String,
     body: String,
+
     channelId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Channel',
     },
-    userId: {
+
+    postOwner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
+      autopopulate: { select: 'nickname' },
     },
+
     comments: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Comment',
     }],
-  }, {timestamps: true}
+
+  }, { timestamps: true }
 )
+
+postSchema.plugin(require('mongoose-autopopulate'));
 
 const Post = mongoose.models.Post || mongoose.model("Post", postSchema)
 export default Post

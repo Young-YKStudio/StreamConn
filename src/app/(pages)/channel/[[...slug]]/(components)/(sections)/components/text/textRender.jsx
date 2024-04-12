@@ -21,10 +21,6 @@ const TextRender = ({channel}) => {
   const [ isEditCommentActive, setIsEditCommentActive ] = useState(false)
   const [ inputText, setInputText ] = useState('')
 
-  // if (loggedUser == undefined) {
-  //   redirect('/')
-  // }
-
   useEffect(() => {
     setAllPosts(channel.posts)
   }, [])
@@ -209,7 +205,7 @@ const TextRender = ({channel}) => {
       let addPostData = { 
         input: inputText, 
         channelId: channel._id,
-        userId: loggedUser._id,
+        postOwner: loggedUser._id,
       } 
 
       try {
@@ -234,7 +230,7 @@ const TextRender = ({channel}) => {
       let addCommentData = { 
         postId: selectedPost._id,
         input: inputText,
-        userId: loggedUser._id,
+        commentOwner: loggedUser._id,
       }
 
       try {
@@ -332,63 +328,80 @@ const TextRender = ({channel}) => {
       return ( <input type='text' placeholder='New message' value={inputText} onChange={(e) => setInputText(e.target.value)} className='w-full bg-transparent focus:ring-0 focus:outline-none text-xs'/> )
     }
   }
-  
+
   return (
-    <div>
-      <div className='flex flex-col gap-2'>
+    <div className='w-full p-5 flex flex-col'>
+      <div>
         { channel && channel.posts.map((post) => {
-          return <div key={post._id} >
-            <p className='flex flex-row gap-3'>{post.body}
-              { loggedUser ? 
-                  <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={ (e) => replyPostHandler(e, post._id) }>Reply</button>
-                :
-                  <></>
-              }
-              { (loggedUser && ((post.userId == loggedUser._id))) ?
-                  <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={ (e) => editPostHandler(e, post._id) }>Edit</button>
-                :
-                  <></>
-              }
-              { (loggedUser && ((post.userId == loggedUser._id) || (channel.channelOwner == loggedUser._id))) ?
-                  <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={ (e) => deletePostHandler(e, channel._id, post._id) }>Delete</button>
-                :
-                  <></>
-              }
-            </p>
-            { post && post.comments.map((comment) => (
-              <div key={comment._id} className='bg-white text-slate-900' >
-                <p className="flex flex-row gap-3">{comment.body}
-                  { (loggedUser && ((comment.userId == loggedUser._id))) ?
-                      <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={ (e) => editCommentHandler(e, post._id, comment._id) }>Edit</button>
+          return (
+            <div key={post._id}>
+              <div className='flex flex-row'>
+                <div className='w-full flex gap-3'>
+                  {post.body}
+                  { loggedUser ? 
+                      <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={ (e) => replyPostHandler(e, post._id) }>Reply</button>
                     :
                       <></>
                   }
-                  { (loggedUser && ((comment.userId == loggedUser._id) || (channel.channelOwner == loggedUser._id)))
-                    ?
-                      <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={ (e) => deleteCommentHandler(e, post._id, comment._id) }>Delete</button>
+                  { (loggedUser && ((post.postOwner._id == loggedUser._id))) ?
+                      <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={ (e) => editPostHandler(e, post._id) }>Edit</button>
                     :
                       <></>
                   }
-                </p>
+                  { (loggedUser && ((post.postOwner._id == loggedUser._id) || (channel.channelOwner == loggedUser._id))) ?
+                      <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={ (e) => deletePostHandler(e, channel._id, post._id) }>Delete</button>
+                    :
+                      <></>
+                  }
+                </div>
+                <div className='flex justify-end'>
+                  {post.postOwner.nickname}
+                </div>
               </div>
-            ))}
-          </div>
+              <div>
+                { post && post.comments.map((comment) => (
+                  <div key={comment._id} className='bg-white text-slate-900 w-full'>
+                    <div className="flex flex-row">
+                      <div className='w-full flex gap-3'>
+                        {comment.body}
+                        { (loggedUser && ((comment.commentOwner._id == loggedUser._id))) ?
+                            <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={ (e) => editCommentHandler(e, post._id, comment._id) }>Edit</button>
+                          :
+                            <></>
+                        }
+                        { (loggedUser && ((comment.commentOwner._id == loggedUser._id) || (channel.channelOwner == loggedUser._id))) ?
+                            <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={ (e) => deleteCommentHandler(e, post._id, comment._id) }>Delete</button>
+                          :
+                            <></>
+                        }
+                      </div>
+                      <div className='flex justify-end'>
+                        {comment.commentOwner.nickname}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )
         })}
       </div>
-      { loggedUser ?
-          <div className='flex flex-row flex-nowrap m-4 items-center bg-white/20 p-2 rounded-md text-xs'>
-            <div className='mr-2'>
-              <MdOutlineAddCircle className='w-5 h-5'/>
+      <div>
+        { loggedUser ?
+            <div className='flex flex-row flex-nowrap m-4 items-center bg-white/20 p-2 rounded-md text-xs'>
+              <div className='mr-2'>
+                <MdOutlineAddCircle className='w-5 h-5'/>
+              </div>
+              {operationHandler()}
+              <div className='flex flex-row gap-2'>
+                <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={(e) => submitHandler(e)}>Submit</button>
+                <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={(e) => cancelHandler(e)}>Cancel</button>
+              </div>
             </div>
-            {operationHandler()}
-            <div className='flex flex-row gap-2'>
-              <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={(e) => submitHandler(e)}>Submit</button>
-              <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={(e) => cancelHandler(e)}>Cancel</button>
-            </div>
-          </div>
-        :
-          <></>
-      }
+          :
+            <></>
+        }
+      </div>
     </div>
   )
 }
