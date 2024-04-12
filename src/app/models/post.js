@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import Comment from './comment'
 
 const Schema = mongoose.Schema
 
@@ -20,8 +21,8 @@ const postSchema = new Schema(
     comments: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Comment',
+      autopopulate: true
     }],
-
   }, { timestamps: true }
 )
 

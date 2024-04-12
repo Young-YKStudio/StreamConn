@@ -2,12 +2,12 @@
 // TODO: remove red error text when click register again
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import axios from 'axios'
 import { useDispatch } from 'react-redux'
-import { signIn } from 'next-auth/react'
-import { toast } from 'react-hot-toast'
+import { useSession } from 'next-auth/react'
+import { registerEmail } from '@/redux/service/authService'
+import { setIsLoadingTrue, setIsLoadingFalse } from '@/redux/slice'
 
 const Register = () => {
 
@@ -21,6 +21,7 @@ const Register = () => {
 
   const router = useRouter()
   const dispatch = useDispatch()
+  const { session, status } = useSession()
 
   const { email, password, confirmPassword, nickname } = submitForm
 
@@ -31,60 +32,26 @@ const Register = () => {
     }))
   }
 
-  const loginAfterRegister = async () => {
-
-    try {
-      const loginAttemp = await signIn('credentials', {
-        redirect: false,
-        email: email,
-        password: password
-      })
-  
-      if(loginAttemp.status !== 200) {
-        return toast.error('Error at creating account. Please try again later')
-      }
-  
-      if(loginAttemp.status === 200) {
-        return router.push('/')
-      }
-    } catch (err) {
-      return toast.error('Error at creating account. Please try again later')
+  useEffect(() => {
+    if(status==='authenticated') {
+      return router.push('/account_update/welcome')
     }
-  }
+  },[status])
 
   const submitHandler = async (e) => {
     e.preventDefault()
 
-    if(password !== confirmPassword) {
-      return toast.error('Please check your passwords')
-    }
+    dispatch(setIsLoadingTrue())
 
-    if(password.length < 6) {
-      return toast.error('Password must be at least 6 characters')
+    let registerRequest = await registerEmail(submitForm)
+    if(registerRequest) {
+      dispatch(setIsLoadingFalse())
+      return router.push('/account_update/welcome')
     }
-
-    if(nickname.length < 2) {
-      return toast.error('Username must be at least 2 characters')
-    }
-    
-    if(nickname.length > 16) {
-      return toast.error('Username must be less than 16 characters')
-    }
-
-    try {
-      // TODO: add Pending state
-      const request = await axios.post('api/register', submitForm)
-      // TODO: login with successed email and token 
-      if(request.status === 200) {
-        return loginAfterRegister()
-      } 
-    } catch (e) {
-      return toast.error(e.response.data)
-    }
-
+    dispatch(setIsLoadingFalse())
   }
 
-  const inputLabelStyle = 'block mb-2 text-sm font-medium'
+  const inputLabelStyle = 'block mb-2 text-xs font-medium'
   const inputBoxStyle = 'bg-slate-500 text-gray-900 text-sm rounded-md focus:outline-none focus:ring-2 focus:bg-slate-300 focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5'
 
   return (
@@ -116,12 +83,14 @@ const Register = () => {
               <input type='password' name='confirmPassword' className={inputBoxStyle} placeholder='Confirm Password' required value={confirmPassword} onChange={changeHandler}/>
             </div>
             <div className='flex flex-col gap-4 pt-2'>
-              <button type='submit' className='w-full bg-sky-900 hover:bg-sky-500 font-medium rounded-md text-sm px-5 py-2.5 text-center'>Reigster</button>
+              <button type='submit' className='w-full bg-sky-900 hover:bg-sky-700 font-medium rounded-md text-sm px-5 py-2.5 text-center'>Reigster</button>
               {message !== '' && <p className='text-red-500 italic text-center text-xs'>{message}</p>}
-              <div className='flex flex-row gap-2 text-sm'>
+              <div className='flex flex-row gap-2 text-sm justify-center'>
                 <p>Already registered?</p>
-                <Link href='/login' className='text-sky-700 hover:text-sky-500'>Login</Link>
+                <Link href='/login' className='text-yellow-400 hover:text-sky-500'>Login</Link>
               </div>
+
+              {/* TODO: find account */}
             </div>
           </form>
         </div>

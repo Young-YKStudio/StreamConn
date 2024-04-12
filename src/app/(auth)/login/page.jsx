@@ -1,29 +1,24 @@
 'use client'
 
-// server component -> call data -> use client -> react render 
-
-
 import { useState, useEffect } from 'react'
-import { signIn, useSession, getProviders } from 'next-auth/react'
+import { useSession, getProviders } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { FcGoogle } from "react-icons/fc";
 import { MdOutlineEmail } from "react-icons/md";
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { signInOauth, signInEmail } from '@/redux/service/authService'
 import { setIsLoadingTrue, setIsLoadingFalse } from '@/redux/slice'
 
 const LoginPage = () => {
 
-  const router = useRouter()
-  // const providers = await getProviders()
-  // const session = useSession()
   
   const [ message, setMessage ] = useState('')
   const [ providers, setProviders ] = useState()
   const [ credentialOpen, setCredentialOpen ] = useState(false)
   const { session, sessionStatus } = useSession()
   const dispatch = useDispatch()
+  const router = useRouter()
   
   useEffect(() => {
     (() => {
@@ -34,10 +29,12 @@ const LoginPage = () => {
   },[])
 
   useEffect(() => {
-    console.log(sessionStatus, session, 'session on login page')
+    if(sessionStatus === 'authenticated') {
+      return router.push('/')
+    }
   },[sessionStatus])
 
-  const inputLabelStyle = 'block mb-2 text-sm font-medium'
+  const inputLabelStyle = 'block mb-2 text-xs font-medium'
   const inputBoxStyle = 'bg-slate-500 text-gray-900 text-sm rounded-md focus:outline-none focus:ring-2 focus:bg-slate-300 focus:ring-sky-500 focus:border-sky-500 block w-full p-2.5'
 
   const [ submitForm, setSubmitForm ] = useState({
@@ -61,30 +58,25 @@ const LoginPage = () => {
   const submitHandler = async (e, data) => {
     e.preventDefault()
 
+    dispatch(setIsLoadingTrue())
+
     let sendingData = {
       email: email,
       password: password
     }
 
     try {
-      let loginRequest = await dispatch(signInEmail(sendingData))
+      let loginRequest = await signInEmail(sendingData)
+      if(loginRequest) {
+        dispatch(setIsLoadingFalse())
+        return router.push('/')
+      }
       // onsuccess route to home
     } catch (err) {
       return dispatch(setIsLoadingFalse())
     }
-    // // await loginAction(data)
 
-    // const response = await signIn('credentials', {
-    //   redirect: false,
-    //   email: email,
-    //   password: password
-    // })
-
-    // if(response.status === 200) {
-    //   router.push('/')
-    // } else {
-    //   console.log(response, sessionStatus, 'at response')
-    // }
+    dispatch(setIsLoadingFalse())
   }
 
   const credentialOpenHandler = (e) => {
@@ -112,7 +104,7 @@ const LoginPage = () => {
           {credentialOpen &&
             <form className="space-y-4 pt-4" onSubmit={(e) => submitHandler(e, submitForm)}>
               {/* Forms */}
-              <div>
+              <div className='flex flex-col'>
                 <label htmlFor="email" className={inputLabelStyle}>Email</label>
                 <input type='email' name='email' className={inputBoxStyle} placeholder="Enter your email address" required value={email} onChange={changeHandler} />
               </div>
@@ -123,7 +115,13 @@ const LoginPage = () => {
 
               {/* button */}
               <div className='flex flex-col gap-4 pt-2'>
-                <button type='submit' className='w-full bg-sky-900 hover:bg-sky-500 font-medium rounded-md text-sm px-5 py-2.5 text-center'>Login</button>
+                <button type='submit' className='w-full bg-sky-900 hover:bg-sky-700 font-medium rounded-md text-sm px-5 py-2.5 text-center'>Login</button>
+              </div>
+
+              {/* register */}
+              <div className='text-center text-xs flex flex-col gap-1'>
+                <p>Don't have an account?</p>
+                <Link href='/register' className='bg-sky-900 px-2 py-2.5 text-sm rounded-md hover:bg-sky-700'>Register Email</Link>
               </div>
             </form>
           }
