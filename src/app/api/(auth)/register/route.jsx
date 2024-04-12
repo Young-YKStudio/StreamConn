@@ -13,13 +13,13 @@ export const POST = async (req) => {
   const existingUser = await User.findOne({ email });
 
   if(existingUser) {
-    return new NextResponse('Email is already registered', { status: 400 })
+    return new NextResponse('Provided email is already registered', { status: 400 })
   }
 
   const duplicateNickname = await User.findOne({nickname: nickname})
 
   if(duplicateNickname) {
-    return new NextResponse('Username is already taken', { status: 400 })
+    return new NextResponse('Provided username is already taken', { status: 400 })
   }
 
   const hashedPassword = await bcrypt.hash(password, 10)
@@ -33,7 +33,6 @@ export const POST = async (req) => {
     await newUser.save()
     // TODO: send email
     return NextResponse.json(
-      { message: newUser },
       { status: 200 },
     )
   } catch (e) {

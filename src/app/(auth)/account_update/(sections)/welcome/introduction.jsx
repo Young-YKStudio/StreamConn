@@ -2,11 +2,20 @@
 import { motion } from 'framer-motion'
 import { bluebuttonDark } from '@/app/components/buttons/buttonStyles';
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react';
+import { useEffect } from 'react'
 
 const Introduction = ({user, setCurrentPage}) => {
 
   const router = useRouter()
+  const { session, status } = useSession()
 
+  useEffect(() => {
+    if(status==='unauthenticated') {
+      return router.push('/')
+    }
+  },[status])
+  
   return (
     <motion.section
       initial={{opacity: 0}}

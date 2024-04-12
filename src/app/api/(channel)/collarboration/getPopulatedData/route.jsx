@@ -18,7 +18,16 @@ export async function POST(req) {
     )
   }
 
-  const foundChannel = await Channel.findOne({_id: channelId}).populate({path: 'posts', model: Post, populate: {path: 'comments', model: Comment, populate: {path: 'userId', model: User}}, populate: {path: 'userId', model: User}})
+  const foundChannel = await Channel.findOne({_id: channelId}).populate({
+    path: 'posts', model: Post,
+      populate: {
+        path: 'comments', model: Comment,
+        populate: {
+          path: 'userId', model: User
+        }
+      }  
+    // populate: {path: 'comments', model: Comment}
+  })
 
   if(!foundChannel) {
     return NextResponse.json(

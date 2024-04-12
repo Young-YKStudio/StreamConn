@@ -35,10 +35,11 @@ const AskStreamerRender = () => {
     let request = await updateAskStreamer(sendingData)
 
     if(request) {
-      dispatch(setIsLoadingFalse())
       if(loggedUser.nickname) {
+        dispatch(setIsLoadingFalse())
         return router.push('/account_update/addFollows')
       }
+      dispatch(setIsLoadingFalse())
       return router.push('/account_update/username')
     }
 
