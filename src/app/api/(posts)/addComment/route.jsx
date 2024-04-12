@@ -8,7 +8,7 @@ export async function POST(req) {
 
   const postId = receivedData.postId
   const input = receivedData.input
-  const userId = receivedData.userId
+  const commentOwner = receivedData.commentOwner
 
   try {
     await dbConnect()
@@ -21,7 +21,7 @@ export async function POST(req) {
     return NextResponse.json({ message: 'Error finding a post from addComment' }, { status: 502 })
   }
 
-  let createdComment = await Comment.create( {postId: postId, body: input, userId: userId })
+  let createdComment = await Comment.create( {postId: postId, body: input, commentOwner: commentOwner })
   if (!createdComment) {
     return NextResponse.json({ message: 'Error creating comment'}, { status: 501 })
   }
