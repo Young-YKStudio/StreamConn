@@ -1,10 +1,14 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { bluebuttonDark, blueButtonDarkOutlined } from '@/app/components/buttons/buttonStyles'
+import { bluebuttonDark } from '@/app/components/buttons/buttonStyles'
 import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { setIsLoadingTrue, setIsLoadingFalse, setForceAuthUpdate } from '@/redux/slice'
+import { useRouter } from 'next/navigation'
+import { updateNewPlatform } from '@/redux/service/authWelcomeService'
 
-const AskPlatform = ({setCurrentPage}) => {
+const AskPlatform = () => {
 
   const [platforms, setPlatforms] = useState([
     {
@@ -44,6 +48,10 @@ const AskPlatform = ({setCurrentPage}) => {
     },
   ])
 
+  const loggedUser = useSelector((state) => state.redux.auth)
+  const dispatch = useDispatch()
+  const router = useRouter()
+
   const checkBoxStyles = 'h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500'
   
   const changeHandler = (e) => {
@@ -57,21 +65,42 @@ const AskPlatform = ({setCurrentPage}) => {
     }))
   }
   
-  const nextBtnHandler = (e, type) => {
+  const nextBtnHandler = async (e, type) => {
     e.preventDefault()
 
-    console.log(platforms, 'button clicked')
-    // let tempArry = []
-    // platforms.forEach(platform => {
-    //   if(platform.checked) {
-    //     tempArry.push(platform.name)
-    //   }
-    // })
-    // if(tempArry.length === 0) {
-    //   console.log('no platform selected')
-    //   return
-    // }
-    // setCurrentPage('askPlatformAddress')
+    let tempArry = []
+    await platforms.forEach(platform => {
+      if(platform.checked) {
+        let newData = {
+          name: platform.name,
+          href: platform.href
+        }
+        tempArry.push(newData)
+      }
+    })
+
+    if(tempArry.length === 0) {
+      return console.log('no platform selected')
+      // direct to introduction
+    }
+
+    dispatch(setIsLoadingTrue())
+
+    let sendingData = {
+      updatingUser: loggedUser,
+      platforms: tempArry
+    }
+
+    let updateRequest = await updateNewPlatform(sendingData)
+
+    if(updateRequest) {
+      dispatch(setForceAuthUpdate())
+      dispatch(setIsLoadingFalse())
+      return router.push('/account_update/platformAddress')
+    }
+
+    return dispatch(setIsLoadingFalse())
+
   }
   
   return (

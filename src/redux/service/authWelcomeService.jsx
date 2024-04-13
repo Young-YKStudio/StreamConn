@@ -61,3 +61,16 @@ export const updateIsUpdated = async (sendingData) => {
     return false
   }
 }
+
+export const updateNewPlatform = async (sendingData) => {
+  try {
+    const res = await axios.put('/api/auth/updatePlatform', sendingData)
+    if(res.status === 200) {
+      return true
+    }
+  } catch (err) {
+    toast.error(err.response.data.message)
+    return false
+  }
+  return true
+}
