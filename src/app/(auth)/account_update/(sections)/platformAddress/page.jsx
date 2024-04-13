@@ -1,6 +1,8 @@
+import AddStreamerAddress from "./addStreamerAddress";
+
 const WelcomePlatformAddress = () => {
   return (
-    <p>WelcomePlatformAddress</p>
+    <AddStreamerAddress />
   );
 }
 export default WelcomePlatformAddress;
