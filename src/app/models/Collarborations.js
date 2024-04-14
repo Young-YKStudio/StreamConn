@@ -4,13 +4,26 @@ const Schema = mongoose.Schema
 
 const collarborationSchema = new Schema(
   {
-    name: String,
-    
-    collarborationOwner: {
+    eventName: String,
+    eventOwner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       autopopulate: { select: 'nickname' }
     },
+    eventPlatforms: String,
+    streamingPlatforms: [],
+    eventTags: [],
+    eventDateStart: Date,
+    eventDateEnd: Date,
+    eventEntryDue: Date,
+    eventDescription: String,
+    eventImage: String,
+    collarboratedUsers: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      invitationStatus: String,
+      autopopulate: { select: 'nickname' }
+    }],
 
   }, { timestamps: true}
 )
