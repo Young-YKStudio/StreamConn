@@ -24,7 +24,7 @@ const collarborationSchema = new Schema(
       invitationStatus: String,
       autopopulate: { select: 'nickname' }
     }],
-
+    eventMaxNum: Number,
   }, { timestamps: true}
 )
 
