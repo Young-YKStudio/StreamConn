@@ -9,6 +9,11 @@ const channelSchema = new Schema(
         ref: 'Post'
       }],
 
+    collarborations: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Collarboration'
+    }],
+
     channelName: {
       type: String,
       required: true

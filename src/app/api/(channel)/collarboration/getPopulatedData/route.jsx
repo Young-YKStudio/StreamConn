@@ -7,8 +7,9 @@ import { NextResponse } from "next/server";
 
 export async function POST(req) {
 
-  const {channelId} = await req.json()
+  const receivedData = await req.json()
 
+  
   try { 
     await dbConnect()
   } catch (err) {
@@ -17,19 +18,10 @@ export async function POST(req) {
       {status: 500}
     )
   }
-
-  const foundChannel = await Channel.findOne({_id: channelId}).populate({
-    path: 'posts', model: Post,
-      populate: {
-        path: 'comments', model: Comment,
-        populate: {
-          path: 'userId', model: User
-        }
-      }  
-    // populate: {path: 'comments', model: Comment}
-  })
-
-  if(!foundChannel) {
+  
+  const foundChannelData = await Channel.findOne({_id: receivedData.data._id}).populate({path: 'channelOwner', model: User})
+  
+  if(!foundChannelData) {
     return NextResponse.json(
       {message: 'Channel not found'},
       {status: 404}
@@ -37,7 +29,7 @@ export async function POST(req) {
   }
     
   return NextResponse.json(
-    foundChannel,
+    foundChannelData,
     { status: 200 },
   )
 }

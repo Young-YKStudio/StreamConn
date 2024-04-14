@@ -3,10 +3,10 @@ import { Suspense } from "react";
 import Loading from "../../../loading";
 import axios from 'axios'
 
-const getPopulatedChannelData = async (id) => {
+const getPopulatedChannelData = async (channel) => {
 
   let sendingData = {
-    id: id
+    data: channel
   }
   try {
     let request = await axios.post(`${process.env.APP_URL}/api/collarboration/getPopulatedData`, sendingData) 
@@ -21,7 +21,7 @@ const getPopulatedChannelData = async (id) => {
 
 const Channel_Collaboration = async ({channel}) => {
 
-  let channelData = await getPopulatedChannelData(channel._id)
+  let channelData = await getPopulatedChannelData(channel)
 
   return (
     <Suspense fallback={<Loading />}>
