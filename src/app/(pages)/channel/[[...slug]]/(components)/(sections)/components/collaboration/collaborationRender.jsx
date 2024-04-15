@@ -7,6 +7,7 @@ import { NewPostCollarboration } from '@/redux/service/collarborationAddPost'
 import { useRouter } from 'next/navigation'
 import CollarbLeftList from './parts/collarbList'
 import AddCollarbButton from './parts/addCollarbButton'
+import AddCollarbModal from './parts/addCollarbModal'
 
 const CollaborationRender = ({channel}) => {
 
@@ -53,11 +54,12 @@ const CollaborationRender = ({channel}) => {
   }
 
   return (
-    <div className='flex flex-row flex-nowrap justify-start w-full h-full'>
+    <div className='flex flex-row flex-nowrap justify-start w-full h-full max-w-4xl'>
       <CollarbLeftList list={channel.collarborations} />
       <div className='w-full p-4'>
         {isLoggedAuthMod && <AddCollarbButton isEventAddModal={isEventAddModal} setIsEventAddModal={setIsEventAddModal} />}
         <p>right side?</p>
+        {isEventAddModal && <AddCollarbModal isEventAddModal={isEventAddModal} setIsEventAddModal={setIsEventAddModal} />}
       </div>
     </div>
   );

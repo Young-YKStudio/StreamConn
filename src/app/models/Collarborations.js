@@ -10,7 +10,7 @@ const collarborationSchema = new Schema(
       ref: 'User',
       autopopulate: { select: 'nickname' }
     },
-    eventPlatforms: String,
+    eventPlatforms: [],
     streamingPlatforms: [],
     eventTags: [],
     eventDateStart: Date,
