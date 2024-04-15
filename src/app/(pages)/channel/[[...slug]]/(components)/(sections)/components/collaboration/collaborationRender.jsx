@@ -1,18 +1,33 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { setIsLoadingTrue, setIsLoadingFalse } from '@/redux/slice'
 import { NewPostCollarboration } from '@/redux/service/collarborationAddPost'
 import { useRouter } from 'next/navigation'
+import CollarbLeftList from './parts/collarbList'
+import AddCollarbButton from './parts/addCollarbButton'
+import AddCollarbModal from './parts/addCollarbModal'
 
 const CollaborationRender = ({channel}) => {
 
   const [ inputtedText, setInputtedText ] = useState('')
+  const [ isLoggedAuthMod, setIsLoggedAuthMod ] = useState(false)
+  const [ isEventAddModal, setIsEventAddModal ] = useState(false)
 
   const router = useRouter()
   const dispatch = useDispatch()
   const loggedUser = useSelector((state) => state.redux.auth)
+
+  useEffect(() => {
+    // authConditions => if channel owner is loggedUser or loggedUser is one of the admins from channel owner's moderator array
+    if(loggedUser && channel) {
+      if(loggedUser._id === channel.channelOwner._id){
+        return setIsLoggedAuthMod(true)
+      }
+    }
+  }, [loggedUser, channel])
+
 
 
   const inputChangeHandler = (e) => {
@@ -39,20 +54,12 @@ const CollaborationRender = ({channel}) => {
   }
 
   return (
-    <div>
-      <div>
-        {channel && channel.posts.map((post) => {
-          return <div
-            key={'colloaboration post' + post._id}
-          >
-            {post.body}
-          </div>
-        })}
-      </div>
-
-      <div>
-        <input type='text' value={inputtedText} onChange={inputChangeHandler} className='text-slate-800' />
-        <button onClick={submitHandler}>submit</button>
+    <div className='flex flex-row flex-nowrap justify-start w-full h-full max-w-4xl'>
+      <CollarbLeftList list={channel.collarborations} />
+      <div className='w-full p-4'>
+        {isLoggedAuthMod && <AddCollarbButton isEventAddModal={isEventAddModal} setIsEventAddModal={setIsEventAddModal} />}
+        <p>right side?</p>
+        {isEventAddModal && <AddCollarbModal isEventAddModal={isEventAddModal} setIsEventAddModal={setIsEventAddModal} />}
       </div>
     </div>
   );

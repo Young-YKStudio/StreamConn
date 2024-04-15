@@ -46,8 +46,8 @@ const StreamerCards = ({loggedUser, streamer}) => {
 
     if(followRequest) {
       dispatch(setIsLoadingFalse())
-      console.log( 'at card success')
-      return window.location.reload()
+      dispatch(setForceAuthUpdate())
+      return router.refresh()
     }
 
     return dispatch(setIsLoadingFalse())
@@ -65,8 +65,8 @@ const StreamerCards = ({loggedUser, streamer}) => {
 
     if(unfollowRequest) {
       dispatch(setIsLoadingFalse())
-      console.log( 'at card success')
-      return window.location.reload()
+      dispatch(setForceAuthUpdate())
+      return router.refresh()
     }
 
     return dispatch(setIsLoadingFalse())
@@ -74,9 +74,8 @@ const StreamerCards = ({loggedUser, streamer}) => {
 
   const followButtonDistributor = (streamer) => {
     if(loggedUser) {
-      let followedStreamer = loggedUser.follows.find((streamer) => streamer._id === loggedUser._id)
-      // 이게 잘못 된것 같은데...
-      // let foundFollow = await streamer.followers.find((follow) => follow._id === loggedUser._id)
+      let followedStreamer = loggedUser.follows.find((follow) => follow._id === streamer._id)
+
       if(followedStreamer) {
         return <button onClick={(e) => unfollowButtonHandler(e, streamer)} className="text-xs bg-white/20 px-2 py-1 rounded-md hover:bg-sky-900">unfollow</button>
       }

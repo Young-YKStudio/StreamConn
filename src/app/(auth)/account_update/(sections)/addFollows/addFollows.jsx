@@ -1,25 +1,23 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { blueButtonDarkOutlined, bluebuttonDark } from '@/app/components/buttons/buttonStyles';
-import axios from 'axios';
-import { useState, useEffect } from 'react'
-import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
+import { bluebuttonDark } from '@/app/components/buttons/buttonStyles';
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSelector, useDispatch } from 'react-redux'
-import { setIsLoadingTrue, setIsLoadingFalse } from '@/redux/slice';
+import { setIsLoadingTrue, setIsLoadingFalse, setForceAuthUpdate } from '@/redux/slice';
 import StreamerCards from './streamerCards';
+import { updateIsUpdated } from '@/redux/service/authWelcomeService';
 
-const AddFollowsRender = () => {
+const AddFollowsRender = ({allStreamers}) => {
 
   const [ searchField, setSearchField ] = useState('')
   const [ matchedStreamers, setMatchedStreamers ] = useState([])
-  const [ favoritedStreamers, setFavoritedStreamers ] = useState([])
 
   const loggedUser = useSelector((state) => state.redux.auth)
-  const allStreamers = useSelector((state) => state.redux.allStreamers)
 
   const router = useRouter()
+  const dispatch = useDispatch()
 
   const changeHandler = (e) => {
     setSearchField(e.target.value)
@@ -36,71 +34,28 @@ const AddFollowsRender = () => {
     }
   }
 
-  const addFavoriteBtnHandler = (e, id) => {
-    let duplicate = favoritedStreamers.find(streamer => streamer.id === id)
-    if(duplicate) {
-      return
-    } else {
-      setFavoritedStreamers((prev) => [...prev, id])
-    }
-  }
-
-  const removeFavoriteBtnHandler = (e, id) => {
-    setFavoritedStreamers(favoritedStreamers.filter(streamer => streamer !== id))
-  }
-
-  const foundStreamersDistributor = (streamer) => {
-
-    let foundStreamer = favoritedStreamers.find(favoritedStreamer => favoritedStreamer === streamer._id)
-    
-    if (foundStreamer) {
-      return <button onClick={e => removeFavoriteBtnHandler(e, streamer._id)} className='flex flex-row px-2 border border-sky-800 items-center text-sky-800 py-1 gap-2 rounded-md text-sm'><MdFavorite className='w-5 h-5 text-sky-500' />followed</button>
-    } else {
-      return <button onClick={e => addFavoriteBtnHandler(e, streamer._id)} className='flex flex-row px-2 border border-sky-800 bg-sky-800 items-center text-white py-1 gap-2 rounded-md text-sm'><MdFavoriteBorder className='w-5 h-5 text-sky-500' />follow</button>
-    }
-  }
-
-
-  const submitHandler = (e, type) => {
+  const submitHandler = async (e) => {
     e.preventDefault()
-
-    let skippedUser = async () => {
-      try {
-        let response = await axios.put(`/api/updateFavSkip/${user._id}`)
-        if(response.status == 200) {
-          router.push('/')
-        }
-      } catch (err) {
-        console.log(err)
-      }
+    if(loggedUser.isStreamer) {
+      // route to the next step
+      return router.push('/account_update/platforms')
     }
 
-    let favAddedUser = async () => {
-      let sendingData = {
-        follows: favoritedStreamers
-      }
+    dispatch(setIsLoadingTrue())
 
-      try {
-        let response = await axios.put(`/api/updateFavUser/${user._id}`, sendingData)
-
-        if(response.status == 200) {
-          router.push('/')
-        }
-      } catch (err) {
-        console.log(err)
-      }
+    let finishRequest = {
+      userId: loggedUser._id,
     }
 
-    if(type === 'skip') {
-      return skippedUser()
+    let finishSettingRequest = await updateIsUpdated(finishRequest)
+
+    if(finishSettingRequest) {
+      dispatch(setIsLoadingFalse())
+      dispatch(setForceAuthUpdate())
+      return router.push('/')
     }
-    if(type === 'favAdded') {
-      if(favoritedStreamers.length > 0) {
-        return favAddedUser()
-      } else {
-        return skippedUser()
-      }
-    }
+
+    dispatch(setIsLoadingFalse())
   }
 
   return (
@@ -132,7 +87,7 @@ const AddFollowsRender = () => {
               animate={{opacity: 1}}
               transition={{duration: 0.2}}
             >
-              <p className='block text-sm font-semibold border-b border-white/40 border-0.5 pb-1'>Found Streamers</p>
+              <p className='block text-sm font-semibold border-b border-white/40 border-0.5 pb-1 mt-2'>Found Streamers</p>
 
               <div className='flex flex-col pb-2 max-h-64 divide-y divide-white/40 gap-1'>
                 {matchedStreamers.map((streamer) => (
@@ -148,7 +103,7 @@ const AddFollowsRender = () => {
         <div className='flex flex-row items-center gap-4'>
           <button
             className={bluebuttonDark + ' mt-2'}
-            onClick={(e) => submitHandler(e, 'favAdded')}
+            onClick={submitHandler}
             >
             Next
           </button>

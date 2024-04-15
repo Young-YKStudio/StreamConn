@@ -4,9 +4,11 @@ import { bluebuttonDark } from '@/app/components/buttons/buttonStyles';
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react';
 import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
 
 const Introduction = ({user, setCurrentPage}) => {
 
+  const loggedUser = useSelector((state) => state.redux.auth)
   const router = useRouter()
   const { session, status } = useSession()
 
@@ -14,7 +16,8 @@ const Introduction = ({user, setCurrentPage}) => {
     if(status==='unauthenticated') {
       return router.push('/')
     }
-  },[status])
+  },[status, loggedUser])
+
   
   return (
     <motion.section
