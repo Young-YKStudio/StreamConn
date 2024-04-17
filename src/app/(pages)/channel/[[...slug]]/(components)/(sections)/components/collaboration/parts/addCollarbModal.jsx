@@ -2,22 +2,32 @@ import { Dialog, Transition, Switch } from '@headlessui/react'
 import { motion } from 'framer-motion'
 import { Fragment, useState } from 'react';
 import { MdClose } from 'react-icons/md'
+import { formatInTimeZone, fromZonedTime } from 'date-fns-tz'
+import { isBefore } from 'date-fns';
+import { toast } from 'react-hot-toast'
+import { useSelector } from 'react-redux'
 
 const AddCollarbModal = ({isEventAddModal, setIsEventAddModal}) => {
 
   const [ submitEventData, setSubmitEventData ] = useState({
     eventName: '',
     eventPlatforms: [], // games, web address, etc
-    streamingPlatforms: [], // twitch, youtube, etc
-    eventTags: [],
-    eventDate: '',
     eventDescription: '',
     collarboratedUsers: [],
+    invitationAllowance: '',
     eventImage: '',
     eventMaxNum: 1
   })
+  const [ eventTags, setEventTags ] = useState([])
+  const [ streamingPlatforms, setStreamingPlatforms ] = useState([])
+  const [ tagInput, setTagInput ] = useState('')
+  const [ eventStart, setEventStart ] = useState('')
+  const [ eventEnd, setEventEnd ] = useState('')
+  const [ streamerSearch, setStreamerSearch ] = useState('')
 
-  const { eventName, eventPlatforms, streamingPlatforms, eventTags, eventDate, eventDescription, collarboratedUsers, eventImage, eventMaxNum } = submitEventData
+  const { eventName, eventPlatforms, eventDescription, collarboratedUsers, eventImage, eventMaxNum } = submitEventData
+
+  const allStreamers = useSelector((state) => state.redux.allStreamers)
 
   const eventNameChangeHandler = (e) => {
     setSubmitEventData((prev) => ({
@@ -26,6 +36,55 @@ const AddCollarbModal = ({isEventAddModal, setIsEventAddModal}) => {
     }))
   }
 
+  const tagInputChangeHandler = (e) => {
+    setTagInput(e.target.value)
+  }
+
+  const tagAddButtonHandler = (e) => {
+    if(tagInput === '') {
+      return 
+    }
+
+    let duplicatedInput = eventTags.find((tag) => tag === tagInput)
+
+    if(duplicatedInput) {
+      return 
+    }
+
+    setEventTags((prev) => ([
+      ...prev,
+      tagInput
+    ]))
+
+    return setTagInput('')
+  }
+
+  const removeTagHandler = (e, tagInput) => {
+    setEventTags(eventTags.filter((tag) =>  tag !== tagInput))
+  }
+
+  const datePickerChangeHandler = (e) => {
+    if(e.target.name === 'eventStart') {
+      return setEventStart(e.target.value)
+    }
+    if(e.target.name === 'eventEnd') {
+      return setEventEnd(e.target.value)
+    }
+  }
+
+  const streamerSearchChangeHandler = (e) => {
+    setStreamerSearch(e.target.value)
+  }
+
+  const now = new Date()
+  const currentzone = Intl.DateTimeFormat().resolvedOptions().timeZone
+  const currentTime = formatInTimeZone(now, currentzone, 'yyyy-MM-dd HH:mm:ss')
+  const utcTime = fromZonedTime(currentTime) // validates utc time for upload purposes
+  const convertedTime = formatInTimeZone(utcTime, 'America/Los_Angeles', 'yyyy-MM-dd HH:mm:ss')
+
+  // console.log(now, 'now', currentTime, 'zone', utcTime, 'utc time', convertedTime, 'converted')
+
+  console.log(allStreamers)
   return (
     <Transition.Root show={isEventAddModal} as={Fragment}>
       <Dialog as='div' className='relative z-20' onClose={setIsEventAddModal}>
@@ -60,19 +119,81 @@ const AddCollarbModal = ({isEventAddModal, setIsEventAddModal}) => {
                   <button className='absolute right-6 top-6 text-gray-400 hover:text-white ' onClick={(e) => setIsEventAddModal(false)}><MdClose className='w-6 h-6'/></button>
 
                   {/* Modal Contents */}
-                  <div className="flex flex-col w-full gap-4">
+                  <div className="flex flex-col w-full gap-4 max-h-96">
                     {/* Title */}
                     <div>
                       <p className='font-bold text-lg'>Create Collarboration Event</p>
                     </div>
 
                     {/* eventName */}
+                    <div>
+                      <div className='flex flex-col gap-1'>
+                        <div>
+                          <p className='text-xs'>Collarboration Event Name</p>
+                        </div>
+                        <input type='text' value={eventName} onChange={(e) => eventNameChangeHandler(e)} className='text-slate-600 w-full text-xs rounded-lg focus:ring-0 ring-0' placeholder='enter event name'/>
+                      </div>
+                    </div>
+
+                    {/* tags */}
                     <div className='flex flex-col gap-1'>
                       <div>
-                        <p className='text-xs'>Collarboration Name</p>
+                        <p className='text-xs'>Tags <span className='italic text-slate-400'>(enter related words)</span></p>
                       </div>
-                      <input type='text' value={eventName} onChange={(e) => eventNameChangeHandler(e)} className='text-slate-600 w-full text-xs rounded-lg focus:ring-0 ring-0'/>
+                      <div className='flex flex-row flex-nowrap'>
+                        <input 
+                          type='text' value={tagInput} onChange={tagInputChangeHandler} className='text-slate-600 w-full text-xs rounded-l-lg focus:ring-0 ring-0' 
+                          placeholder='enter tags'
+                        />
+                        <button onClick={tagAddButtonHandler} className='w-24 text-xs px-2 bg-sky-800 rounded-r-lg hover:bg-sky-900'>Add Tag</button>
+                      </div>
+                      <div>
+                        {eventTags.length === 0 ?
+                          <p className='text-xs text-center'>No tags added</p>
+                        :
+                          <div className='text-xs flex flex-row gap-2 flex-wrap'>
+                            {eventTags.map((tag) => (
+                              <div 
+                                key={tag + 'tagKey'}
+                                className='flex flex-row flex-nowrap px-2 py-1 bg-sky-900 rounded-full items-center gap-1'
+                              >
+                                <p>{tag}</p>
+                                <button
+                                  className='p-0.5 bg-white/10 rounded-full hover:bg-white/30'
+                                  onClick={(e) => removeTagHandler(e, tag)}
+                                >
+                                  <MdClose className='w-3 h-3'/>
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        }
+                      </div>
                     </div>
+
+                    {/* event date and time */}
+                    <div className='flex flex-col gap-2'>
+                      <div className='flex flex-row flex-nowrap items-center justify-between w-full gap-2'>
+                        <p className='text-xs'>Event starts : </p>
+                        <input type='datetime-local' name='eventStart' value={eventStart} onChange={datePickerChangeHandler} className='text-slate-800 text-xs rounded-lg w-2/3' />
+                      </div>
+                      <div className='flex flex-row flex-nowrap items-center justify-between w-full gap-2'>
+                        <p className='text-xs'>Event ends : </p>
+                        <input type='datetime-local' name='eventEnd' value={eventEnd} onChange={datePickerChangeHandler} className='text-slate-800 text-xs rounded-lg w-2/3' />
+                      </div>
+                    </div>
+
+                    {/* collarborating streamers */}
+                    <div className='flex flex-col gap-2'>
+                      <div>
+                        <p className='text-xs'>Collarborating Streamers</p>
+                      </div>
+                      <input type='text' value={streamerSearch} onChange={streamerSearchChangeHandler} className='text-slate-600 w-full text-xs rounded-lg focus:ring-0 ring-0' placeholder='search streamers and send invitations'/>
+
+                    </div>
+
+                    {/* submit button */}
+                    <button className='w-full bg-sky-800 py-2 rounded-lg hover:bg-sky-900'>Create Event</button>
 
                   </div>
                 </motion.div>
