@@ -25,6 +25,11 @@ const collarborationSchema = new Schema(
       autopopulate: { select: 'nickname' }
     }],
     eventMaxNum: Number,
+    isPrivate: false,
+    channel: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Channel',
+    }
   }, { timestamps: true}
 )
 

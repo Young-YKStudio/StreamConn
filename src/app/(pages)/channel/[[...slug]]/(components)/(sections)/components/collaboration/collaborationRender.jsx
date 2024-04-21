@@ -59,7 +59,7 @@ const CollaborationRender = ({channel}) => {
       <div className='w-full p-4'>
         {isLoggedAuthMod && <AddCollarbButton isEventAddModal={isEventAddModal} setIsEventAddModal={setIsEventAddModal} />}
         <p>right side?</p>
-        {isEventAddModal && <AddCollarbModal isEventAddModal={isEventAddModal} setIsEventAddModal={setIsEventAddModal} />}
+        {isEventAddModal && <AddCollarbModal isEventAddModal={isEventAddModal} setIsEventAddModal={setIsEventAddModal} loggedUser={loggedUser} channelOwner={channel.channelOwner._id} />}
       </div>
     </div>
   );
