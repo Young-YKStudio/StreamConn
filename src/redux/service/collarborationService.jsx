@@ -4,19 +4,12 @@ import { isBefore } from 'date-fns'
 import { formatInTimeZone, fromZonedTime } from 'date-fns-tz'
 
 export const CreateCollarborationEvent = async (data) => {
-  console.log(data, 'at service')
-
-  const { eventDateEnd, eventDateStart, eventDescription, eventName, eventOwner, eventTags } = data
 
   const now = new Date()
 
   const validation = (data) => {
     if(data.eventName === '') {
       toast.error('Please provide a event name')
-      return false
-    }
-    if(data.eventTags.length === 0) {
-      toast.error('Please provide at leat one event tag')
       return false
     }
     if(data.eventDateStart === '') {
@@ -70,12 +63,14 @@ export const CreateCollarborationEvent = async (data) => {
   const formattedData = {
     eventName: data.eventName,
     eventOwner: data.eventOwner,
-    eventTags: data.eventTags,
     eventDateStart: uploadingTime(data.eventDateStart),
     eventDateEnd: uploadingTime(data.eventDateEnd),
     eventDescription: data.eventDescription,
-    isPrivate: data.isPrivate
+    isPrivate: data.isPrivate,
+    channel: data.channel
   }
+
+  // console.log(formattedData)
 
   try {
     const res = await axios.post('/api/collarboration/createNewEvent', formattedData)
@@ -83,7 +78,7 @@ export const CreateCollarborationEvent = async (data) => {
       return true
     }
   } catch (err) {
-    console.log(err)
+    toast.error(err.response.data.message)
     return false
   }
 } 

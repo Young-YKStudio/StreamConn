@@ -66,3 +66,6 @@ const userSchema = new Schema(
 
 const User = mongoose.models.User || mongoose.model("User", userSchema)
 export default User
+
+// intro profile nickname password, password reset - account settings
+// blocked users, moderatoers, connects, follow - security options

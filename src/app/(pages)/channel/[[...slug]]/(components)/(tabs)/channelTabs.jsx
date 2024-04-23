@@ -16,7 +16,7 @@ const ChannelTabs = ({channelOwner, channelName}) => {
   const router = useRouter()
 
   const selectChangeHandler = (e, string) => {
-    router.push(`/channel/${string}/${channelOwner._id}`)
+    router.push(`/channel/${string}/${channelOwner.nickname}`)
   }
   
   const tabButtonHandler = (e, string) => {
@@ -55,7 +55,7 @@ const ChannelTabs = ({channelOwner, channelName}) => {
         >
           {channelTypeButtonIcons(tabType)}{tabType} {tabOpen === tabType ? <MdKeyboardArrowUp className='w-5 h-5'/> : <MdKeyboardArrowDown className='w-5 h-5' />}
         </button>
-        {tabOpen === tabType && <ChannelListsPopUp tabType={tabType} channels={channels}/>}
+        {tabOpen === tabType && <ChannelListsPopUp tabType={tabType} channels={channels} channelOwner={channelOwner}/>}
       </div>
     )
   }
@@ -90,7 +90,7 @@ const ChannelTabs = ({channelOwner, channelName}) => {
         <div className="flex flex-wrap gap-4">
           <button
             className='rounded-md px-3 py-1.5 font-medium bg-sky-950 hover:bg-sky-800 flex flex-row gap-2 items-center'
-            onClick={(e) => router.push(`/channel/home/${channelOwner._id}`)}
+            onClick={(e) => router.push(`/channel/home/${channelOwner.nickname}`)}
             >
             <MdHome className="w-5 h-5"/>Home
           </button>

@@ -18,7 +18,7 @@ const DynamicChannelPage = async ({params}) => {
   
   let sendingData = {
     channel: params.slug[0],
-    channelOwner: params.slug[1],
+    channelOwnerNickname: params.slug[1],
   }
 
   const channelData = await getCurrentChannel(sendingData)
