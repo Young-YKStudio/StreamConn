@@ -28,12 +28,14 @@ const DynamicChannelPage = async ({params}) => {
       {/* sidebar here */}
       <ChannelSideBar />
       <Suspense fallback={<Loading />}>
-        <div className="w-full flex flex-col items-center">
-          <div className='w-full flex flex-col items-center bg-white/10 pt-24 pb-4 px-4'>
-            <ChannelProfileBackGround channelOwner={channelData.channelOwner} channel={sendingData.channel}/>
+        <div className="w-full flex flex-col items-center scrollbar-track-sky-950 scrollbar-thumb-white/40">
+          <div className='overflow-auto scrollbar-thin w-full h-full flex flex-col items-center'>
+            <div className='w-full flex flex-col items-center bg-white/10 pt-24 pb-4 px-4'>
+              <ChannelProfileBackGround channelOwner={channelData.channelOwner} channel={sendingData.channel}/>
+            </div>
+            <ChannelTabs channelOwner={channelData.channelOwner} channelName={sendingData.channel}/>
+            <ChannelSectionLanding channelName={sendingData.channel} channelData={channelData} channel={sendingData.channel} channelOwnerNickname={sendingData.channelOwnerNickname} />
           </div>
-          <ChannelTabs channelOwner={channelData.channelOwner} channelName={sendingData.channel}/>
-          <ChannelSectionLanding channelName={sendingData.channel} channelData={channelData}/>
         </div>
       </Suspense>
     </div>
