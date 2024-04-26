@@ -56,8 +56,8 @@ const LandingSideBarLogged = () => {
     setHoveredFollow()
   }
 
-  const userClickHandler = (id) => {
-    router.push(`/channel/home/${id}`)
+  const userClickHandler = (nickname) => {
+    router.push(`/channel/home/${nickname}`)
   }
 
   return (
@@ -84,7 +84,7 @@ const LandingSideBarLogged = () => {
                 className='flex flex-row flex-nowrap items-center px-1.5 py-1.5 gap-2 hover:bg-sky-950 hover:cursor-pointer rounded-md relative'
                 onMouseEnter={() => onHoverFollowHandler(follow._id)}
                 onMouseLeave={() => offHoverFollowHandler()}
-                onClick={() => userClickHandler(follow._id)}
+                onClick={() => userClickHandler(follow.nickname)}
               >
                 {/* Icons */}
                 {follow.profile ?
@@ -137,7 +137,7 @@ const LandingSideBarLogged = () => {
               className="flex flex-row flex-nowrap items-center px-1.5 py-1.5 gap-2 hover:bg-sky-950 hover:cursor-pointer rounded-md relative"
               onMouseEnter={() => onHoverStreamerHandler(streamer._id)}
               onMouseLeave={() => offHoverStreamerHandler()}
-              onClick={() => userClickHandler(streamer._id)}
+              onClick={() => userClickHandler(streamer.nickname)}
             >
 
               {/* Icons */}

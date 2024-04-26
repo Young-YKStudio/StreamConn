@@ -3,7 +3,16 @@ import Channel_Collaboration from "./components/collaboration/Channel_Collaborat
 import ChannelParticipation from "./components/participation/Channel_Participation";
 import Channel_Text from "./components/text/Channel_Text";
 
-const ChannelSectionLanding = ({channelName, channelData}) => {
+const ChannelSectionLanding = ({channelName, channelData, channel, channelOwnerNickname}) => {
+  
+  if(channel==='collaboration') {
+    return <Channel_Collaboration channelOwnerNickname={channelOwnerNickname} />
+  }
+
+  if(channel==='participation') {
+    return <ChannelParticipation channelOwnerNickname={channelOwnerNickname} />
+  }
+
 
   let foundChannel = channelData.channelOwner.channels.find(ch => ch.channelName === channelName)
 
@@ -15,12 +24,7 @@ const ChannelSectionLanding = ({channelName, channelData}) => {
     return <Channel_Text channel={foundChannel} />
   }
 
-  if(foundChannel.channelType === 'Collaboration') {
-    return <Channel_Collaboration channel={foundChannel}/>
-  }
-
-  if(foundChannel.channelType === 'Participation') {
-    return <ChannelParticipation />
-  }
+  return <p>not found</p>
+  // TODO: render not found section
 }
 export default ChannelSectionLanding;

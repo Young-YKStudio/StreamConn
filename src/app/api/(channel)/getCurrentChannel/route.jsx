@@ -9,9 +9,9 @@ export const POST = async (req) => {
   const submittedData = await req.json()
 
   
-  const { channel, channelOwner } = submittedData
+  const { channel, channelOwnerNickname } = submittedData
   
-  if(!channel || !channelOwner) {
+  if(!channel || !channelOwnerNickname) {
     return NextResponse.json(
       {message: 'please provide channel and channelOwner'},
       {status: 400}
@@ -27,7 +27,7 @@ export const POST = async (req) => {
     )
   }
       
-  const foundChannelOwner = await User.findOne({_id: channelOwner}).populate('blockedUsers').populate({path: 'channels', model: Channel})
+  const foundChannelOwner = await User.findOne({nickname: channelOwnerNickname}).populate('blockedUsers').populate({path: 'channels', model: Channel})
 
   if(!foundChannelOwner) {
     return NextResponse.json(

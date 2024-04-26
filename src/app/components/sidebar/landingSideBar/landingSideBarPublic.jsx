@@ -34,8 +34,8 @@ const LandingSideBarPublic = () => {
     setHoveredStreamer()
   }
 
-  const userClickHandler = (e, id) => {
-    router.push(`/channel/home/${id}`)
+  const userClickHandler = (e, nickname) => {
+    router.push(`/channel/home/${nickname}`)
   }
 
   if(displayigStreamers) {
@@ -57,7 +57,7 @@ const LandingSideBarPublic = () => {
                 className="flex flex-row flex-nowrap items-center px-1.5 py-1.5 gap-2 hover:bg-sky-950 hover:cursor-pointer rounded-md relative"
                 onMouseEnter={() => onHoverHandler(streamer._id)}
                 onMouseLeave={() => offHoverHandler()}
-                onClick={(e) => userClickHandler(e, streamer._id)}
+                onClick={(e) => userClickHandler(e, streamer.nickname)}
               >
                 {/* Icons */}
                 {streamer.profile ?
