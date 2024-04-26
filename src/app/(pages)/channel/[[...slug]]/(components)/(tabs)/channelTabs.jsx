@@ -16,7 +16,7 @@ const ChannelTabs = ({channelOwner, channelName}) => {
   const router = useRouter()
 
   const selectChangeHandler = (e, string) => {
-    router.push(`/channel/${string}/${channelOwner._id}`)
+    router.push(`/channel/${string}/${channelOwner.nickname}`)
   }
   
   const tabButtonHandler = (e, string) => {
@@ -43,21 +43,53 @@ const ChannelTabs = ({channelOwner, channelName}) => {
     return setTabOpen(tabType)
   }
 
+  const collaborationButtonHandler = (e) => {
+    return router.push(`/channel/collaboration/${channelOwner.nickname}`)
+  }
+
+  const participationButtonHandler = (e) => {
+    return router.push(`/channel/participation/${channelOwner.nickname}`)
+  }
+
+  
   const tabButtonDistributor = (tabType, channels, state) => {
-    return (
-      <div 
-        className='relative'
+
+    if(tabType === 'Text') {
+      return (
+        <div 
+          className='relative'
+          key={tabType + 'tabtypes'}
+        >
+          <button 
+            onClick={(e) => tabOpenChanger(e, tabType, state)}
+            className={channelTypeButtonStyles(tabType, state)}
+          >
+            {channelTypeButtonIcons(tabType)}{tabType} {tabOpen === tabType ? <MdKeyboardArrowUp className='w-5 h-5'/> : <MdKeyboardArrowDown className='w-5 h-5' />}
+          </button>
+          {tabOpen === tabType && <ChannelListsPopUp tabType={tabType} channels={channels} channelOwner={channelOwner}/>}
+        </div>
+      )
+    }
+
+    if(tabType === 'Collaboration') {
+      return <button
+        className={channelTypeButtonStyles(tabType, state)}
+        onClick={collaborationButtonHandler}
         key={tabType + 'tabtypes'}
       >
-        <button 
-          onClick={(e) => tabOpenChanger(e, tabType, state)}
-          className={channelTypeButtonStyles(tabType, state)}
-        >
-          {channelTypeButtonIcons(tabType)}{tabType} {tabOpen === tabType ? <MdKeyboardArrowUp className='w-5 h-5'/> : <MdKeyboardArrowDown className='w-5 h-5' />}
-        </button>
-        {tabOpen === tabType && <ChannelListsPopUp tabType={tabType} channels={channels}/>}
-      </div>
-    )
+        {channelTypeButtonIcons(tabType)} {tabType}
+      </button>
+    }
+
+    if(tabType === 'Participation') {
+      return <button
+        className={channelTypeButtonStyles(tabType, state)}
+        onClick={participationButtonHandler}
+        key={tabType + 'tabtypes'}
+      >
+        {channelTypeButtonIcons(tabType)} {tabType}
+      </button>
+    }
   }
   
   return (
@@ -90,56 +122,13 @@ const ChannelTabs = ({channelOwner, channelName}) => {
         <div className="flex flex-wrap gap-4">
           <button
             className='rounded-md px-3 py-1.5 font-medium bg-sky-950 hover:bg-sky-800 flex flex-row gap-2 items-center'
-            onClick={(e) => router.push(`/channel/home/${channelOwner._id}`)}
+            onClick={(e) => router.push(`/channel/home/${channelOwner.nickname}`)}
             >
             <MdHome className="w-5 h-5"/>Home
           </button>
           {tabTypes.length > 0 && tabTypes.map((tab) => (
             tabButtonDistributor(tab, channelOwner.channels, tabOpen)
-            // <button
-            // key={tab + 'tabtypes'}
-            // className={tabButtonStyles(channelName, tab)}
-            // onClick={(e) => router.push(`/channel/${tab}/${channelOwner._id}`)}
-            // >
-            //   {tab}
-            // </button>
           ))}
-          {/* {channelOwner.channels.map((tab) => {
-            if(tab.channelType === 'Text') {
-              return (
-                <button
-                  key={tab.channelName + 'tabsWide'}
-                  className={tabButtonStyles(channelName, tab.channelName)}
-                  onClick={e => tabButtonHandler(e, tab.channelName)}
-                >
-                  <FaHashtag className="w-4 h-4"/> {tab.channelName}
-                </button>
-              )
-            }
-            if(tab.channelType === 'Collaboration') {
-              return (
-                <button
-                  key={tab.channelName + 'tabsWide'}
-                  className={tabButtonStyles(channelName, tab.channelName)}
-                  onClick={e => tabButtonHandler(e, tab.channelName)}
-                >
-                  <MdPeopleAlt className="w-5 h-5"/> {tab.channelName}
-                </button>
-              )
-            }
-            if(tab.channelType === 'Participation') {
-              return (
-                <button
-                  key={tab.channelName + 'tabsWide'}
-                  className={tabButtonStyles(channelName, tab.channelName)}
-                  onClick={e => tabButtonHandler(e, tab.channelName)}
-                >
-                  <MdCoPresent className="w-5 h-5 mr-1"/> {tab.channelName}
-                </button>
-              )
-            }
-          }
-          )} */}
         </div>
         
         <div>

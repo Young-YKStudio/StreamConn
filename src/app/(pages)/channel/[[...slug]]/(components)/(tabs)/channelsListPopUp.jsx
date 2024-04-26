@@ -1,9 +1,8 @@
 import Link from "next/link"
 
-const ChannelListsPopUp = ({tabType, channels}) => {
+const ChannelListsPopUp = ({tabType, channels, channelOwner}) => {
   
   let currentChannel
-  
 
   if(channels) {
     if(channels.length > 0) {
@@ -19,7 +18,7 @@ const ChannelListsPopUp = ({tabType, channels}) => {
         <div className="flex flex-row flex-wrap gap-2 px-2 max-h-[15em] overflow-auto scrollbar-thin">
           {currentChannel.map(channel => (
             <Link 
-              href={`/channel/${channel.channelName}/${channel.channelOwner}`}
+              href={`/channel/${channel.channelName}/${channelOwner.nickname}`}
               key={channel.channelName + tabType + ' key'}
               className="px-4 py-1 hover:bg-sky-950 rounded-md truncate w-full"
             >

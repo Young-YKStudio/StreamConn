@@ -12,7 +12,10 @@ const collarborationSchema = new Schema(
     },
     eventPlatforms: [],
     streamingPlatforms: [],
-    eventTags: [],
+    eventTags: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'EventTags',
+    }],
     eventDateStart: Date,
     eventDateEnd: Date,
     eventEntryDue: Date,
@@ -21,10 +24,17 @@ const collarborationSchema = new Schema(
     collarboratedUsers: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      invitationStatus: String,
       autopopulate: { select: 'nickname' }
     }],
     eventMaxNum: Number,
+    isPrivate: {
+      type: Boolean,
+      default: false
+    },
+    channel: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Channel',
+    }
   }, { timestamps: true}
 )
 
@@ -32,3 +42,7 @@ collarborationSchema.plugin(require('mongoose-autopopulate'))
 
 const Collarboration = mongoose.models.Collarboration || mongoose.model('Collarboration', collarborationSchema)
 export default Collarboration
+
+// for creation : eventName,  eventDateStart, eventDateEnd, eventDescription, isPrivate
+// for addingCollaborationMember : collarbaratedUsers, eventMaxNum
+// for finish setting: eventPlatforms, streamingPlatforms, eventImage, event Tags,
