@@ -28,13 +28,13 @@ const AuthLinksPopUp = () => {
       animate={{ opacity: 1 }}
       transition={{duration: 0.2}}
     >
-      {/* account setting */}
+      {/* settings */}
       <Link 
-        href="/accountSetting"
+        href="/settings/profile"
         className='flex gap-1 items-center px-2 py-1.5 rounded-md hover:bg-sky-950'
       >
         <MdSettings className='w-4 h-4' />
-        Account Settings
+        Settings
       </Link>
 
       {/* logoutButton */}
