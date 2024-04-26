@@ -8,7 +8,7 @@ const getAllPosts = async (channelId) => {
     channelId: channelId,
   }
 
-  const response = await axios.post(`${process.env.APP_URL}/api/collarboration/getPopulatedData`, requestData)
+  const response = await axios.post(`${process.env.APP_URL}/api/text/getPopulatedData`, requestData)
   if (response.status == 200) {
     return response.data
   } else {

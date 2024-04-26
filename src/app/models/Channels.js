@@ -5,9 +5,9 @@ const Schema = mongoose.Schema
 const channelSchema = new Schema(
   {
     posts: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Post'
-      }],
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Post'
+    }],
 
     collarborations: [{
       type: mongoose.Schema.Types.ObjectId,

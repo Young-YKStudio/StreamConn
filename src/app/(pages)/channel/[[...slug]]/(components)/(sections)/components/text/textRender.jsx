@@ -6,11 +6,9 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setIsLoadingTrue, setIsLoadingFalse } from '@/redux/slice'
 import { useRouter, redirect } from 'next/navigation'
 import { MdOutlineAddCircle } from 'react-icons/md'
+import { addPost, editPost, deletePost, addComment, editComment, deleteComment } from '@/redux/service/textCRUDPost'
 
 const TextRender = ({channel}) => {
-
-  console.log(channel, 'at front')
-
   const router = useRouter()
   const dispatch = useDispatch()
   const loggedUser = useSelector((state) => state.redux.auth)
@@ -102,13 +100,13 @@ const TextRender = ({channel}) => {
   const deletePostHandler = async (e, channelId, postId) => {
     dispatch(setIsLoadingTrue())
 
-    let data = { 
+    let deletePostData = { 
       channelId: channelId,
       postId: postId, 
     }
 
     const requestToDelete = async () => {
-      const response = await axios.put('/api/deletePost', data)
+      const response = await deletePost(deletePostData)
       if (response.status === 200) {
         setMode('addPost')
         setAllPosts(response.data)
@@ -172,13 +170,13 @@ const TextRender = ({channel}) => {
   const deleteCommentHandler = async (e, postId, commentId) => {
     dispatch(setIsLoadingTrue())
 
-    let data = { 
+    let deleteCommentData = { 
       postId: postId, 
       commentId: commentId,
     }
 
     const requestToDelete = async () => {
-      const response = await axios.put('/api/deleteComment', data)
+      const response = await deleteComment(deleteCommentData)
       if (response.status === 200) {
         setMode('addPost')
         setAllPosts(response.data)
@@ -212,7 +210,8 @@ const TextRender = ({channel}) => {
       } 
 
       try {
-        const response = await axios.post('/api/addPost', addPostData)
+        const response = await addPost(addPostData)
+
         if (response.status === 200) {
           setMode('addPost')
           setAllPosts(response.data)
@@ -237,7 +236,7 @@ const TextRender = ({channel}) => {
       }
 
       try {
-        const response = await axios.post('/api/addComment', addCommentData)
+        const response = await addComment(addCommentData)
         if (response.status === 200) {
           setMode('addPost')
           setAllPosts(response.data)
@@ -262,7 +261,7 @@ const TextRender = ({channel}) => {
       } 
 
       try {
-        const response = await axios.put('/api/editPost', editPostData)
+        const response = await editPost(editPostData)
         if ( response.status === 200) {
           setMode('addPost')
           setAllPosts(response.data)
@@ -287,7 +286,7 @@ const TextRender = ({channel}) => {
       }
 
       try {
-        const response = await axios.put('/api/editComment', editCommentData)
+        const response = await editComment(editCommentData)
         if (response.status === 200) {
           setMode('addPost')
           setAllPosts(response.data)
@@ -337,10 +336,10 @@ const TextRender = ({channel}) => {
       <div>
         { channel && channel.posts.map((post) => {
           return (
-            <div key={post._id}>
+            <div key={ post._id }>
               <div className='flex flex-row'>
                 <div className='w-full flex gap-3'>
-                  {post.body}
+                  { post.body }
                   { loggedUser ? 
                       <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={ (e) => replyPostHandler(e, post._id) }>Reply</button>
                     :
@@ -358,15 +357,15 @@ const TextRender = ({channel}) => {
                   }
                 </div>
                 <div className='flex justify-end'>
-                  {post.postOwner.nickname}
+                  { post.postOwner.nickname }
                 </div>
               </div>
               <div>
-                { post && post.comments.map((comment) => (
-                  <div key={comment._id} className='bg-white text-slate-900 w-full'>
+                { post.comments.map((comment) => (
+                  <div key={ comment._id } className='bg-white text-slate-900 w-full'>
                     <div className="flex flex-row">
                       <div className='w-full flex gap-3'>
-                        {comment.body}
+                        { comment.body }
                         { (loggedUser && ((comment.commentOwner._id == loggedUser._id))) ?
                             <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={ (e) => editCommentHandler(e, post._id, comment._id) }>Edit</button>
                           :
