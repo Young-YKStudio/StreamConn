@@ -39,7 +39,10 @@ const userSchema = new Schema(
         href: String,
       }
     ],
-    nickname: String,
+    nickname: {
+      type: String,
+      unique: true,
+    },
     blockedUsers: [
       {
         type: mongoose.Schema.Types.ObjectId,
