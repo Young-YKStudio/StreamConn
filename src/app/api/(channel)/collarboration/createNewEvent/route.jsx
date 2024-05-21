@@ -9,8 +9,6 @@ export async function POST(req) {
 
   const { eventName, eventOwner, eventDateStart, eventDateEnd, eventDescription, isPrivate, channel, eventChannel } = receivedData;
 
-  console.log(receivedData)
-
   try {
     await dbConnect()
   } catch (err) {
