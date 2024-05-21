@@ -7,7 +7,7 @@ import Channel from '@/app/models/Channels';
 export async function POST(req) {
   const receivedData = await req.json()
 
-  const { eventName, eventOwner, eventDateStart, eventDateEnd, eventDescription, isPrivate, channel } = receivedData;
+  const { eventName, eventOwner, eventDateStart, eventDateEnd, eventDescription, isPrivate, channel, eventChannel } = receivedData;
 
   try {
     await dbConnect()
@@ -27,9 +27,9 @@ export async function POST(req) {
     )
   }
 
-  const foundChannel = await Channel.findOne({_id: channel._id})
+  const foundEventChannel = await Channel.findOne({_id: eventChannel._id})
 
-  if(!foundChannel) {
+  if(!foundEventChannel) {
     return NextResponse.json(
       {message: 'Error at connecting to the channel. Please try again later.'},
       {status: 404}
@@ -43,7 +43,7 @@ export async function POST(req) {
     eventDateEnd: eventDateEnd,
     eventDescription: eventDescription,
     isPrivate: isPrivate,
-    channel: foundChannel
+    channel: foundEventChannel
   })
 
   if(!createdCollarborationEvent) {
@@ -53,10 +53,10 @@ export async function POST(req) {
     )
   }
 
-  foundChannel.collarborations.push(createdCollarborationEvent)
+  foundEventChannel.collarborations.push(createdCollarborationEvent)
 
   try {
-    await foundChannel.save()
+    await foundEventChannel.save()
   } catch (err) {
     return NextResponse.json(
       {message: 'Error at creating the collarboration event. Please try again.'},
