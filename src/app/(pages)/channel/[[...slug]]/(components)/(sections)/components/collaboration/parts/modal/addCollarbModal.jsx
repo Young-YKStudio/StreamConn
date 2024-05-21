@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux'
 import { setIsLoadingTrue, setIsLoadingFalse } from '@/redux/slice';
 import { useRouter } from 'next/navigation'
 
-const AddCollarbModal = ({isEventAddModal, setIsEventAddModal, channel, channelOwner}) => {
+const AddCollarbModal = ({isEventAddModal, setIsEventAddModal, channel, channelOwner, addCollaborationChannel}) => {
 
   const [ submitEventData, setSubmitEventData ] = useState({
     eventName: '',
@@ -36,33 +36,6 @@ const AddCollarbModal = ({isEventAddModal, setIsEventAddModal, channel, channelO
       [e.target.name]: e.target.value
     }))
   }
-
-  // const tagInputChangeHandler = (e) => {
-  //   setTagInput(e.target.value)
-  // }
-
-  // const tagAddButtonHandler = (e) => {
-  //   if(tagInput === '') {
-  //     return 
-  //   }
-
-  //   let duplicatedInput = eventTags.find((tag) => tag === tagInput)
-
-  //   if(duplicatedInput) {
-  //     return 
-  //   }
-
-  //   setEventTags((prev) => ([
-  //     ...prev,
-  //     tagInput
-  //   ]))
-
-  //   return setTagInput('')
-  // }
-
-  // const removeTagHandler = (e, tagInput) => {
-  //   setEventTags(eventTags.filter((tag) =>  tag !== tagInput))
-  // }
 
   const datePickerChangeHandler = (e) => {
     if(e.target.name === 'eventStart') {
@@ -95,6 +68,7 @@ const AddCollarbModal = ({isEventAddModal, setIsEventAddModal, channel, channelO
       eventDateStart: eventStart,
       eventDateEnd: eventEnd,
       eventDescription: eventDescription,
+      eventChannel: addCollaborationChannel,
       isPrivate: invitationOnly,
       channel: channel
     }
@@ -109,14 +83,6 @@ const AddCollarbModal = ({isEventAddModal, setIsEventAddModal, channel, channelO
 
     return dispatch(setIsLoadingFalse())
   }
-
-
-
-  // const now = new Date()
-  // const currentzone = Intl.DateTimeFormat().resolvedOptions().timeZone
-  // const currentTime = formatInTimeZone(now, currentzone, 'yyyy-MM-dd HH:mm:ss')
-  // const utcTime = fromZonedTime(currentTime) // validates utc time for upload purposes
-  // const convertedTime = formatInTimeZone(utcTime, 'America/Los_Angeles', 'yyyy-MM-dd HH:mm:ss')
 
   return (
     <Transition.Root show={isEventAddModal} as={Fragment}>
@@ -156,6 +122,7 @@ const AddCollarbModal = ({isEventAddModal, setIsEventAddModal, channel, channelO
                     {/* Title */}
                     <div className='px-4'>
                       <p className='font-bold text-lg'>Create Collarboration Event</p>
+                      <p className='text-sm font-bold text-sky-500'>{addCollaborationChannel.channelName}</p>
                     </div>
 
                     <div className='scrollbar-track-sky-950 scrollbar-thumb-white/40'>

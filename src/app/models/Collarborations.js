@@ -34,6 +34,10 @@ const collarborationSchema = new Schema(
     channel: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Channel',
+    },
+    eventStatus: {
+      type: String,
+      default: 'pending'
     }
   }, { timestamps: true}
 )

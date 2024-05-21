@@ -11,6 +11,7 @@ const initialState = {
   isLoading: false,
   allStreamers: [],
   forceAuthUpdate: false,
+  IGDB_Token: undefined,
 }
 
 // slice
@@ -52,7 +53,10 @@ export const slice = createSlice({
     },
     setForceAuthUpdate: (state) => {
       state.forceAuthUpdate = !state.forceAuthUpdate
-    }
+    },
+    setIGDBTokenRedux: (state, action) => {
+      state.IGDB_Token = action.payload
+    },
   }
   })
 
@@ -64,6 +68,7 @@ export const {
   setInitialAllStreamersUpdate,
   setAllStreamersUpdate,
   setForceAuthUpdate,
+  setIGDBTokenRedux
 } = slice.actions
 
 export default slice.reducer

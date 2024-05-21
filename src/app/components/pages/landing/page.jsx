@@ -1,22 +1,9 @@
-'use client'
-import { useSession } from 'next-auth/react'
+import LandingRender from './landingRender'
 
-
-// pages
-import LandingSideBarPublic from '../../sidebar/landingSideBar/landingSideBarPublic'
-import LandingSideBarLogged from '../../sidebar/landingSideBar/landingSideBarLogged'
-import FeaturedStreamers from './featuredStreamers/featuredStremers'
-
-const LandingRender = () => {
-
-  let session = useSession()
-
+const LandingServer = () => {
 
   return (
-    <div className='flex flex-row flex-nowrap h-full'>
-      { session.status === 'authenticated' ? <LandingSideBarLogged /> : <LandingSideBarPublic /> }
-      <FeaturedStreamers />
-    </div>
+    <LandingRender />
   );
 }
-export default LandingRender;
+export default LandingServer;

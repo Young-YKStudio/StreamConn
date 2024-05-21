@@ -13,6 +13,7 @@
     "@reduxjs/toolkit": "^2.2.2",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.12",
+    "apicalypse": "^0.2.0",
     "axios": "^1.6.4",
     "bcryptjs": "^2.4.3",
     "date-fns": "^3.6.0",

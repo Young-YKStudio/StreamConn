@@ -67,10 +67,9 @@ export const CreateCollarborationEvent = async (data) => {
     eventDateEnd: uploadingTime(data.eventDateEnd),
     eventDescription: data.eventDescription,
     isPrivate: data.isPrivate,
-    channel: data.channel
+    channel: data.channel,
+    eventChannel: data.eventChannel
   }
-
-  // console.log(formattedData)
 
   try {
     const res = await axios.post('/api/collarboration/createNewEvent', formattedData)
