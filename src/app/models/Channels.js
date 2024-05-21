@@ -24,6 +24,11 @@ const channelSchema = new Schema(
       ref: 'User'
     },
 
+    channelModerators: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    }],
+
     isPrivate: {
       type: Boolean,
       default: false
