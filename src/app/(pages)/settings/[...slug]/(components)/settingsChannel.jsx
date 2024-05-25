@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
 import { getAllModerators, addModerator, removeModerator } from '@/redux/service/settingsService'
 import { toast } from 'react-hot-toast'
+import { useRouter } from 'next/navigation'
 
 const SettingsChannel = ({ currentLoggedUser }) => {
   const [ inputText, setInputText ] = useState('')
   const [ moderators, setModerators ] = useState([])
+
+  const router = useRouter()
 
   useEffect(() => {
     if (currentLoggedUser) {
@@ -46,6 +49,8 @@ const SettingsChannel = ({ currentLoggedUser }) => {
       const response = await addModerator(userData)
       if (response.status === 200) {
         console.log('ADD:', response.data)
+        setModerators(response.data.moderators)
+        return router.refresh()
       }
     } catch (error) {
       console.log(error, 'at api addPost call')
@@ -61,7 +66,9 @@ const SettingsChannel = ({ currentLoggedUser }) => {
     try {
       const response = await removeModerator(userData)
         if (response.status === 200) {
-        console.log('DEL:', response.data._id)
+        console.log('DEL:', response.data)
+        setModerators(response.data.moderators)
+        return router.refresh()
       }
     } catch (error) {
       console.log(error, 'at api addPost call')
