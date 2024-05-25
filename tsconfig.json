@@ -38,7 +38,7 @@
     "**/*.js",
     "*.js",
     "**/*.jsx"
-, "src/app/api/(auth)/auth/[...nextauth]/route.js"  ],
+, "src/app/api/(auth)/auth/[...nextauth]/route.js", "src/app/api/(settings)/addModerator"  ],
   "exclude": [
     "node_modules"
   ]

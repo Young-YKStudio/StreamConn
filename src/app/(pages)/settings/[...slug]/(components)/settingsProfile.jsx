@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Switch } from '@headlessui/react'
 
-const Profile = () => {
+const SettingsProfile = () => {
   const [enabled, setEnabled] = useState(false)
 
   return (
@@ -52,4 +52,4 @@ const Profile = () => {
 //     </div>
 //   );
 }
-export default Profile;
+export default SettingsProfile;

@@ -52,7 +52,7 @@ const userSchema = new Schema(
     moderators: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
       }
     ],
     channels: [

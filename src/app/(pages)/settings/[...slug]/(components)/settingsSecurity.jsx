@@ -1,5 +1,5 @@
 
-const Security = () => {
+const SettingsSecurity = () => {
 
   return (
     <div>
@@ -15,4 +15,4 @@ const Security = () => {
     </div>
   );
 }
-export default Security;
+export default SettingsSecurity;
