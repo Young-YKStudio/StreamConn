@@ -1,8 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { toast } from 'react-hot-toast'
-import { signOut, signIn } from 'next-auth/react'
-import { redirect } from 'next/navigation'
-import axios from 'axios'
 
 // redux state -- immutable object
 const initialState = {

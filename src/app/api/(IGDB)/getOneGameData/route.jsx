@@ -1,9 +1,12 @@
 import axios from 'axios'
-import IGDBToken from '@/app/models/IGDBData'
 import { NextResponse } from 'next/server'
 import dbConnect from '@/app/util/DBConnect'
+import IGDBToken from '@/app/models/IGDBData'
+
 
 export async function POST(req) {
+  
+  const { slug, gameId } = await req.json()
 
   try {
     await dbConnect()
@@ -14,12 +17,13 @@ export async function POST(req) {
     )
   }
 
+
   let clientId = process.env.TWITCH_DEV_CLIENT
   let clientSecret = process.env.TWITCH_DEV_SEC
   let savedTokenId = '664df7330da56a70404db2cb'
-
-  let foundToken = await IGDBToken.findById(savedTokenId)
   
+  let foundToken = await IGDBToken.findById(savedTokenId)
+
   if(!foundToken) {
     return NextResponse.json(
       {message: 'No token found'},
@@ -37,23 +41,20 @@ export async function POST(req) {
     },
   }
 
-  const newReleasesBody = "fields cover.*,slug,name; sort release_dates desc; limit 12;"
-  const topRatedBody = "fields cover.*,slug,name; sort rating_count desc; limit 12;"
-  
-  let IGDBNewReleases
-  let IGDBTopRated
+  const sendingBody = `fields *; where id = ${gameId};`
+
+  let IGDBSearchedGame
   let renewedTokenData
   let renewedToken
 
-
   try {
-    IGDBNewReleases = await axios.post(`https://api.igdb.com/v4/games`, newReleasesBody, config)
-    IGDBTopRated = await axios.post(`https://api.igdb.com/v4/games`, topRatedBody, config)
-
+    IGDBSearchedGame = await axios.post(`https://api.igdb.com/v4/games`, sendingBody, config)
   } catch (err) {
+    console.log('error from IGDB', err)
     if(err.response.status === 401) {
-      IGDBNewReleases = 'token expired'
+      IGDBSearchedGame = 'token expired'
     }
+
     if(err.response.status !== 401) {
       return NextResponse.json(
         {message: 'server error from IGDB'},
@@ -62,7 +63,7 @@ export async function POST(req) {
     }
   }
 
-  if(IGDBNewReleases === 'token expired') {
+  if(IGDBSearchedGame === 'token expired') {
     try {
       renewedTokenData = await axios.post(`https://id.twitch.tv/oauth2/token?client_id=${clientId}&client_secret=${clientSecret}&grant_type=client_credentials`)
     } catch (err) {
@@ -75,10 +76,10 @@ export async function POST(req) {
     renewedToken = renewedTokenData.data.access_token
 
     try {
-      await IGDBToken.findByIdAndUpdate(savedTokenId, {token: renewedToken})
+      await IGDBToken.findByIdAndUpdate(savedTokenId, { token: renewedToken })
     } catch (err) {
       return NextResponse.json(
-        {message: 'error at saving renewed token from IGDB in MongoDB'},
+        {message: 'server error from updating token in database'},
         {status: 408}
       )
     }
@@ -88,13 +89,11 @@ export async function POST(req) {
         'Client-ID': clientId,
         'Authorization': `Bearer ${renewedToken}`,
         'Content-Type': "text/plain"
-      },
+      }
     }
 
     try {
-      IGDBNewReleases = await axios.post(`https://api.igdb.com/v4/games`, newReleasesBody, newConfig)
-      IGDBTopRated = await axios.post(`https://api.igdb.com/v4/games`, topRatedBody, newConfig)
-
+      IGDBSearchedGame = await axios.post(`https://api.igdb.com/v4/games`, sendingBody, newConfig)
     } catch (err) {
       return NextResponse.json(
         {message: 'server error from IGDB'},
@@ -104,7 +103,7 @@ export async function POST(req) {
   }
 
   return NextResponse.json(
-    {newReleases: IGDBNewReleases.data, topRated: IGDBTopRated.data},
-    {status: 200}
+    { searchedGame: IGDBSearchedGame.data },
+    { status: 200 }
   )
 }
