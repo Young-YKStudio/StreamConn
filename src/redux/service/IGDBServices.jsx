@@ -68,10 +68,14 @@ export const initialMongoEntry = async (token) => {
 }
 
 export const getOneGame = async (gameSlug, gameId) => {
-  console.log(gameSlug, gameId, 'at service')
 
   try {
     const res = await axios.post(`/api/getOneGameData`, { slug: gameSlug, gameId: gameId })
+    if(res.status === 200) {
+      console.log(res.data.searchedGame[0])
+      return res.data.searchedGame[0]
+
+    }
     console.log(res, 'at service')
   } catch (err) {
     console.log(err)

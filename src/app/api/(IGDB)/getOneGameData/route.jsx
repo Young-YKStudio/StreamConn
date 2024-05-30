@@ -41,7 +41,7 @@ export async function POST(req) {
     },
   }
 
-  const sendingBody = `fields *; where id = ${gameId};`
+  const sendingBody = `fields cover.*,genres.name,name,summary,platforms.name,similar_games.*; where id = ${gameId};`
 
   let IGDBSearchedGame
   let renewedTokenData
@@ -50,7 +50,6 @@ export async function POST(req) {
   try {
     IGDBSearchedGame = await axios.post(`https://api.igdb.com/v4/games`, sendingBody, config)
   } catch (err) {
-    console.log('error from IGDB', err)
     if(err.response.status === 401) {
       IGDBSearchedGame = 'token expired'
     }
