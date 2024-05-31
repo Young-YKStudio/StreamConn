@@ -1,9 +1,48 @@
 import { Dialog, Transition, Switch } from '@headlessui/react'
 import { motion } from 'framer-motion'
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { MdClose, MdLock } from 'react-icons/md'
+import { searchGame } from '@/redux/service/IGDBServices'
 
 const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal}) => {
+
+  const [ searchGameInput, setSearchGameInput ] = useState('')
+  const [ isSearchResult, setIsSearchResult ] = useState(false)
+  const [ searchResult, setSearchResult ] = useState()
+  const [ selectedGame, setSelectedGame ] = useState([])
+
+  const searchHandler = (e) => {
+    if(searchGameInput === '') {
+      setIsSearchResult(false)
+    }
+    setSearchGameInput(e.target.value)
+  }
+
+  const selectGameHandler = (e, game) => {
+    setSelectedGame((prev) => [
+      ...prev,
+      game
+    ])
+    setSearchGameInput('')
+    setIsSearchResult(false)
+  }
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(async () => {
+      if(searchGameInput !== '') {
+        setIsSearchResult(true)
+        const request = await searchGame(searchGameInput)
+        if(request) {
+          console.log(request, 'at useEffect')
+          setSearchResult(request)
+        }
+      }
+      if(searchGameInput === '') {
+        setIsSearchResult(false)
+      }
+    }, 500)
+    return () => clearTimeout(delayDebounce)
+  }, [searchGameInput])
 
   // Platforms
   // streamingPlatforms
@@ -57,6 +96,46 @@ const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal}) => {
                     <div className='scrollbar-track-sky-950 scrollbar-thumb-white/40'>
                       <div className='overflow-auto scrollbar-thin max-h-96 flex flex-col gap-4 px-4'>
                         {/* eventName */}
+                        <div>
+                          <input 
+                            type='text'
+                            className='w-full rounded-lg text-slate-800 text-sm'
+                            placeholder='search' 
+                            onChange={(e) => searchHandler(e)}
+                            value={searchGameInput}
+                          />
+                          {selectedGame.length > 0 && <div>
+                            {selectedGame.map((game) => {
+                              return <div key={game.id + 'selectedGame'}>{game.name}</div>
+                            })}
+                          </div>
+                          }
+                          {isSearchResult && (
+                            <div className='flex flex-col gap-2 p-2 bg-white/20 mt-2 rounded-lg'>
+                              {searchResult && searchResult.map((result) => {
+                                return (
+                                  <div
+                                    key={result.id + 'result games'}
+                                    className='flex flex-row gap-2 items-center text-sm hover:bg-sky-900/80 hover:cursor-pointer p-2 rounded-lg'
+                                    onClick={(e) => selectGameHandler(e, result)}
+                                  >
+                                    <div
+                                      className='w-[9%] aspect-[3/4]'
+                                    >
+                                      {
+                                        result.cover &&
+                                        <img src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${result.cover.image_id}.jpg`} />
+                                      }
+                                    </div>
+                                    <div>
+                                      <p>{result.name}</p>
+                                    </div>
+                                  </div>
+                                )
+                              })}
+                            </div>
+                          )}
+                        </div>
 
 
                         {/* submit button */}
