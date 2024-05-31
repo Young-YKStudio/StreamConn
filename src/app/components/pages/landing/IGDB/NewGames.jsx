@@ -1,22 +1,31 @@
+import { useRouter } from 'next/navigation'
+import { motion } from 'framer-motion'
 
 const IGDBNewGames = ({newReleases}) => {
 
-  const buttonClickHandler = (e, slug) => {
-    console.log(slug)
+  const router = useRouter()
+
+  const buttonClickHandler = (e, slug, id) => {
+    router.push(`/games/${slug}?id=${id}`)
   }
 
   return (
-    <div>
+    <div className='px-8'>
       <p className="text-white">New Releases</p>
       {newReleases && <div
-        className="flex flex-wrap justify-center"
+        className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2"
       >
         {newReleases.map((game) => {
           return <div key={game.id}>
-            {game.cover && <div>
-              <img src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover.image_id}.jpg`} alt={game.cover.image_id} />
-              <button onClick={(e) => buttonClickHandler(e, game.slug)}>Temp Click</button>
-            </div>}
+            {game.cover && <motion.div
+              onClick={(e) => buttonClickHandler(e, game.slug, game.id)}
+              className='hover:cursor-pointer rounded-lg aspect-[3/4] bg-white bg-center bg-cover'
+              style={{backgroundImage: `url(https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover.image_id}.jpg)`}}
+              initial={{scale: 0.98, opacity: 0.75}}
+              whileHover={{scale: 1.05, opacity: 1}}
+              transition={{duration: 0.1}}
+            >
+            </motion.div>}
           </div>
         })}
         </div>

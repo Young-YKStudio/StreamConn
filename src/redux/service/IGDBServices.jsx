@@ -74,9 +74,24 @@ export const getOneGame = async (gameSlug, gameId) => {
     if(res.status === 200) {
       console.log(res.data.searchedGame[0])
       return res.data.searchedGame[0]
-
     }
-    console.log(res, 'at service')
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export const searchGame = async (input) => {
+  console.log(input, 'at service')
+  let sendingData = {
+    input: input
+  }
+
+  try {
+    const res = await axios.post(`/api/searchIGDB`, sendingData)
+    if(res.status === 200) {
+      console.log(res.data, 'at service')
+      return res.data.searchedGame
+    }
   } catch (err) {
     console.log(err)
   }

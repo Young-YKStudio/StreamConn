@@ -43,27 +43,29 @@ const GamePageClient = ({gameSlug}) => {
             <div className='w-full p-2 py-4 flex flex-col gap-2'>
               <p className='text-3xl font-bold'>{receivedIGDBGameData.name}</p>
               <div className='flex flex-row gap-2'>
-                {receivedIGDBGameData.genres.map((genre) => {
+                {receivedIGDBGameData.genres && receivedIGDBGameData.genres.map((genre) => {
                   return <p key={genre.id + ' game genres'} className='bg-white/40 py-1 px-2 text-xs rounded-full flex items-center justify-center'>{genre.name}</p>
                 })}
               </div>
               <div>
-                <div className='flex flex-col gap-1'>
-                  <p className='text-sm font-bold'>Similar games</p>
-                  <div className='flex flex-row gap-2 flex-wrap'>
-                    {
-                      receivedIGDBGameData.similar_games.map((game) => {
-                        return <div 
-                          key={game.id + ' similar games'} 
-                          className='hover:cursor-pointer bg-sky-800/40 rounded-full py-0.5 px-1 hover:bg-sky-600/40'
-                          onClick={(e) => similarGamesLinkHandler(e, game.slug, game.id)}
-                        >
-                          <p className='text-xs py-1 px-2 rounded-full flex items-center justify-center'>{game.name}</p>
-                        </div>
-                      })
-                    }
+                {receivedIGDBGameData.similar_games &&
+                  <div className='flex flex-col gap-1'>
+                    <p className='text-sm font-bold'>Similar games</p>
+                    <div className='flex flex-row gap-2 flex-wrap'>
+                      {
+                        receivedIGDBGameData.similar_games.map((game) => {
+                          return <div 
+                            key={game.id + ' similar games'} 
+                            className='hover:cursor-pointer bg-sky-800/40 rounded-full py-0.5 px-1 hover:bg-sky-600/40'
+                            onClick={(e) => similarGamesLinkHandler(e, game.slug, game.id)}
+                          >
+                            <p className='text-xs py-1 px-2 rounded-full flex items-center justify-center'>{game.name}</p>
+                          </div>
+                        })
+                      }
+                    </div>
                   </div>
-                </div>
+                }
               </div>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import { useRouter } from 'next/navigation'
+import { motion } from 'framer-motion'
 
 const IGDBTopRated = ({topRated}) => {
 
@@ -9,19 +10,22 @@ const IGDBTopRated = ({topRated}) => {
   }
 
   return (
-    <div>
+    <div className='px-8'>
       <p className="text-white">Top Rated</p>
       {topRated && <div
-        className="grid grid-cols-4 gap-2"
+        className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2"
       >
         {topRated.map((game) => {
           return <div key={game.id}>
-            {game.cover && <div
+            {game.cover && <motion.div
               onClick={(e) => gameImageClickHandler(e, game.slug, game.id)}
-              className="hover:cursor-pointer"
+              className="hover:cursor-pointer rounded-lg aspect-[3/4] bg-white bg-center bg-cover"
+              style={{backgroundImage: `url(https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover.image_id}.jpg)`}}
+              initial={{scale: 0.98, opacity: 0.75}}
+              whileHover={{scale: 1.05, opacity: 1}}
+              transition={{duration: 0.1}}
             >
-              <img src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${game.cover.image_id}.jpg`} alt={game.cover.image_id} />
-            </div>}
+            </motion.div>}
           </div>
         })}
         </div>

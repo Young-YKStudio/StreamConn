@@ -47,10 +47,12 @@ const LandingRender = () => {
   return (
     <div className='flex flex-row flex-nowrap h-full'>
       { session.status === 'authenticated' ? <LandingSideBarLogged /> : <LandingSideBarPublic /> }
-      <div>
-        <FeaturedStreamers />
-        <IGDBTopRated topRated={topRated} />
-        <IGDBNewGames newReleases={newReleases} />
+      <div className='w-full h-full flex flex-col scrollbar-track-sky-950  scrollbar-thumb-white/40'>
+        <div className='overflow-auto scrollbar-thin w-full h-full'>
+          <FeaturedStreamers />
+          <IGDBTopRated topRated={topRated} />
+          <IGDBNewGames newReleases={newReleases} />
+        </div>
       </div>
     </div>
   );
