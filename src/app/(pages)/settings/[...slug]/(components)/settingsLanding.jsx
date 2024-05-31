@@ -3,6 +3,7 @@
 import SettingsProfile from './settingsProfile'
 import SettingsSecurity from './settingsSecurity'
 import SettingsChannel from './settingsChannel'
+import SettingsTeam from './settingsTeam'
 import { useSelector } from 'react-redux'
 
 const SettingsLanding = ({ settingsMenu }) => {
@@ -14,6 +15,8 @@ const SettingsLanding = ({ settingsMenu }) => {
     return <SettingsSecurity />
   } else if (settingsMenu == 'channel') {
     return <SettingsChannel currentLoggedUser={ currentLoggedUser } />
+  } else if (settingsMenu == 'team') {
+    return <SettingsTeam currentLoggedUser={ currentLoggedUser } />
   }
 }
 export default SettingsLanding
