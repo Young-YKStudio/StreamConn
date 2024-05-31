@@ -10,6 +10,7 @@ const Settings = async ({params}) => {
         <a href="/settings/profile" className="border rounded hover:bg-red-300">Profile</a>
         <a href="/settings/security" className="border rounded hover:bg-red-300">Security</a>
         <a href="/settings/channel" className="border rounded hover:bg-red-300">Channel</a>
+        <a href="/settings/team" className="border rounded hover:bg-red-300">Team</a>
       </div>
       <SettingsLanding settingsMenu={selectedMenu} />
     </div>

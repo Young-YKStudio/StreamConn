@@ -3,7 +3,7 @@ import { getAllModerators, addModerator, removeModerator } from '@/redux/service
 import { toast } from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 
-const SettingsChannel = ({ currentLoggedUser }) => {
+const SettingsTeam = ({ currentLoggedUser }) => {
   const [ inputText, setInputText ] = useState('')
   const [ moderators, setModerators ] = useState([])
 
@@ -76,16 +76,16 @@ const SettingsChannel = ({ currentLoggedUser }) => {
   return (
     <div>
       <div className="border border-solid border-white rounded-md">
-        <p>Channel settings</p>
+        <p>Team settings</p>
         <div className='flex gap-3'>
-        <p>Add a new channel moderator:</p>
+        <p>Add a new team moderator:</p>
           <input type='text' value={inputText} onChange={(e) => setInputText(e.target.value)} className='bg-transparent focus:ring-0 focus:outline-none text-xs'/>
           <button className='rounded-md bg-blue-400 hover:bg-red-700' onClick={(e) => addHandler(inputText) }>Add</button>
         </div>
       </div>
       <div>
         {<div>
-          My channel moderators:
+          My team moderators:
           { moderators && moderators.map((mod) => { 
             return (
               <div key={mod._id} className='flex gap-3'>
@@ -99,4 +99,4 @@ const SettingsChannel = ({ currentLoggedUser }) => {
     </div>
   );
 }
-export default SettingsChannel;
+export default SettingsTeam;

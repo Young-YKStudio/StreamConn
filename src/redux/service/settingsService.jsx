@@ -6,7 +6,6 @@ export const getAllModerators = async (data) => {
   try {
     let res = await axios.post('/api/getAllModerators', data)
     if (res.status === 200) {
-      console.log('ALL:', res)
       return res
     }
   } catch (err) {
