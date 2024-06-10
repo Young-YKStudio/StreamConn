@@ -63,6 +63,12 @@ const userSchema = new Schema(
     ],
     connects: [
       {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+    ],
+    uploadedFiles: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Upload'
+      }
     ]
   },{timestamps: true}
 )
