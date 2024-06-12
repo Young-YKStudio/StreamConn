@@ -17,7 +17,6 @@ export async function POST(req) {
     )
   }
 
-
   const foundLoggedUser = await User.findOne({nickname: loggedUser.nickname})
 
   if(!foundLoggedUser) {
@@ -60,8 +59,6 @@ export async function POST(req) {
       {status: 503}
     )
   }
-
-
 
   return NextResponse.json(
     createdUpload,

@@ -10,6 +10,8 @@ const ChannelHomePage = ({foundUser}) => {
   const dispatch = useDispatch()
   const loggedUser = useSelector(state => state.redux.auth)
 
+  const [ uploadQueue, SetUploadQueue ] = useState([])
+
   const testButtonHandler = (e) => {
   }
 

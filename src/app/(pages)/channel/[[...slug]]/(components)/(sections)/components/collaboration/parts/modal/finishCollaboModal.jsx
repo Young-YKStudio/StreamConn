@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { Fragment, useState, useEffect } from 'react';
 import { MdClose, MdLock } from 'react-icons/md'
 import { searchGame } from '@/redux/service/IGDBServices'
+import { MdOutlineCircle, MdOutlineCheckCircleOutline } from "react-icons/md";
 
 const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal}) => {
 
@@ -10,6 +11,32 @@ const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal}) => {
   const [ isSearchResult, setIsSearchResult ] = useState(false)
   const [ searchResult, setSearchResult ] = useState()
   const [ selectedGame, setSelectedGame ] = useState([])
+  const [ platforms, setPlatforms ] = useState([])
+
+  const platformSelections = [
+    {
+      name: 'YouTube',
+      // icons: 
+    },
+    {
+      name: 'Twitch',
+    },
+    {
+      name: 'Kick',
+    },
+  ]
+
+  const platformClickHandler = (e, list) => {
+    setPlatforms((prev) => [
+     ...prev,
+      list.name
+    ])
+  }
+
+  const platformRemoveHandler = (e, list) => {
+    setPlatforms(platforms.filter((platform) => platform !== list.name))
+  }
+
 
   const searchHandler = (e) => {
     if(searchGameInput === '') {
@@ -43,6 +70,10 @@ const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal}) => {
     }, 500)
     return () => clearTimeout(delayDebounce)
   }, [searchGameInput])
+
+  useEffect(() => {
+    return () => console.log(platforms, 'at useEffect')
+  },[platforms])
 
   // Platforms
   // streamingPlatforms
@@ -135,6 +166,43 @@ const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal}) => {
                               })}
                             </div>
                           )}
+                        </div>
+
+                        {/* streaming platforms */}
+                        <div>
+                          <p className='text-xs'>Please choose the platforms for this event</p>
+                          {platformSelections.map((list) => {
+                            let addedPlatform = platforms.find((platform) => platform.includes(list.name))
+                            if(addedPlatform) {
+                              return (
+                                <div 
+                                  className='flex flex-row items-center gap-1'
+                                  key={list.name + 'added platform'}
+                                  onClick={(e) => platformRemoveHandler(e, list)}
+                                >
+                                  <MdOutlineCheckCircleOutline />
+                                  <p>{list.name}</p>
+                                </div>
+                              )
+                            }
+                            return (
+                              <div 
+                                className='flex flex-row items-center gap-1'
+                                onClick={(e) => platformClickHandler(e, list)}
+                                key={list.name + ' platform  options'}
+                              >
+                                <MdOutlineCircle />
+                                <p>{list.name}</p>
+                              </div>
+                            ) 
+                            })
+                          }
+                        </div>
+
+                        {/* upload images? */}
+
+                        <div>
+                          <p>upload image drop zone display</p>
                         </div>
 
 
