@@ -4,6 +4,7 @@ import { Fragment, useState, useEffect } from 'react';
 import { MdClose, MdLock } from 'react-icons/md'
 import { searchGame } from '@/redux/service/IGDBServices'
 import { MdOutlineCircle, MdOutlineCheckCircleOutline } from "react-icons/md";
+import { searchCollarboUser } from '@/redux/service/collarborationService'
 
 const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal}) => {
 
@@ -12,6 +13,10 @@ const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal}) => {
   const [ searchResult, setSearchResult ] = useState()
   const [ selectedGame, setSelectedGame ] = useState([])
   const [ platforms, setPlatforms ] = useState([])
+  const [ tagInput, setTagInput ] = useState('')
+  const [ inputtedTags, setInputtedTags ] = useState([])
+  const [ invitationInput, setInvitationInput ] = useState('')
+  const [ foundCollarboratedUser, setFoundCollarboratedUser ] = useState([])
 
   const platformSelections = [
     {
@@ -45,6 +50,22 @@ const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal}) => {
     setSearchGameInput(e.target.value)
   }
 
+  const addTagHandler = (e) => {
+    setInputtedTags((prev) => [
+    ...prev,
+      tagInput
+    ])
+    setTagInput('')
+  }
+
+  const removeTagHandler = (e, tag) => {
+    setInputtedTags(inputtedTags.filter((t) => t!== tag))
+  }
+
+  const removeGameHandler = (e, game) => {
+    setSelectedGame(selectedGame.filter((selected) => selected.name !== game))
+  }
+
   const selectGameHandler = (e, game) => {
     setSelectedGame((prev) => [
       ...prev,
@@ -72,15 +93,23 @@ const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal}) => {
   }, [searchGameInput])
 
   useEffect(() => {
-    return () => console.log(platforms, 'at useEffect')
-  },[platforms])
+    const delayDebounce = setTimeout(async () => {
+      if(invitationInput!== '') {
+        const request = await searchCollarboUser(invitationInput)
+        // if(request) {
+        //   setFoundCollarboratedUser(request)
+        // }
+      }
+    }, 500)
+    return () => clearTimeout(delayDebounce)
+  },[invitationInput])
 
-  // Platforms
-  // streamingPlatforms
-  // tags
+  // Platforms **
+  // streamingPlatforms **
+  // tags **
+  // collarboratedUsers
   // eventEntryDue
   // eventImage
-  // collarboratedUsers
   // eventMaxNum
   // eventStatus
 
@@ -135,9 +164,17 @@ const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal}) => {
                             onChange={(e) => searchHandler(e)}
                             value={searchGameInput}
                           />
-                          {selectedGame.length > 0 && <div>
+                          {selectedGame.length > 0 && <div className='flex flex-row gap-2 py-1'>
                             {selectedGame.map((game) => {
-                              return <div key={game.id + 'selectedGame'}>{game.name}</div>
+                              return (
+                                <div
+                                  key={'entered Tags' + game.name}
+                                  className='flex flex-row items-center bg-white/10 rounded-full px-2 py-0.5'
+                                >
+                                  <p className='block py-1 px-2 text-xs'>{game.name}</p>
+                                  <MdClose className='w-4 h-4 p-1 bg-white/20 rounded-full hover:cursor-pointer' onClick={(e) => removeGameHandler(e, game.name)}/>
+                                </div>
+                              )
                             })}
                           </div>
                           }
@@ -171,34 +208,71 @@ const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal}) => {
                         {/* streaming platforms */}
                         <div>
                           <p className='text-xs'>Please choose the platforms for this event</p>
-                          {platformSelections.map((list) => {
-                            let addedPlatform = platforms.find((platform) => platform.includes(list.name))
-                            if(addedPlatform) {
+                          <div className='flex flex-row flex-nowrap justify-start text-sm gap-2 py-2'>
+                            {platformSelections.map((list) => {
+                              let addedPlatform = platforms.find((platform) => platform.includes(list.name))
+                              if(addedPlatform) {
+                                return (
+                                  <div 
+                                    className='flex flex-row justify-center items-center gap-1 px-2 py-1 rounded-full bg-sky-700 hover:cursor-pointer'
+                                    key={list.name + 'added platform'}
+                                    onClick={(e) => platformRemoveHandler(e, list)}
+                                  >
+                                    <MdOutlineCheckCircleOutline className='w-4 h-4' />
+                                    <p>{list.name}</p>
+                                  </div>
+                                )
+                              }
                               return (
                                 <div 
-                                  className='flex flex-row items-center gap-1'
-                                  key={list.name + 'added platform'}
-                                  onClick={(e) => platformRemoveHandler(e, list)}
+                                  className='flex flex-row justify-center items-center gap-1 px-2 py-1 rounded-full hover:cursor-pointer bg-white/10'
+                                  onClick={(e) => platformClickHandler(e, list)}
+                                  key={list.name + ' platform  options'}
                                 >
-                                  <MdOutlineCheckCircleOutline />
+                                  <MdOutlineCircle  className='w-4 h-4' />
                                   <p>{list.name}</p>
                                 </div>
-                              )
+                              ) 
+                              })
                             }
-                            return (
-                              <div 
-                                className='flex flex-row items-center gap-1'
-                                onClick={(e) => platformClickHandler(e, list)}
-                                key={list.name + ' platform  options'}
-                              >
-                                <MdOutlineCircle />
-                                <p>{list.name}</p>
-                              </div>
-                            ) 
-                            })
-                          }
+                          </div>
                         </div>
 
+                        {/* Tags */}
+                        
+                        <div>
+                          <p>Tags</p>
+                          <div className='flex flex-row flex-nowrap'>
+                            <input type='text' value={tagInput} onChange={(e) => setTagInput(e.target.value)} className='text-slate-800 text-sm px-4 py-2 rounded-l-lg w-full' placeholder='Enter tags' />
+                            <button 
+                              className='w-24 bg-sky-800 rounded-r-lg text-xs hover:bg-sky-600'
+                              onClick={addTagHandler}
+                            >
+                              Add Tag
+                            </button>
+                          </div>
+                          <div className='flex flex-row gap-2 py-1'>
+                            {inputtedTags.length > 0 && inputtedTags.map((tag) => {
+                              return (
+                                <div
+                                  key={'entered Tags' + tag}
+                                  className='flex flex-row items-center bg-white/10 rounded-full px-2 py-0.5'
+                                >
+                                  <p className='block py-1 px-2 text-xs'>{tag}</p>
+                                  <MdClose className='w-4 h-4 p-1 bg-white/20 rounded-full hover:cursor-pointer' onClick={(e) => removeTagHandler(e, tag)}/>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        </div>
+
+                        {/* collarborated users */}
+                        <div>
+                          <p>Send out Invitations</p>
+                          <div>
+                            <input type='text' value={invitationInput} onChange={(e) => setInvitationInput(e.target.value)} className='w-full rounded-lg text-slate-800 text-sm' placeholder='search collarborating user'/>
+                          </div>
+                        </div>
                         {/* upload images? */}
 
                         <div>

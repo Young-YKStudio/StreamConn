@@ -81,3 +81,20 @@ export const CreateCollarborationEvent = async (data) => {
     return false
   }
 } 
+
+export const searchCollarboUser = async (input) => {
+  console.log('reaced service', input)
+  let sendingData = {
+    userNickname: input
+  }
+
+  try {
+    const res = await axios.post('/api/collarboration/searchCollarboUser', sendingData)
+    if(res.status === 200) {
+      return true
+    }
+  } catch (err) {
+    console.log(err)
+    return false
+  }
+}
