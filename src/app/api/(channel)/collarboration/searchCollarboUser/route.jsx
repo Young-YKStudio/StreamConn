@@ -14,23 +14,26 @@ export async function POST(req) {
     )
   }
 
-  let foundUser 
+
+  let foundAllStreamers
 
   try {
-    foundUser = await User.findOne({nickname: userNickname})
+    foundAllStreamers = await User.find({isStreamer: true})
   } catch (err) {
     return NextResponse.json(
-      {message: 'Error found at finding User, Please try again.'},
+      {message: 'Error found at finding all streamers, Please try again.'},
       {status: 503}
     )
   }
 
-  if(!foundUser) {
+  if(!foundAllStreamers) {
     return NextResponse.json(
-      {message: 'User not found'},
-      {status: 204}
+      {message: 'Error connecting to database'},
+      {status: 503}
     )
   }
 
-  return NextResponse.json(foundUser, {status: 200})
+  let filteredStreamers = foundAllStreamers.filter((streamer) => streamer.nickname.toLowerCase().includes(userNickname.toLowerCase()))
+
+  return NextResponse.json(filteredStreamers, {status: 200})
 }

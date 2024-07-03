@@ -16,7 +16,8 @@ const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal}) => {
   const [ tagInput, setTagInput ] = useState('')
   const [ inputtedTags, setInputtedTags ] = useState([])
   const [ invitationInput, setInvitationInput ] = useState('')
-  const [ foundCollarboratedUser, setFoundCollarboratedUser ] = useState([])
+  const [ foundCollarboratedUser, setFoundCollarboratedUser ] = useState()
+  const [ pickedStreamerForInvitation, setPickedStreamerForInvitation ] = useState([])
 
   const platformSelections = [
     {
@@ -33,7 +34,7 @@ const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal}) => {
 
   const platformClickHandler = (e, list) => {
     setPlatforms((prev) => [
-     ...prev,
+      ...prev,
       list.name
     ])
   }
@@ -75,6 +76,14 @@ const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal}) => {
     setIsSearchResult(false)
   }
 
+  const sendInvitation = (e, streamer) => {
+    console.log(streamer, 'invite clicked')
+    setPickedStreamerForInvitation((prev) => [
+      ...prev,
+      streamer
+    ])
+  }
+
   useEffect(() => {
     const delayDebounce = setTimeout(async () => {
       if(searchGameInput !== '') {
@@ -96,13 +105,50 @@ const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal}) => {
     const delayDebounce = setTimeout(async () => {
       if(invitationInput!== '') {
         const request = await searchCollarboUser(invitationInput)
-        // if(request) {
-        //   setFoundCollarboratedUser(request)
-        // }
+
+        if(request.length > 0) {
+          setFoundCollarboratedUser(request)
+        }
+
+        if(!request) {
+          setFoundCollarboratedUser('Error at getting streamer information')
+        }
       }
     }, 500)
     return () => clearTimeout(delayDebounce)
   },[invitationInput])
+
+  const invitationPopup = () => {
+    if(invitationInput === '') {
+      return null
+    }
+
+    if(foundCollarboratedUser === 'not found') {
+      return (
+        <div>
+          <p className='text-red-600 text-center'>{foundCollarboratedUser}</p>
+        </div>
+      )
+    }
+
+    if(foundCollarboratedUser && foundCollarboratedUser !== 'not found' && foundCollarboratedUser.length > 0 ) {
+      return (
+        <div>
+          {foundCollarboratedUser.map((streamer) => {
+            return (
+              <div
+                key={streamer._id + ' found streamer at invitation popup'}
+              >
+                <p>{streamer.nickname}</p>
+                <button onClick={(e) => sendInvitation(e, streamer)}>Invite</button>
+              </div>
+            )
+          })}
+        </div>
+      )
+    }
+
+  }
 
   // Platforms **
   // streamingPlatforms **
@@ -271,6 +317,7 @@ const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal}) => {
                           <p>Send out Invitations</p>
                           <div>
                             <input type='text' value={invitationInput} onChange={(e) => setInvitationInput(e.target.value)} className='w-full rounded-lg text-slate-800 text-sm' placeholder='search collarborating user'/>
+                            {invitationPopup()}
                           </div>
                         </div>
                         {/* upload images? */}
