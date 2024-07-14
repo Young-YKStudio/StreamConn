@@ -104,4 +104,21 @@ export const searchCollarboUser = async (input) => {
   }
 }
 
+export const invitationSetUp = async (data) => {
+  console.log(data, 'data received at service')
+
+  try {
+    const res = await axios.post('/api/sendInvitation', data)
+
+    if(res.status === 200) {
+      console.log('call success', res.data)
+      return true
+    }
+  } catch (err) {
+    console.log('call failed', err)
+    return false
+  }
+
+}
+
 // TODO: Start from sending invitation backend protocol, and button change in frontend

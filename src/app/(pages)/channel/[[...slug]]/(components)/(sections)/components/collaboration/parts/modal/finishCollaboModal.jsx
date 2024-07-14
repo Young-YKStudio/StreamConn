@@ -4,9 +4,9 @@ import { Fragment, useState, useEffect } from 'react';
 import { MdClose, MdLock } from 'react-icons/md'
 import { searchGame } from '@/redux/service/IGDBServices'
 import { MdOutlineCircle, MdOutlineCheckCircleOutline } from "react-icons/md";
-import { searchCollarboUser } from '@/redux/service/collarborationService'
+import { searchCollarboUser, invitationSetUp } from '@/redux/service/collarborationService'
 
-const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal}) => {
+const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal, loggedUser}) => {
 
   const [ searchGameInput, setSearchGameInput ] = useState('')
   const [ isSearchResult, setIsSearchResult ] = useState(false)
@@ -17,7 +17,7 @@ const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal}) => {
   const [ inputtedTags, setInputtedTags ] = useState([])
   const [ invitationInput, setInvitationInput ] = useState('')
   const [ foundCollarboratedUser, setFoundCollarboratedUser ] = useState()
-  const [ pickedStreamerForInvitation, setPickedStreamerForInvitation ] = useState([])
+  const [ invitationStatus, setInvitationStatus ] = useState([])
 
   const platformSelections = [
     {
@@ -76,12 +76,70 @@ const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal}) => {
     setIsSearchResult(false)
   }
 
-  const sendInvitation = (e, streamer) => {
-    console.log(streamer, 'invite clicked')
-    setPickedStreamerForInvitation((prev) => [
+  const sendInvitation = async (e, streamer) => {
+    // 1. set current status for invitaion for pending
+    let defaultData = {
+      status: 'sent',
+      streamer: streamer
+    }
+    setInvitationStatus((prev) => [
       ...prev,
-      streamer
+      defaultData
     ])
+
+    // 2. set sending data (user info, invited user, current event info)
+    let sendingData = {
+      loggedUser: loggedUser,
+      invitedUser: streamer,
+      event: event
+    }
+
+    let invitationSending
+    // 3. call invitation service
+    try {
+      invitationSending = await invitationSetUp(sendingData)
+    } catch (err) {
+      console.log(err)
+    }
+    
+    // 4. set returned status for the server call
+  }
+
+  const inviteButtonDistributor = (selectedInvitation, streamerInfo) => {
+    // clicked invite [status, streamer], foundCollaboaratedUser
+    let foundStreamerFromSavedInvitation = selectedInvitation.find(streamer => streamer.streamer._id === streamerInfo._id)
+
+    if(!foundStreamerFromSavedInvitation) {
+      return (
+        <button 
+          onClick={(e) => sendInvitation(e, streamerInfo)}
+          className='bg-sky-700 px-3 py-1 rounded-md text-white'
+        >
+          Invite
+        </button>
+      )
+    }
+
+    if(foundStreamerFromSavedInvitation.status === 'pending') {
+      return (
+        <button 
+          className='bg-sky-900 px-3 py-1 rounded-md text-white'
+        >
+          Loading...
+        </button>
+      )
+    }
+
+    if(foundStreamerFromSavedInvitation.status === 'sent') {
+      return (
+        <button 
+          className='bg-sky-900 px-3 py-1 rounded-md text-white'
+        >
+          Sent
+        </button>
+      )
+    }
+
   }
 
   useEffect(() => {
@@ -118,6 +176,10 @@ const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal}) => {
     return () => clearTimeout(delayDebounce)
   },[invitationInput])
 
+  useEffect(() => {
+    return console.log(invitationStatus, 'at useEffect', event, 'event')
+  },[invitationStatus])
+
   const invitationPopup = () => {
     if(invitationInput === '') {
       return null
@@ -133,14 +195,17 @@ const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal}) => {
 
     if(foundCollarboratedUser && foundCollarboratedUser !== 'not found' && foundCollarboratedUser.length > 0 ) {
       return (
-        <div>
-          {foundCollarboratedUser.map((streamer) => {
+        <div
+          className='mt-2 p-2 bg-white rounded-md text-slate-700 flex flex-col divide-y-[1px] divide-slate-300 text-xs'
+        >
+          {foundCollarboratedUser.map((streamer, i) => {
             return (
               <div
                 key={streamer._id + ' found streamer at invitation popup'}
+                className='flex flex-row flex-nowrap justify-between items-center py-1.5 px-2'
               >
                 <p>{streamer.nickname}</p>
-                <button onClick={(e) => sendInvitation(e, streamer)}>Invite</button>
+                {inviteButtonDistributor(invitationStatus, streamer)}
               </div>
             )
           })}
@@ -316,7 +381,7 @@ const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal}) => {
                         <div>
                           <p>Send out Invitations</p>
                           <div>
-                            <input type='text' value={invitationInput} onChange={(e) => setInvitationInput(e.target.value)} className='w-full rounded-lg text-slate-800 text-sm' placeholder='search collarborating user'/>
+                            <input type='text' value={invitationInput} onChange={(e) => setInvitationInput(e.target.value)} className='w-full rounded-lg text-slate-800 text-sm' placeholder='Search Username'/>
                             {invitationPopup()}
                           </div>
                         </div>

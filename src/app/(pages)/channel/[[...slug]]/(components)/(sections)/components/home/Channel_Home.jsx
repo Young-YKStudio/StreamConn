@@ -4,6 +4,7 @@ import { UploadButton, UploadDropzone } from "@uploadthing/react";
 import toast from "react-hot-toast";
 import { imageUploadService } from "@/redux/service/uploadService";
 import { useState } from 'react'
+import { sendTestEmail } from '@/redux/service/authService'
 
 const ChannelHomePage = ({foundUser}) => {
 
@@ -12,7 +13,11 @@ const ChannelHomePage = ({foundUser}) => {
 
   const [ uploadQueue, SetUploadQueue ] = useState([])
 
-  const testButtonHandler = (e) => {
+  const testButtonHandler = async (e) => {
+
+    let emailSending = await sendTestEmail()
+
+
   }
 
   return (

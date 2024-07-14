@@ -12,6 +12,10 @@ const collaboInvitationSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
     },
+    invitedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
     invitationStatus: {
       type: String,
       default: 'pending'
@@ -19,6 +23,6 @@ const collaboInvitationSchema = new Schema(
   }, { timeseries: true }
 )
 
-const CollaboInvitation = mongoose.models.CollaboInvitation || mongoose.models('CollaboInvitation', collaboInvitationSchema)
+const CollaboInvitation = mongoose.models.CollaboInvitation || mongoose.model('CollaboInvitation', collaboInvitationSchema)
 
 export default CollaboInvitation
