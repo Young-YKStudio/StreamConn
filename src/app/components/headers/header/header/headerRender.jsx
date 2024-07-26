@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setNewReduxAuth } from "@/redux/service/authService";
 import { getIGDBToken } from "@/redux/service/IGDBServices";
 import { setAuthUserRedux, setAllStreamersUpdate, setInitialAllStreamersUpdate, setIGDBTokenRedux } from "@/redux/slice";
+// import HeaderNotification from "../headerParts/notification";
 
 const HeaderRender = ({allStreamers}) => {
 
@@ -83,7 +84,10 @@ const HeaderRender = ({allStreamers}) => {
       <Header_SearchBox />
 
       {/* link elements section */}
-      <AuthButton status={status} session={session} />
+      <div>
+        <AuthButton status={status} session={session} />
+        {/* <HeaderNotification /> */}
+      </div>
     </nav>
   );
 }

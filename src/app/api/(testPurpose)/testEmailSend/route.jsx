@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 export const POST = async (req) => {
   const {from, to} = await req.json()
 
-
   let emailOptions = {
     from: from,
     to: to,

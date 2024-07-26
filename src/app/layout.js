@@ -3,6 +3,7 @@ import HeaderLanding from './components/headers/header/HeaderLanding'
 
 import { getServerSession } from 'next-auth'
 import SessionProvider from './util/SessionProvider'
+import {SocketProvider} from '@/app/util/SocketProvider'
 import Providers from '@/redux/reduxProviders'
 import SpinnerOverlay from '@/redux/components/loadingParts/spinnerOverlay'
 import { Toaster } from 'react-hot-toast'
@@ -22,31 +23,33 @@ export default async function RootLayout({ children }) {
         <Providers>
           <SpinnerOverlay />
           <SessionProvider session={session}>
-            <HeaderLanding />
-            <div className='w-screen h-screen'>
-              <Toaster 
-                position='bottom-right' 
-                gutter={8}
-                toastOptions={{
-                  className: '',
-                  style: {
-                    background: '#082f49',
-                    color: 'white'
-                  },
-                  success: {
+            <SocketProvider>
+              <HeaderLanding />
+              <div className='w-screen h-screen'>
+                <Toaster 
+                  position='bottom-right' 
+                  gutter={8}
+                  toastOptions={{
+                    className: '',
                     style: {
-                      background: '#134e4a',
+                      background: '#082f49',
+                      color: 'white'
+                    },
+                    success: {
+                      style: {
+                        background: '#134e4a',
+                      }
+                    },
+                    error: {
+                      style: {
+                        background: '#a16207',
+                      }
                     }
-                  },
-                  error: {
-                    style: {
-                      background: '#a16207',
-                    }
-                  }
-                }}
-              />
-              {children}
-            </div>
+                  }}
+                />
+                {children}
+              </div>
+            </SocketProvider>
           </SessionProvider>
         </Providers>
       </body>
