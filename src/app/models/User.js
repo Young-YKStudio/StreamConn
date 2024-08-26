@@ -55,6 +55,12 @@ const userSchema = new Schema(
         ref: 'User',
       }
     ],
+    teams: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Team',
+      }
+    ],
     channels: [
       {
         type: mongoose.Schema.Types.ObjectId,

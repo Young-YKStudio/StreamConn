@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import Channel from './Channels';
 
 const Schema = mongoose.Schema
 
@@ -6,12 +7,19 @@ const teamSchema = new Schema(
   {
     teamName: {
       type: String,
-      required: true
+      required: true,
+      unique: true,
+    },
+
+    teamOwnerNickname: {
+      type: String,
+      required: true,
     },
 
     teamOwner: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
+      ref: 'User',
+      autopopulate: true,
     },
 
     teamModerators: [{
@@ -29,22 +37,31 @@ const teamSchema = new Schema(
       default: false
     },
 
-    // posts: [{
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: 'Post'
-    // }],
+    channels: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Channel',
+      autopopulate: true,
+    }],
 
-    // collarborations: [{
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: 'Collarboration'
-    // }],
+    collaborations: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Collarboration',
+      autopopulate: true,
+    }],
 
+    followers: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    }],
+    
     // teamType: {
     //   type: String,
     //   default: 'Text'
     // },
   }, { timestamps: true }
 )
+
+teamSchema.plugin(require('mongoose-autopopulate'));
 
 const Team = mongoose.models.Team || mongoose.model("Team", teamSchema)
 export default Team
