@@ -14,3 +14,17 @@ export const addChannelRequest = async (newChannel) => {
     return false
   }
 }
+
+export const addTeamChannelRequest = async (newTeamChannel) => {
+  
+  try {
+    const res = await axios.post(`/api/createTeamChannel`, newTeamChannel);
+    if(res.status === 200) {
+      toast.success(`Team ${newTeamChannel.channelName} has been created`)
+      return true
+    }
+  } catch (err) {
+    toast.error(err.response.data.message)
+    return false
+  }
+} 
