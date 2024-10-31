@@ -63,7 +63,53 @@ const userSchema = new Schema(
     ],
     connects: [
       {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
-    ]
+    ],
+    uploadedFiles: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Upload'
+      }
+    ],
+    invitationSent: [
+      {
+        collaboInvitation: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'CollaboInvitation'
+        },
+        collaboEvent: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Collarboration'
+        },
+        invitationSentTo: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User'
+        },
+        status: {
+          type: String,
+          default: 'pending'
+        }
+      }
+    ],
+    invitationReceived: [
+      {
+        collaboInvitation: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'CollaboInvitation'
+        },
+        collaboEvent: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Collarboration'
+        },
+        invitationReceivedFrom: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User'
+        },
+        status: {
+          type: String,
+          default: 'pending'
+        }
+      }
+    ],
   },{timestamps: true}
 )
 

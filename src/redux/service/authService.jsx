@@ -106,3 +106,20 @@ export const registerEmail = async (registerData) => {
     return false
   }
 }
+
+export const sendTestEmail = async (userId) => {
+
+  let sendingData = {
+    from: 'service@streamconn.com',
+    to: 'kys3923@gmail.com',
+  }
+
+  try {
+    let res = await axios.post('/api/testEmailSend', sendingData)
+    return true
+  } catch (err) {
+    console.log(err)
+    toast.error('Error sending test email')
+    return false
+  }
+}

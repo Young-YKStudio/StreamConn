@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setNewReduxAuth } from "@/redux/service/authService";
 import { getIGDBToken } from "@/redux/service/IGDBServices";
 import { setAuthUserRedux, setAllStreamersUpdate, setInitialAllStreamersUpdate, setIGDBTokenRedux } from "@/redux/slice";
+// import HeaderNotification from "../headerParts/notification";
 
 const HeaderRender = ({allStreamers}) => {
 
@@ -72,7 +73,7 @@ const HeaderRender = ({allStreamers}) => {
   // },[])
 
   return (
-    <nav className="bg-black/80 backdrop-blur-md grid grid-cols-3 p-4 absolute top-0 w-full z-10">
+    <nav className="bg-black/80 backdrop-blur-md grid grid-cols-3 p-4 absolute top-0 w-full z-50">
       {/* Logo/left section */}
       <div className="flex flex-row gap-2 items-center">
         <Link href='/' className="truncate text-sky-500">Stream Connect</Link>
@@ -83,7 +84,10 @@ const HeaderRender = ({allStreamers}) => {
       <Header_SearchBox />
 
       {/* link elements section */}
-      <AuthButton status={status} session={session} />
+      <div>
+        <AuthButton status={status} session={session} />
+        {/* <HeaderNotification /> */}
+      </div>
     </nav>
   );
 }

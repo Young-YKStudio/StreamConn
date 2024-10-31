@@ -21,11 +21,28 @@ const collarborationSchema = new Schema(
     eventEntryDue: Date,
     eventDescription: String,
     eventImage: String,
-    collarboratedUsers: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      autopopulate: { select: 'nickname' }
+    invitations: [{
+      invitaion: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'CollaboInvitation',
+      },
+      status: {
+        type: String,
+        default: 'pending'
+      }
     }],
+    collarboratedUsers: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User'
+        },
+        status: {
+          type: String,
+          default: 'pending'
+        }
+      }
+    ],
     eventMaxNum: Number,
     isPrivate: {
       type: Boolean,

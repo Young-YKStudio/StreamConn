@@ -65,6 +65,7 @@ const CollaborationRender = ({channel}) => {
             event={selectedEventForSetup} 
             finishSetupModal={finishSetupModal}
             setFinishSetupModal={setFinishSetupModal}
+            loggedUser={loggedUser}
           />
         }
       </div>

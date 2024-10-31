@@ -1,7 +1,7 @@
 const FeaturedStreamers = ({streamers}) => {
 
   return (
-    <section className="pt-20 flex flex-col">
+    <section className="pt-20 flex flex-col md:pl-28">
       <p>Featured Streamers</p>
       <div>
         {streamers && streamers.map((streamer) => (

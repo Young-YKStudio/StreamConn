@@ -81,3 +81,44 @@ export const CreateCollarborationEvent = async (data) => {
     return false
   }
 } 
+
+export const searchCollarboUser = async (input) => {
+  let sendingData = {
+    userNickname: input
+  }
+
+  try {
+    const res = await axios.post('/api/collarboration/searchCollarboUser', sendingData)
+    if(res.status === 200) {
+      let foundStreamers = res.data
+
+      if (foundStreamers.length === 0 ) {
+        return 'not found'
+      }
+
+      return foundStreamers
+    }
+  } catch (err) {
+    console.log(err)
+    return undefined
+  }
+}
+
+export const invitationSetUp = async (data) => {
+  console.log(data, 'data received at service')
+
+  try {
+    const res = await axios.post('/api/sendInvitation', data)
+
+    if(res.status === 200) {
+      console.log('call success', res.data)
+      return true
+    }
+  } catch (err) {
+    console.log('call failed', err)
+    return false
+  }
+
+}
+
+// TODO: Start from sending invitation backend protocol, and button change in frontend

@@ -15,7 +15,7 @@ export async function POST(req) {
   } catch (err) {
     return NextResponse.json(
       {message: 'error at connecting to database'},
-      {status: 500}
+      {status: 503}
     )
   }
   // find Channel

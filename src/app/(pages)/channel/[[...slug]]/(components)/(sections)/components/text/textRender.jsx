@@ -7,11 +7,13 @@ import { setIsLoadingTrue, setIsLoadingFalse } from '@/redux/slice'
 import { useRouter, redirect } from 'next/navigation'
 import { MdOutlineAddCircle } from 'react-icons/md'
 import { addPost, editPost, deletePost, addComment, editComment, deleteComment } from '@/redux/service/textCRUDPost'
+import { useSocket } from '@/app/util/SocketProvider'
 
 const TextRender = ({channel}) => {
   const router = useRouter()
   const dispatch = useDispatch()
   const loggedUser = useSelector((state) => state.redux.auth)
+  const { socket } = useSocket()
 
   const [ allPosts, setAllPosts ] = useState([])
   const [ mode, setMode ] = useState('addPost')
@@ -25,6 +27,10 @@ const TextRender = ({channel}) => {
   useEffect(() => {
     setAllPosts(channel.posts)
   }, [])
+
+  useEffect(() => {
+    socket?.emit('test', loggedUser)
+  }, [socket, loggedUser])
 
   const replyPostHandler = (e, postId) => {
     let foundPost

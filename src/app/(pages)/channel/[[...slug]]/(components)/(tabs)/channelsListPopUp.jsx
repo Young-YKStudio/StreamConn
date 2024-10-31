@@ -13,7 +13,7 @@ const ChannelListsPopUp = ({tabType, channels, channelOwner}) => {
   if(currentChannel.length > 0) {
     return (
       <div
-        className="absolute top-12 left-0 bg-sky-800 rounded-md shadow-md scrollbar-track-sky-950 scrollbar-thumb-white/40 py-2"
+        className="absolute top-12 left-0 bg-sky-800 rounded-md shadow-md scrollbar-track-sky-950 scrollbar-thumb-white/40 py-2 z-20"
       >
         <div className="flex flex-row flex-wrap gap-2 px-2 max-h-[15em] overflow-auto scrollbar-thin">
           {currentChannel.map(channel => (

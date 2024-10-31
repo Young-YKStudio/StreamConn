@@ -2,6 +2,7 @@ import axios from 'axios'
 import { Suspense } from "react"
 import Loading from '../../../loading'
 import TextRender from './textRender'
+import TextRenderSocket from './textRenderSocket'
 
 const getAllPosts = async (channelId) => {
   const requestData = {
@@ -21,7 +22,8 @@ const Channel_Text = async ({ channel }) => {
 
   return (
     <Suspense fallback={<Loading />}>
-      <TextRender channel={initChannelData} />
+      {/* <TextRender channel={initChannelData} /> */}
+      <TextRenderSocket channel={channel}/>
     </Suspense>
   )
 }
