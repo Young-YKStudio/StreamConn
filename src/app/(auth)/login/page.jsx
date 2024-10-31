@@ -11,7 +11,6 @@ import { signInOauth, signInEmail } from '@/redux/service/authService'
 import { setIsLoadingTrue, setIsLoadingFalse } from '@/redux/slice'
 
 const LoginPage = () => {
-
   
   const [ message, setMessage ] = useState('')
   const [ providers, setProviders ] = useState()
@@ -84,23 +83,30 @@ const LoginPage = () => {
   }
 
   return (
-    <section className="flex justify-center items-center h-full w-full px-4 pt-12">
-      <div className="relative rounded-md shadow bg-slate-800 w-full max-w-sm lg:max-w-md">
+    <section className="flex justify-center items-center h-full w-full px-4 pt-12 bg-yellow-200">
+      <div className="relative rounded-md shadow bg-zinc-800 w-full max-w-sm lg:max-w-md text-white ring-4 ring-sky-400">
         <div className="flex flex-col items-center p-7">
           <h3 className="text-xl font-semibold">
-            Login Account
+            Sign In
           </h3>
         </div>
 
         {/* body */}
-        <div className="flex flex-col gap-4 p-5 py-7 border-t border-slate-500">
+        <div className="flex flex-col gap-4 p-5">
           {/* Oauth Buttons */}
-          <div className='flex items-center justify-center pt-2'>
-            {providers && <button className='flex gap-2 items-center p-2 bg-white/20 w-full justify-center rounded-md hover:bg-white/50' onClick={(e) => oAuthLoginHandler(e, providers.id)}><FcGoogle className='w-5 h-5' />Sign in with {providers.name}</button>}
+          <div className='flex items-center justify-center'>
+            {providers && <button className='flex gap-2 items-center p-2 bg-white w-full justify-center rounded-md hover:bg-sky-400 text-zinc-800 hover:text-white' onClick={(e) => oAuthLoginHandler(e, providers.id)}><FcGoogle className='w-5 h-5' />Sign in with {providers.name}</button>}
           </div>
           <div className='flex items-center justify-center pt-2'>
-            <button className='flex gap-2 items-center p-2 bg-white/20 w-full justify-center rounded-md hover:bg-white/50' onClick={() => credentialOpenHandler()}><MdOutlineEmail className='w-5 h-5' />Sign in with Email</button>
+            <button className='flex gap-2 items-center p-2 bg-white w-full justify-center rounded-md hover:bg-sky-400 text-zinc-800 hover:text-white' onClick={() => credentialOpenHandler()}><MdOutlineEmail className='w-5 h-5' />Sign in with Email</button>
           </div>
+
+          <div className='flex flex-row justify-center gap-2'>
+            <p className='text-xs'>forgot password?</p>
+            <Link href='/forgot-password' className='text-xs text-sky-400 hover:text-red-600'>Find your password</Link>
+          </div>
+          
+          
           {credentialOpen &&
             <form className="space-y-4 pt-4" onSubmit={(e) => submitHandler(e, submitForm)}>
               {/* Forms */}

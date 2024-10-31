@@ -3,12 +3,14 @@ import { useSession } from 'next-auth/react'
 import { useState, useEffect } from 'react'
 import LandingSideBarPublic from '../../sidebar/landingSideBar/landingSideBarPublic'
 import LandingSideBarLogged from '../../sidebar/landingSideBar/landingSideBarLogged'
+import { IntroSection } from './Introduction/IntroSection'
 import FeaturedStreamers from './featuredStreamers/featuredStremers'
 import IGDBNewGames from './IGDB/NewGames'
 import IGDBTopRated from './IGDB/TopRated'
 import { getNewGames } from '@/redux/service/IGDBServices'
+import { SocketSideBarLanding } from '../../sidebar/socketSideBar/SocketSideBarLanding'
 
-const LandingRender = () => {
+const LandingRender = ({allStreamers}) => {
 
   let session = useSession()
 
@@ -45,10 +47,10 @@ const LandingRender = () => {
   }, [])
 
   return (
-    <div className='flex flex-row flex-nowrap h-full'>
-      { session.status === 'authenticated' ? <LandingSideBarLogged /> : <LandingSideBarPublic /> }
-      <div className='w-full h-full flex flex-col scrollbar-track-sky-950  scrollbar-thumb-white/40'>
+    <div className='flex flex-row flex-nowrap h-full w-full'>
+      <div className='w-full h-full flex flex-col scrollbar-track-zinc-800  scrollbar-thumb-sky-700'>
         <div className='overflow-auto scrollbar-thin w-full h-full'>
+          <IntroSection />
           <FeaturedStreamers />
           <IGDBTopRated topRated={topRated} />
           <IGDBNewGames newReleases={newReleases} />

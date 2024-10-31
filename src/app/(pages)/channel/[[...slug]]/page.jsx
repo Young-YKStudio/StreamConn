@@ -24,7 +24,7 @@ const DynamicChannelPage = async ({params}) => {
   const channelData = await getCurrentChannel(sendingData)
   
   return (
-    <div className="flex flex-row flex-nowrap h-full w-full">
+    <div className="relative flex flex-row flex-nowrap h-full w-full">
       {/* sidebar here */}
       <ChannelSideBar />
       <Suspense fallback={<Loading />}>

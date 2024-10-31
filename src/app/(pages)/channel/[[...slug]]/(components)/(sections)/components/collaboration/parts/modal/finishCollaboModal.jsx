@@ -79,7 +79,7 @@ const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal, logge
   const sendInvitation = async (e, streamer) => {
     // 1. set current status for invitaion for pending
     let defaultData = {
-      status: 'sent',
+      status: 'pending',
       streamer: streamer
     }
     setInvitationStatus((prev) => [
@@ -409,3 +409,12 @@ const FinishCollaboModal = ({event, finishSetupModal, setFinishSetupModal, logge
   );
 }
 export default FinishCollaboModal;
+
+// team image
+// team background image
+// number of team members
+// team streaming platform 
+//  edit button form team setting
+
+// home, text, collaboration
+// add event button

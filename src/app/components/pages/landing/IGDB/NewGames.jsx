@@ -10,7 +10,7 @@ const IGDBNewGames = ({newReleases}) => {
   }
 
   return (
-    <div className='px-8'>
+    <div className='px-8 md:pl-28'>
       <p className="text-white">New Releases</p>
       {newReleases && <div
         className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2"

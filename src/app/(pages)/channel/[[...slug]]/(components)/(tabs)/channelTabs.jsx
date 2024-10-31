@@ -93,7 +93,7 @@ const ChannelTabs = ({channelOwner, channelName}) => {
   }
   
   return (
-    <nav className="flex flex-row gap-2 w-full max-w-4xl justify-center sm:justify-start border-b border-sky-500 py-4 px-4 pt-8">
+    <nav className="flex flex-row gap-2 w-full max-w-4xl justify-center sm:justify-start border-b border-sky-500 py-4 px-4 pt-8 sticky top-12 z-20 bg-black/80 backdrop-blur-md">
 
       {/* responsive select */}
       <div className='sm:hidden w-full max-w-sm flex flex-row gap-4'>

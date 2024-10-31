@@ -1,6 +1,6 @@
-import LandingRender from './landingRender'
-import axios from 'axios';
+import axios from 'axios'
 import { Suspense } from 'react'
+import { SocketSideBarLanding } from './socketSideBar/SocketSideBarLanding'
 
 const getAllStreamers = async () => {
   try {
@@ -13,16 +13,15 @@ const getAllStreamers = async () => {
   }
 }
 
-const LandingServer = async () => {
+const SideBarServerSide = async () => {
 
   const streamers = await getAllStreamers()
 
-  // const newGames = await getIGDBData()
-  // TODO: Error handler here
   return (
     <Suspense fallback={<p>Loading..</p>}>
-      <LandingRender allStreamers={streamers}/>
+      <SocketSideBarLanding allStreamers={streamers}/>
     </Suspense>
-  );
+  )
 }
-export default LandingServer;
+
+export default SideBarServerSide;

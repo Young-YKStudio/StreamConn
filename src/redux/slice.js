@@ -8,6 +8,7 @@ const initialState = {
   allStreamers: [],
   forceAuthUpdate: false,
   IGDB_Token: undefined,
+  logInCallback: undefined,
 }
 
 // slice
@@ -33,6 +34,9 @@ export const slice = createSlice({
     },
     setInitialAllStreamersUpdate: (state, action) => {
       state.allStreamers = action.payload
+    },
+    setLogInCallback: (state, action) => {
+      state.logInCallback = action.payload
     },
     setAllStreamersUpdate: (state, action) => {
       state.allStreamers.map((reduxStreamer) => {
@@ -64,7 +68,8 @@ export const {
   setInitialAllStreamersUpdate,
   setAllStreamersUpdate,
   setForceAuthUpdate,
-  setIGDBTokenRedux
+  setIGDBTokenRedux,
+  setLogInCallback,
 } = slice.actions
 
 export default slice.reducer
