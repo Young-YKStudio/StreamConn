@@ -3,10 +3,10 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { tabButtonStyles, userValidator, channelTypeButtonStyles, channelTypeButtonIcons } from '../(parts)/(sharedFunctions)/channelSharedFunctions'
 import { MdAdd, MdHome, MdPeopleAlt, MdCoPresent, MdOutlineArrowDropDown, MdOutlineArrowDropUp, MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
-import { FaHashtag } from "react-icons/fa6";
 import AddChannelModal from './addChannelModal';
 import ChannelListsPopUp from './channelsListPopUp';
 import { useSelector } from 'react-redux';
+import { tabBlueButton, tabSelectButton } from '@/app/components/buttons/buttonStyles';
 
 const ChannelTabs = ({channelOwner, channelName}) => {
 
@@ -16,11 +16,11 @@ const ChannelTabs = ({channelOwner, channelName}) => {
   const router = useRouter()
 
   const selectChangeHandler = (e, string) => {
-    router.push(`/channel/${string}/${channelOwner.nickname}`)
+    router.push(`/channel/${channelOwner.nickname}/${string}`)
   }
   
   const tabButtonHandler = (e, string) => {
-    router.push(`/channel/${string}/${channelOwner._id}`)
+    router.push(`/channel/${channelOwner._id}/${string}`)
   }
   
   const currentUser = useSelector((state) => state.redux.auth)
@@ -34,6 +34,7 @@ const ChannelTabs = ({channelOwner, channelName}) => {
       tabTypes = filteredTypes
     }
   }
+  'rounded-md px-3 py-1.5 font-medium bg-sky-950 hover:bg-sky-800 flex flex-row gap-2 items-center'
 
   const tabOpenChanger = (e, tabType, state) => {
     if(state === tabType) {
@@ -44,11 +45,11 @@ const ChannelTabs = ({channelOwner, channelName}) => {
   }
 
   const collaborationButtonHandler = (e) => {
-    return router.push(`/channel/collaboration/${channelOwner.nickname}`)
+    return router.push(`/channel/${channelOwner.nickname}/collaboration`)
   }
 
   const participationButtonHandler = (e) => {
-    return router.push(`/channel/participation/${channelOwner.nickname}`)
+    return router.push(`/channel/${channelOwner.nickname}/participation`)
   }
 
   
@@ -93,36 +94,42 @@ const ChannelTabs = ({channelOwner, channelName}) => {
   }
   
   return (
-    <nav className="flex flex-row gap-2 w-full max-w-4xl justify-center sm:justify-start border-b border-sky-500 py-4 px-4 pt-8 sticky top-12 z-20 bg-black/80 backdrop-blur-md">
+    <nav className="flex flex-row gap-2 w-full max-w-4xl justify-center sm:justify-start border-sky-500 py-4 px-4 md:pt-4 pt-5 sticky top-16 z-20 bg-white">
 
       {/* responsive select */}
-      <div className='sm:hidden w-full max-w-sm flex flex-row gap-4'>
-        <label htmlFor='tabs' className='sr-only'>
-          Choose a channel
-        </label>
-        <select
-          id='tabs'
-          name='tabs'
-          className="block w-full rounded-md border-none bg-white/20 py-2 pl-3 pr-10 text-base text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-0 focus:ring-inset focus:ring-sky-500 sm:text-sm"
-          value={channelName}
-          onChange={(e) => selectChangeHandler(e, e.target.value)}
-        >
-          {channelOwner.channels.map((tab) => (
-            <option key={tab.channelName + 'tabs option with responsive'}>
-              {tab.channelName}
-            </option>
-          ))}
-        </select>
+      <div className='sm:hidden w-full flex flex-row justify-between items-center flex-nowrap gap-4 bg-sky-400'>
+        <div>
+          <p>Channel Info</p>
+        </div>
+        <div className='flex flex-row flex-nowrap gap-4 w-full'>
+          <label htmlFor='tabs' className='sr-only'>
+            Choose a channel
+          </label>
+          <select
+            id='tabs'
+            name='tabs'
+            className={tabSelectButton}
+            value={channelName}
+            onChange={(e) => selectChangeHandler(e, e.target.value)}
+          >
+            {channelOwner.channels.map((tab) => (
+              <option key={tab.channelName + 'tabs option with responsive'}>
+                {tab.channelName}
+              </option>
+            ))}
+          </select>
 
-        <button className="px-4 py-2 bg-sky-950 hover:bg-sky-800 rounded-md"><MdAdd className="w-5 h-5 text-bold"/></button>
+          <button className={tabBlueButton}><MdAdd className="w-5 h-5 text-bold"/></button>
+        </div>
+
       </div>
 
       {/* tabs */}
       <div className='hidden sm:flex sm:flex-row sm:justify-between w-full'>
         <div className="flex flex-wrap gap-4">
           <button
-            className='rounded-md px-3 py-1.5 font-medium bg-sky-950 hover:bg-sky-800 flex flex-row gap-2 items-center'
-            onClick={(e) => router.push(`/channel/home/${channelOwner.nickname}`)}
+            className={tabBlueButton}
+            onClick={(e) => router.push(`/channel/${channelOwner.nickname}/home`)}
             >
             <MdHome className="w-5 h-5"/>Home
           </button>
@@ -133,7 +140,7 @@ const ChannelTabs = ({channelOwner, channelName}) => {
         
         <div>
           {currentUser && userValidator(currentUser, channelOwner) &&
-            <button className="px-3 py-2 bg-sky-950 rounded-md hover:bg-sky-800" onClick={(e) => setIsModalOpen(true)} ><MdAdd className="w-5 h-5 text-bold" /></button>
+            <button className={tabBlueButton} onClick={(e) => setIsModalOpen(true)} ><MdAdd className="w-5 h-5 text-bold" /></button>
           }
         </div>
       </div>
@@ -145,5 +152,3 @@ const ChannelTabs = ({channelOwner, channelName}) => {
   );
 }
 export default ChannelTabs;
-
-// TODO: add click handler on responsive add button

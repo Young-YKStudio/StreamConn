@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { UploadButton, UploadDropzone } from "@uploadthing/react";
 import toast from "react-hot-toast";
 import { imageUploadService } from "@/redux/service/uploadService";
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { sendTestEmail } from '@/redux/service/authService'
 
 const ChannelHomePage = ({foundUser}) => {
@@ -12,13 +12,48 @@ const ChannelHomePage = ({foundUser}) => {
   const loggedUser = useSelector(state => state.redux.auth)
 
   const [ uploadQueue, SetUploadQueue ] = useState([])
+  const [ mutatedData, setMutatedData ] = useState([])
+
+  let initialData = [
+    {id: 'fist id', name: '1', number: 1},
+    {id: 'second id', name: '2', number: 2},
+    {id: 'third id', name: '23', number: 3},
+  ]
 
   const testButtonHandler = async (e) => {
 
-    let emailSending = await sendTestEmail()
+    
+    let mutatedData = []
+    
+    initialData.forEach(data => {
+      let desiredDataFormat = {
+        id: data.id,
+        name: data.name
+      }
+      mutatedData.push(desiredDataFormat)
+    })
 
+    console.log(mutatedData, 'success?')
 
   }
+
+  useEffect(() => {
+
+    let addingAttributes = (data) => {
+      let receivedData = data //array
+      receivedData.forEach(async (individualObject, index) => {
+        individualObject.name = `${index + 1}`
+      })
+
+      return receivedData
+    }
+
+
+    return () => {
+      setMutatedData(addingAttributes(initialData))
+    }
+
+  },[])
 
   return (
     <div>

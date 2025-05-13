@@ -23,6 +23,12 @@ const postSchema = new Schema(
       ref: 'Comment',
       autopopulate: true
     }],
+
+    likes: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      autopopulate: { select: 'nickname' },
+    }]
   }, { timestamps: true }
 )
 

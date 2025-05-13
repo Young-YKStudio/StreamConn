@@ -11,6 +11,7 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
+      minLength: 6,
       required: false
     },
     follows: [{
@@ -51,8 +52,20 @@ const userSchema = new Schema(
     ],
     moderators: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        moderator: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+        },
+        allowedChannels: [
+          {
+            channel: {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: 'Channel',
+            },
+            modLevel: String,
+          }
+        ], 
+        modType: String,
       }
     ],
     teams: [
@@ -116,6 +129,8 @@ const userSchema = new Schema(
         }
       }
     ],
+    resetPasswordToken: String,
+    resetTokenExpire: Date,
   },{timestamps: true}
 )
 
