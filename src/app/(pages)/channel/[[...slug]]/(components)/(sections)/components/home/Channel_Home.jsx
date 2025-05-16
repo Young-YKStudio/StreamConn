@@ -4,7 +4,6 @@ import { UploadButton, UploadDropzone } from "@uploadthing/react";
 import toast from "react-hot-toast";
 import { imageUploadService } from "@/redux/service/uploadService";
 import { Fragment, useState, useEffect, useRef, useCallback } from 'react'
-import { useState, useEffect } from 'react'
 import { sendTestEmail } from '@/redux/service/authService'
 
 import { Dialog, Transition, Switch } from '@headlessui/react'
@@ -137,20 +136,22 @@ const ChannelHomePage = ({ calendarEvents, channelEvents, foundUser }) => {
 
   useEffect(() => {
     let allEvents = []
-    calendarEvents.forEach((cal) => {
-      let newCalendarEvents = 
-      { 
-        id: cal.id, 
-        title: cal.title, 
-        start: new Date(cal.start),
-        end: new Date(cal.end),
-        resourceId: cal.resourceId,
-        // origstart: cal.start,
-        // origend: cal.end,
-      }
-      allEvents.push(newCalendarEvents)
-    })
-    setUpdatedCal(allEvents)
+    if(calendarEvents) {
+      calendarEvents.forEach((cal) => {
+        let newCalendarEvents = 
+        { 
+          id: cal.id, 
+          title: cal.title, 
+          start: new Date(cal.start),
+          end: new Date(cal.end),
+          resourceId: cal.resourceId,
+          // origstart: cal.start,
+          // origend: cal.end,
+        }
+        allEvents.push(newCalendarEvents)
+      })
+      setUpdatedCal(allEvents)
+    }
   }, [])
 
   const submitHandler = async (e) => {

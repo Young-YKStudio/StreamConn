@@ -5,8 +5,7 @@ import Channel_Text from "./components/text/Channel_Text";
 import SettingPreload from './components/setting/SettingPreload'
 
 
-const ChannelSectionLanding = ({calendarEvents, channelEvents, channelName, channelData, channel, channelOwnerNickname}) => {
-const ChannelSectionLanding = ({channelName, channelData, channel, channelOwnerNickname}) => {
+const ChannelSectionLanding = ({channelName, channelData, channel, channelOwnerNickname, calendarEvents, channelEvents,}) => {
   let foundChannel = channelData.channelOwner.channels.find(ch => ch.channelName === channelName)
   
   if(channel==='collaboration') {
