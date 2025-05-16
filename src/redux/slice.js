@@ -6,6 +6,7 @@ const initialState = {
   isAuthStored: false,
   isLoading: false,
   allStreamers: [],
+  newReleasedGames: [],
   forceAuthUpdate: false,
   IGDB_Token: undefined,
   logInCallback: undefined,
@@ -34,6 +35,9 @@ export const slice = createSlice({
     },
     setInitialAllStreamersUpdate: (state, action) => {
       state.allStreamers = action.payload
+    },
+    setNewReleasedGames: (state, action) => {
+      state.newReleasedGames = action.payload
     },
     setLogInCallback: (state, action) => {
       state.logInCallback = action.payload
@@ -70,6 +74,7 @@ export const {
   setForceAuthUpdate,
   setIGDBTokenRedux,
   setLogInCallback,
+  setNewReleasedGames,
 } = slice.actions
 
 export default slice.reducer

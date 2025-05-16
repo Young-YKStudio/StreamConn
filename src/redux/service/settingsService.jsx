@@ -44,3 +44,27 @@ export const removeModerator = async (data) => {
     return false
   }
 }
+
+// updateChannelSettings
+
+export const updateChannelSettings = async (data) => {
+  try {
+    let res = await axios.post('/api/updateChannelPrivacy', data)
+    if (res.status === 200) {
+      return res.data.channels
+    }
+  } catch (err) {
+    toast.error('Error: ' + err.response.data.message)
+    return false
+  }
+}
+
+// deleteChannel
+
+export const deleteChannel = async (data) => {
+  try {
+    let res = await axios.post('/api/deleteChannel', data)
+  } catch (err) {
+    return false
+  }
+}

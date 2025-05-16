@@ -33,8 +33,8 @@ export const InputPost = ({inputText, setInputText, loggedUser, channel}) => {
   }
 
   return (
-    <form className='my-2 sticky top-36 w-full bg-slate-500/70 rounded-md flex flex-row z-10 shadow-md backdrop-blur-md' onSubmit={postSubmitHandler}>
-      <button className='px-4 bg-sky-700 rounded-l-md hover:bg-sky-900'>+</button>
+    <form className='my-2 sticky md:top-[4.5em] top-[7.75em] w-full bg-slate-500/70 rounded-md flex flex-row z-10 shadow-md backdrop-blur-md' onSubmit={postSubmitHandler}>
+      <button className='px-4 bg-sky-400 rounded-l-md hover:bg-sky-800 text-white text-xl'>+</button>
       <TextareaAutosize
         rows={1}
         className='w-full bg-transparent focus:ring-0 ring-0 border-transparent focus:border-transparent text-sm text-white'
@@ -42,7 +42,7 @@ export const InputPost = ({inputText, setInputText, loggedUser, channel}) => {
         onChange={(e) => setInputText(e.target.value)}
         placeholder='Wrtie a Markdown supported post here...'
       ></TextareaAutosize>
-      <button className='px-6 bg-sky-700 rounded-r-md text-sm hover:bg-sky-900'>Post</button>
+      <button className='px-6 bg-sky-400 rounded-r-md text-medium hover:bg-sky-800 text-white'>Post</button>
     </form>
   )
 }

@@ -17,8 +17,8 @@ const getCurrentChannel = async (reqData) => {
 const DynamicChannelPage = async ({params}) => {
   
   let sendingData = {
-    channel: params.slug[0],
-    channelOwnerNickname: params.slug[1],
+    channel: params.slug[1],
+    channelOwnerNickname: params.slug[0],
   }
 
   const channelData = await getCurrentChannel(sendingData)
@@ -26,15 +26,21 @@ const DynamicChannelPage = async ({params}) => {
   return (
     <div className="relative flex flex-row flex-nowrap h-full w-full">
       {/* sidebar here */}
-      <ChannelSideBar />
+      {/* <ChannelSideBar /> */}
       <Suspense fallback={<Loading />}>
         <div className="w-full flex flex-col items-center scrollbar-track-sky-950 scrollbar-thumb-white/40">
           <div className='overflow-auto scrollbar-thin w-full h-full flex flex-col items-center'>
-            <div className='w-full flex flex-col items-center bg-white/10 pt-24 pb-4 px-4'>
+            <div className='w-full flex flex-col items-center bg-yellow-200 pt-24 pb-4 px-4 pl-24'>
               <ChannelProfileBackGround channelOwner={channelData.channelOwner} channel={sendingData.channel}/>
             </div>
             <ChannelTabs channelOwner={channelData.channelOwner} channelName={sendingData.channel}/>
             <ChannelSectionLanding calendarEvents={channelData.calendarEvents} channelEvents={channelData.channelEvents} channelName={sendingData.channel} channelData={channelData} channel={sendingData.channel} channelOwnerNickname={sendingData.channelOwnerNickname} />
+            <div className='md:pl-24 sticky md:top-0 top-8 z-30 w-full flex justify-center border-sky-400 border-t-4 '>
+              <ChannelTabs channelOwner={channelData.channelOwner} channelName={sendingData.channel}/>
+            </div>
+            <div className='md:pl-20 flex justify-center w-full bg-white'>
+              <ChannelSectionLanding channelName={sendingData.channel} channelData={channelData} channel={sendingData.channel} channelOwnerNickname={sendingData.channelOwnerNickname} />
+            </div>
           </div>
         </div>
       </Suspense>

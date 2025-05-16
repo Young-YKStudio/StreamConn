@@ -5,7 +5,7 @@ import TextareaAutosize from 'react-textarea-autosize'
 import { useState } from 'react'
 import { MdTurnLeft, MdAddCircle } from "react-icons/md";
 
-export const ReplyPost = ({replyText, setReplyText, setReplyId, loggedUser, list, channel}) => {
+export const ReplyPost = ({replyText, setReplyText, setReplyId, loggedUser, list, channel, hoveredList}) => {
   const { socket } = useSocket()
 
   const clearButtonClickHandler = (e) => {
@@ -43,11 +43,11 @@ export const ReplyPost = ({replyText, setReplyText, setReplyId, loggedUser, list
 
   return (
     <div className='w-full flex flex-row flex-nowrap items-center mt-2'>
-      <MdTurnLeft className='w-5 h-5 text-gray-300 rotate-180 mr-2' />
+      <MdTurnLeft className={`w-5 h-5 rotate-180 mr-2 + ${hoveredList  === list._id ? 'text-white' :'text-sky-400'}`} />
       <form className='w-full flex flex-row flex-nowrap' onSubmit={replySubmitHandler}>
         <input
           type='text'
-          className='w-full bg-gray-800 focus:ring-0 rounded-l-md border-transparent focus:border-transparent text-sm text-white'
+          className='w-full bg-slate-400 focus:ring-0 rounded-l-md border-transparent focus:border-transparent text-sm text-white'
           placeholder='reply on this post'
           value={replyText}
           onChange={(e) => setReplyText(e.target.value)}
@@ -57,7 +57,7 @@ export const ReplyPost = ({replyText, setReplyText, setReplyId, loggedUser, list
         >
           <button 
             type='submit'
-            className='bg-sky-700 text-xs px-4 py-2.5 rounded-r-md hover:bg-sky-900'
+            className='bg-sky-500 text-xs px-4 py-2.5 rounded-r-md hover:bg-white/20 text-white'
           >
             Reply
           </button>

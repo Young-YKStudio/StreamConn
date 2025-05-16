@@ -34,7 +34,7 @@ const Register = () => {
 
   useEffect(() => {
     if(status==='authenticated') {
-      return router.push('/account_update/welcome')
+      return router.push('/')
     }
   },[status])
 
@@ -46,7 +46,7 @@ const Register = () => {
     let registerRequest = await registerEmail(submitForm)
     if(registerRequest) {
       dispatch(setIsLoadingFalse())
-      return router.push('/account_update/welcome')
+      return router.push('/')
     }
     dispatch(setIsLoadingFalse())
   }

@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { UploadButton, UploadDropzone } from "@uploadthing/react";
 import toast from "react-hot-toast";
 import { imageUploadService } from "@/redux/service/uploadService";
-
 import { Fragment, useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { sendTestEmail } from '@/redux/service/authService'
 
 import { Dialog, Transition, Switch } from '@headlessui/react'
@@ -31,6 +31,13 @@ const ChannelHomePage = ({ calendarEvents, channelEvents, foundUser }) => {
 
   const [ uploadQueue, SetUploadQueue ] = useState([])
   const [ updatedCal, setUpdatedCal ] = useState([])
+  const [ mutatedData, setMutatedData ] = useState([])
+
+  let initialData = [
+    {id: 'fist id', name: '1', number: 1},
+    {id: 'second id', name: '2', number: 2},
+    {id: 'third id', name: '23', number: 3},
+  ]
 
   const [ isEventAddModal, setIsEventAddModal ] = useState(false)
 
@@ -67,6 +74,7 @@ const ChannelHomePage = ({ calendarEvents, channelEvents, foundUser }) => {
     // setSelectedEventTitle(calEvent.title)
     setIsEventAddModal(true)
   }
+
 
   const onSelectEvent = useCallback((calEvent) => {
     /**
@@ -160,6 +168,18 @@ const ChannelHomePage = ({ calendarEvents, channelEvents, foundUser }) => {
     //   isPrivate: invitationOnly,
     //   channel: channel
     // }
+    
+    let mutatedData = []
+    
+    initialData.forEach(data => {
+      let desiredDataFormat = {
+        id: data.id,
+        name: data.name
+      }
+      mutatedData.push(desiredDataFormat)
+    })
+
+    console.log(mutatedData, 'success?')
 
     // let request = await CreateCollarborationEvent(sendingData)
 
@@ -171,6 +191,24 @@ const ChannelHomePage = ({ calendarEvents, channelEvents, foundUser }) => {
 
     // return dispatch(setIsLoadingFalse())
   }
+
+  useEffect(() => {
+
+    let addingAttributes = (data) => {
+      let receivedData = data //array
+      receivedData.forEach(async (individualObject, index) => {
+        individualObject.name = `${index + 1}`
+      })
+
+      return receivedData
+    }
+
+
+    return () => {
+      setMutatedData(addingAttributes(initialData))
+    }
+
+  },[])
 
   return (
     <div>

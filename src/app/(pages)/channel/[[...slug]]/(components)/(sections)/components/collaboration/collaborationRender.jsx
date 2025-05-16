@@ -24,6 +24,8 @@ const CollaborationRender = ({channel}) => {
   const dispatch = useDispatch()
   const loggedUser = useSelector((state) => state.redux.auth)
 
+  console.log(channel, 'at collarb')
+
   useEffect(() => {
     //TODO: authConditions => if channel owner is loggedUser or loggedUser is one of the admins from channel owner's moderator array
     if(loggedUser && channel) {
