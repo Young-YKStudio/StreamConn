@@ -5,6 +5,7 @@ import Channel_Text from "./components/text/Channel_Text";
 import SettingPreload from './components/setting/SettingPreload'
 
 
+const ChannelSectionLanding = ({calendarEvents, channelEvents, channelName, channelData, channel, channelOwnerNickname}) => {
 const ChannelSectionLanding = ({channelName, channelData, channel, channelOwnerNickname}) => {
   let foundChannel = channelData.channelOwner.channels.find(ch => ch.channelName === channelName)
   
@@ -21,7 +22,7 @@ const ChannelSectionLanding = ({channelName, channelData, channel, channelOwnerN
   }
   
   if(!foundChannel || channelName === 'home') {
-    return <ChannelHomePage foundUser={channelData.channelOwner} />
+    return <ChannelHomePage calendarEvents={calendarEvents} channelEvents={channelEvents} foundUser={channelData.channelOwner} />
   }
   
   if(foundChannel.channelType === 'Text') {
