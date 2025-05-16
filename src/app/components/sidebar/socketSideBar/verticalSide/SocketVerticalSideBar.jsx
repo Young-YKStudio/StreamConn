@@ -1,5 +1,4 @@
 import { MdOutlineLogin, MdOutlineHome, MdPersonSearch, MdExplore, MdPerson, MdHelp, MdMonitor } from "react-icons/md";
-import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { ShuffleArrayLimit8 } from "@/app/util/SharedFunctions";
 import { useRouter } from 'next/navigation'
@@ -35,7 +34,6 @@ export const SocketVerticalSideBar = ({allStreamers, path}) => {
   const dispatch  = useDispatch()
 
   useEffect(() => {
-    console.log(allStreamers, '??')
     if(allStreamers) {
       if(allStreamers.length > 0) {
         let workingArray = allStreamers
@@ -78,7 +76,7 @@ export const SocketVerticalSideBar = ({allStreamers, path}) => {
   }
 
   const userClickHandler = (e, nickname) => {
-    router.push(`/channel/home/${nickname}`)
+    router.push(`/channel/${nickname}/home`)
   }
 
   const homeButtonClickHandler = () => {

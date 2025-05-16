@@ -38,10 +38,10 @@ export const tabButtonStyles = (currentSection, channel) => {
 
 export const channelTypeButtonStyles = (currentChannelType, selectedChannelType) => {
   if(currentChannelType === selectedChannelType) {
-    return 'rounded-md px-3 py-1.5 font-medium bg-sky-800 flex flex-row gap-2 items-center'
+    return 'rounded-md px-3 py-1.5 font-medium bg-sky-400 flex flex-row gap-2 items-center'
   }
 
-  return 'rounded-md px-3 py-1.5 font-medium bg-sky-950 hover:bg-sky-800 flex flex-row gap-2 items-center'
+  return 'rounded-md px-3 py-1.5 font-medium bg-sky-400 hover:bg-sky-800 flex flex-row gap-2 items-center text-white'
 }
 
 export const channelTypeButtonIcons = (channelType) => {
@@ -168,10 +168,10 @@ export const accountNotLoggedEvent = (e) => {
 
 export const followButtonStyle = (state) => {
   if(state) {
-    return 'rounded-md px-3 py-1.5 font-medium bg-sky-800 flex flex-row items-center gap-0.5 hover:bg-red-900 flex flex-row gap-1 tracking-wide'
+    return 'rounded-md px-3 py-1.5 font-medium bg-sky-400 flex flex-row items-center gap-0.5 hover:bg-red-900 flex flex-row gap-1 tracking-wide text-white'
   }
 
-  return 'rounded-md px-3 py-1.5 font-medium bg-sky-800 flex flex-row items-center gap-0.5 hover:bg-sky-950 flex flex-row gap-1 tracking-wide'
+  return 'rounded-md px-3 py-1.5 font-medium bg-sky-400 flex flex-row items-center gap-0.5 hover:bg-sky-900 flex flex-row gap-1 tracking-wide text-white'
 }
 
 export const profileButtonDistributor = (loggedUser, channelOwner, setModalOn, addFollowFunction, addSubscriptionFunction, isFollowedButtonHovered, setHoverOnFollows, setHoverOffFollows, unfollowFunction) => {
@@ -186,7 +186,7 @@ export const profileButtonDistributor = (loggedUser, channelOwner, setModalOn, a
   if(loggedUser._id === channelOwner._id) {
     return (
       <div className="flex items-end h-full gap-2 pb-4 text-sm">
-        <button onClick={(e) => setModalOn(e)} className={followButtonStyle()}><MdOutlineEdit className="w-5 h-5"/>Manage Account</button>
+        <button onClick={(e) => setModalOn(e)} className={followButtonStyle()}><MdOutlineEdit className="w-5 h-5"/>Manage Channel</button>
       </div>
     )
   }
@@ -226,3 +226,6 @@ export const profileButtonDistributor = (loggedUser, channelOwner, setModalOn, a
     </div>
   )
 }
+
+//start -> static top for tab section
+// responsive design for profile parts when small

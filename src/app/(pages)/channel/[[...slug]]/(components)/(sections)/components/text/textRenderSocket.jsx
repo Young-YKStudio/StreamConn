@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useSocket } from '@/app/util/SocketProvider'
 import { PostLists } from './components/postLists'
-import TextareaAutosize from 'react-textarea-autosize'
 import { InputPost } from './components/inputs/inputPost'
 
 const TextRenderSocket = ({channel}) => {
@@ -13,6 +12,7 @@ const TextRenderSocket = ({channel}) => {
   const [ inputType, setInputType ] = useState('post')
   const [ replyId, setReplyId ] = useState()
   const [ inputText, setInputText ] = useState('')
+  const [ moreId, setMoreId ] = useState()
 
   const loggedUser = useSelector((state) => state.redux.auth)
   const { socket } = useSocket()
@@ -41,7 +41,7 @@ const TextRenderSocket = ({channel}) => {
       {inputBoxDistributor(inputType)}
       {/* posts */}
       <div className='w-full'>
-        {posts && <PostLists lists={posts} loggedUser={loggedUser} replyId={replyId} setReplyId={setReplyId} channel={channel._id} />}
+        {posts && <PostLists lists={posts} loggedUser={loggedUser} replyId={replyId} setReplyId={setReplyId} channel={channel._id} moreId={moreId} />}
       </div>
     </div>
   )

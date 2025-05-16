@@ -19,7 +19,7 @@ const ChannelProfileBackGround = ({channelOwner, channel}) => {
   const router = useRouter()
 
   const setModalOn = () => {
-    console.log('setting modal on')
+    router.push(`/channel/${channelOwner.nickname}/setting`)
   }
 
   const setHoverOnFollows = (e) => {

@@ -118,8 +118,53 @@ export const sendTestEmail = async (userId) => {
     let res = await axios.post('/api/testEmailSend', sendingData)
     return true
   } catch (err) {
-    console.log(err)
     toast.error('Error sending test email')
+    return false
+  }
+}
+
+export const FindPasswordService = async (submittedForm) => {
+  const { findingEmail, findingEmailConfirm } = submittedForm
+
+  if(findingEmail !== findingEmailConfirm) {
+    toast.error('Please check your emails again. Provided emails do not match.')
+    return 'emailsDoNotMatch'
+  }
+
+  let sendingData = {
+    findingEmail: findingEmail
+  }
+
+  try {
+    let res = await axios.post('/api/forgotPassword', sendingData)
+    return res.data
+  } catch (err) {
+    toast.error(err.response.data.error)
+    return false
+  }
+}
+
+export const updatePassword = async (submittedForm) => {
+  console.log(submittedForm, 'from serivce')
+
+  const { userId, newPassword, confirmPassword } = submittedForm
+
+  if(newPassword !== confirmPassword) {
+    toast.error('Please check your passwords. Passwords do not match.')
+    return false
+  }
+
+  let sendingData = {
+    userId: userId,
+    newPassword: newPassword
+  }
+
+  try {
+    let res = await axios.put('/api/updatePassword', sendingData)
+    console.log(res, 'from serivce return')
+    return true
+  } catch (err) {
+    toast.error(err.response.data.error)
     return false
   }
 }
