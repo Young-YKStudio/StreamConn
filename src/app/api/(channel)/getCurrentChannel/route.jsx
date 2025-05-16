@@ -4,6 +4,7 @@ import Post from '@/app/models/post'
 import Comment from '@/app/models/comment'
 import dbConnect from '@/app/util/DBConnect'
 import { NextResponse } from 'next/server'
+import Collarboration from '@/app/models/Collarborations'
 
 export const POST = async (req) => {
   const submittedData = await req.json()
@@ -36,8 +37,33 @@ export const POST = async (req) => {
     )
   }
 
+  // let foundEvents = await Channel.findById(channelId).populate({ path: 'posts', populate: { path: 'comments' } })
+  let foundEvents = await User.findOne({nickname: channelOwnerNickname}).populate({path: 'channels', populate: { path: 'collarborations' } })
+  // console.log('EVENTS:', foundEvents)
+
+  let filteredEvents = []
+  foundEvents.channels.map((col) => col.collarborations.forEach((cb) => filteredEvents.push(cb)) )
+  console.log('COLS:', filteredEvents)
+
+  let allEvents = []
+  filteredEvents.forEach((cal, idx) => {
+    let calendarEvents = 
+    { 
+      id: idx, 
+      title: cal.eventName, 
+      start: cal.eventDateStart,
+      end: cal.eventDateEnd,
+      resourceId: idx 
+    }
+    allEvents.push(calendarEvents)
+  })
+
+  console.log('ALL:', allEvents)
+
   const sendingData = {
     channelOwner: foundChannelOwner,
+    channelEvents: filteredEvents,
+    calendarEvents: allEvents,
   }
   
   return NextResponse.json(

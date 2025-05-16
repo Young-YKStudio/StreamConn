@@ -3,7 +3,7 @@ import Channel_Collaboration from "./components/collaboration/Channel_Collaborat
 import ChannelParticipation from "./components/participation/Channel_Participation";
 import Channel_Text from "./components/text/Channel_Text";
 
-const ChannelSectionLanding = ({channelName, channelData, channel, channelOwnerNickname}) => {
+const ChannelSectionLanding = ({calendarEvents, channelEvents, channelName, channelData, channel, channelOwnerNickname}) => {
   
   if(channel==='collaboration') {
     return <Channel_Collaboration channelOwnerNickname={channelOwnerNickname} />
@@ -17,7 +17,7 @@ const ChannelSectionLanding = ({channelName, channelData, channel, channelOwnerN
   let foundChannel = channelData.channelOwner.channels.find(ch => ch.channelName === channelName)
 
   if(!foundChannel || channelName === 'home') {
-    return <ChannelHomePage foundUser={channelData.channelOwner} />
+    return <ChannelHomePage calendarEvents={calendarEvents} channelEvents={channelEvents} foundUser={channelData.channelOwner} />
   }
 
   if(foundChannel.channelType === 'Text') {
