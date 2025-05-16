@@ -37,8 +37,7 @@ const ChannelOwnerSettings = ({channel}) => {
 
     // let sendingData = {
     //   channelOwner: channel.channelOwner,
-    //   channelId: channel._id,
-    // }
+    //   channelId: channel._id,  // }
 
     // let res = await deleteChannel(sendingData)
     setSelectedDelteChannel(channel)

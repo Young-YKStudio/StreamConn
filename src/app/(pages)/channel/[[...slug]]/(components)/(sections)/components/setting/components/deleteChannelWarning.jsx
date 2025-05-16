@@ -55,12 +55,10 @@ const DeleteChannelWarning = ({selectedDeleteChannel, isDeleteModal, setIsDelete
                     </div>
 
                     {/* buttons */}
-                    <div>
+                    <div className='w-full flex justify-between'>
                       <button>Cancel</button>
                       <button>Delete</button>
                     </div>
-
-
 
                     <div className='scrollbar-track-sky-950 scrollbar-thumb-white/40'>
                       <div className='overflow-auto scrollbar-thin max-h-96 flex flex-col gap-4 px-4'>
